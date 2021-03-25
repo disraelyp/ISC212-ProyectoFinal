@@ -1,5 +1,6 @@
 package logic;
 
-public class Microprocesador {
-
+public class Microprocesador extends Componente{
+	//Padre: Componente
+	
 }

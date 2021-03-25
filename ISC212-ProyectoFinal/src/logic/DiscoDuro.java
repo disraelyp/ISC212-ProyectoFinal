@@ -1,5 +1,6 @@
 package logic;
 
-public class DiscoDuro {
-
+public class DiscoDuro extends Componente{
+	//Padre: Componente
+	
 }

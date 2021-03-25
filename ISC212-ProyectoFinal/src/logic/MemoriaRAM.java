@@ -1,5 +1,6 @@
 package logic;
 
-public class MemoriaRAM {
-
+public class MemoriaRAM extends Componente{
+	//Padre: Componente
+	
 }

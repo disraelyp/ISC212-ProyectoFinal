@@ -1,5 +1,6 @@
 package logic;
 
-public class Administrador {
-
+public class Administrador extends Empleado{
+	//Padre: Empleado
+	
 }

@@ -1,5 +1,6 @@
 package logic;
 
-public class TarjetaMadre {
+public class TarjetaMadre extends Componente{
+	//Padre: Componente
 
 }

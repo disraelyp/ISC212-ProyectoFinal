@@ -1,5 +1,6 @@
 package logic;
 
-public class Cliente {
-
+public class Cliente extends Persona{
+	// Padre: Persona
+	
 }
