@@ -1,0 +1,25 @@
+Reparticion de la elaboracion de las Clases:
+
+**SOLO CREAR LOS ATRIBUTO Y LOS CONSTRUCCTORES, NO CREAR FUNCIONES**
+
+Tienda - Lista
+
+Yelida:
+	Empleado
+	Vendedor
+	Administrador
+	Proovedor
+	Persona
+	Cliente
+	Compra
+	
+
+
+Disraely:
+	Componente
+	DiscoDuro
+	MemoriaRAM
+	Microprocesador
+	TarjetaMadre
+	PaqueteComponente
+	Venta
