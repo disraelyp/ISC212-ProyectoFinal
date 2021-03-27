@@ -22,8 +22,7 @@ Ver proveedor (Representante)
 
 
 YELIDA
-
-Crear empleados (Vendedor y administrador)
-Crear proveedor (Representante)
-Crear componentes
-Crear clientes
+RegistroEmpleados
+RegistroProveedores
+RegistroComponente
+RegistroCliente
