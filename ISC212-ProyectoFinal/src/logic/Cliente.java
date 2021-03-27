@@ -1,7 +1,7 @@
 package logic;
 
 public class Cliente extends Persona{
-	// Padre: Persona
+
 	private float credito;
 	private float creditoLimite;
 	
@@ -15,19 +15,14 @@ public class Cliente extends Persona{
 	public float getCredito() {
 		return credito;
 	}
-
 	public void setCredito(float credito) {
 		this.credito = credito;
 	}
-
 	public float getCreditoLimite() {
 		return creditoLimite;
 	}
-
 	public void setCreditoLimite(float creditoLimite) {
 		this.creditoLimite = creditoLimite;
 	}
-	
-	
-	
+		
 }

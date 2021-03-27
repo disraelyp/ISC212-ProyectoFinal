@@ -19,39 +19,30 @@ public class Proveedor {
 	public String getRnc() {
 		return rnc;
 	}
-
 	public void setRnc(String rnc) {
 		this.rnc = rnc;
 	}
-
 	public String getNombre() {
 		return nombre;
 	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
 	public String getTelefono() {
 		return telefono;
 	}
-
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-
 	public String getDireccion() {
 		return direccion;
 	}
-
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-
 	public Persona getRepresentante() {
 		return representante;
 	}
-
 	public void setRepresentante(Persona representante) {
 		this.representante = representante;
 	}

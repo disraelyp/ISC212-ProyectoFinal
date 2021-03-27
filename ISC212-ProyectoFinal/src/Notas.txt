@@ -2,24 +2,28 @@ Reparticion de la elaboracion de las Clases:
 
 **SOLO CREAR LOS ATRIBUTO Y LOS CONSTRUCCTORES, NO CREAR FUNCIONES**
 
-Tienda - Lista
-
-Yelida:
-	Empleado
-	Vendedor
-	Administrador
-	Proovedor
-	Persona
-	Cliente
-	Compra
-	
+Crear diseños de ventas
 
 
-Disraely:
-	Componente
-	DiscoDuro
-	MemoriaRAM
-	Microprocesador
-	TarjetaMadre
-	PaqueteComponente
-	Venta
+
+
+Crear paquetes - Planeacion
+Pagina prinicpal(Tienda) - Planeacion
+
+DISRAELY 
+
+Modulo del inventario
+Modulo de venta
+ver componentes
+ver paquetes
+Ver clientes
+Ver empleados (Vendedor y administrador)
+Ver proveedor (Representante)
+
+
+YELIDA
+
+Crear empleados (Vendedor y administrador)
+Crear proveedor (Representante)
+Crear componentes
+Crear clientes

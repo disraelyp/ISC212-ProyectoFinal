@@ -4,60 +4,49 @@ import java.util.ArrayList;
 
 public class Compra {
 	private String codigo;
-	private Proveedor prov;
-	private Administrador admin;
+	private Proveedor proovedor;
+	private Administrador administrador;
 	private ArrayList<Componente> componentes;
 	private boolean estado;
 	
-	public Compra(String codigo, Proveedor prov, Administrador admin, ArrayList<Componente> componentes,
-			boolean estado) {
+	public Compra(String codigo, Proveedor proovedor, Administrador administrador, ArrayList<Componente> componentes) {
 		super();
 		this.codigo = codigo;
-		this.prov = prov;
-		this.admin = admin;
+		this.proovedor = proovedor;
+		this.administrador = administrador;
 		this.componentes = componentes;
-		this.estado = estado;
+		this.estado = false;
 	}
 
 	public String getCodigo() {
 		return codigo;
 	}
-
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-
 	public Proveedor getProv() {
-		return prov;
+		return proovedor;
 	}
-
-	public void setProv(Proveedor prov) {
-		this.prov = prov;
+	public void setProovedor(Proveedor prov) {
+		this.proovedor = prov;
 	}
-
-	public Administrador getAdmin() {
-		return admin;
+	public Administrador getAdministrador() {
+		return administrador;
 	}
-
-	public void setAdmin(Administrador admin) {
-		this.admin = admin;
+	public void setAdmin(Administrador administrador) {
+		this.administrador = administrador;
 	}
-
 	public ArrayList<Componente> getComponentes() {
 		return componentes;
 	}
-
 	public void setComponentes(ArrayList<Componente> componentes) {
 		this.componentes = componentes;
 	}
-
 	public boolean isEstado() {
 		return estado;
 	}
-
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-	
 	
 }
