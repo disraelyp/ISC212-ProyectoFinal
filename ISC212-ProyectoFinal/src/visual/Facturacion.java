@@ -1,7 +1,6 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.ImageIcon;
 
 public class Facturacion extends JDialog {
 
@@ -59,7 +59,8 @@ public class Facturacion extends JDialog {
 		tabbedPane.addTab("Facturas", null, panelFacturas, null);
 		panelFacturas.setLayout(null);
 		
-		btnCrearFactura = new JButton("CREAR");
+		btnCrearFactura = new JButton("");
+		btnCrearFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
 		btnCrearFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegistroVenta registroVenta = new RegistroVenta();
@@ -80,7 +81,8 @@ public class Facturacion extends JDialog {
 		btnDuplicarFactura.setBounds(250, 391, 70, 70);
 		panelFacturas.add(btnDuplicarFactura);
 		
-		btnSalirFactura = new JButton("SALIR");
+		btnSalirFactura = new JButton("");
+		btnSalirFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
 		btnSalirFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -130,7 +132,8 @@ public class Facturacion extends JDialog {
 		columModel1.getColumn(4).setPreferredWidth(114);
 		scrollPaneOrden.setViewportView(tableOrden);
 		
-		JButton btnVerFactura = new JButton("VER");
+		JButton btnVerFactura = new JButton("");
+		btnVerFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
 		btnVerFactura.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerFactura.setBounds(10, 391, 70, 70);
 		panelFacturas.add(btnVerFactura);
@@ -154,7 +157,8 @@ public class Facturacion extends JDialog {
 		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnDuplicarCotizacion);
 		
-		btnSalirCotizacion = new JButton("SALIR");
+		btnSalirCotizacion = new JButton("");
+		btnSalirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
 		btnSalirCotizacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -169,7 +173,8 @@ public class Facturacion extends JDialog {
 		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
 		panelCotizaciones.add(btnEliminarCotizacion);
 		
-		JButton btnRecibirCotizacion = new JButton("FACTURAR");
+		JButton btnRecibirCotizacion = new JButton("");
+		btnRecibirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
 		btnRecibirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
 		panelCotizaciones.add(btnRecibirCotizacion);
@@ -209,7 +214,8 @@ public class Facturacion extends JDialog {
 		columModel2.getColumn(4).setPreferredWidth(114);
 		scrollPaneCotizacion.setViewportView(tableCotizacion);
 		
-		JButton btnVerCotizacion = new JButton("VER");
+		JButton btnVerCotizacion = new JButton("");
+		btnVerCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
 		btnVerCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerCotizacion.setBounds(90, 391, 70, 70);
 		panelCotizaciones.add(btnVerCotizacion);
@@ -257,7 +263,8 @@ public class Facturacion extends JDialog {
 		btnProcesar.setBounds(10, 391, 70, 70);
 		panelDevoluciones.add(btnProcesar);
 		
-		JButton button_1 = new JButton("VER");
+		JButton button_1 = new JButton("");
+		button_1.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
 		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_1.setBounds(90, 391, 70, 70);
 		panelDevoluciones.add(button_1);

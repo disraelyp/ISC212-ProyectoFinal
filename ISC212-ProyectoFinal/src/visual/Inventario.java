@@ -11,7 +11,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.JScrollPane;
@@ -19,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class Inventario extends JDialog {
 
@@ -43,16 +43,16 @@ public class Inventario extends JDialog {
 		setResizable(false);
 		setTitle("Modulo de Inventario");
 		setModal(true);
-		setBounds(100, 100, 750, 550);
+		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 734, 512);
+		contentPanel.setBounds(0, 0, 784, 512);
 		setLocationRelativeTo(null);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(5, 5, 724, 500);
+		tabbedPane.setBounds(5, 5, 774, 500);
 		contentPanel.add(tabbedPane);
 		
 		JPanel panelOrdenes = new JPanel();
@@ -60,6 +60,12 @@ public class Inventario extends JDialog {
 		panelOrdenes.setLayout(null);
 		
 		btnCrearOrden = new JButton("CREAR");
+		btnCrearOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroVenta registroVenta = new RegistroVenta();
+				registroVenta.setVisible(true);
+			}
+		});
 		btnCrearOrden.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearOrden.setBounds(90, 391, 70, 70);
 		panelOrdenes.add(btnCrearOrden);
@@ -74,14 +80,15 @@ public class Inventario extends JDialog {
 		btnDuplicarOrden.setBounds(250, 391, 70, 70);
 		panelOrdenes.add(btnDuplicarOrden);
 		
-		btnSalirOrden = new JButton("SALIR");
+		btnSalirOrden = new JButton("");
+		btnSalirOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
 		btnSalirOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		btnSalirOrden.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnSalirOrden.setBounds(639, 391, 70, 70);
+		btnSalirOrden.setBounds(689, 391, 70, 70);
 		panelOrdenes.add(btnSalirOrden);
 		
 		JButton btnDevolucionOrden = new JButton("DEVOLUCION");
@@ -99,8 +106,7 @@ public class Inventario extends JDialog {
 		panelOrdenes.add(cmbOrden);
 		
 		JPanel panelTablaOrden = new JPanel();
-		panelTablaOrden.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelTablaOrden.setBounds(10, 36, 699, 349);
+		panelTablaOrden.setBounds(10, 36, 749, 344);
 		panelOrdenes.add(panelTablaOrden);
 		panelTablaOrden.setLayout(new BorderLayout(0, 0));
 		
@@ -119,12 +125,13 @@ public class Inventario extends JDialog {
 		TableColumnModel columModel1 = tableOrden.getColumnModel();
 		columModel1.getColumn(0).setPreferredWidth(90);
 		columModel1.getColumn(1).setPreferredWidth(90);
-		columModel1.getColumn(2).setPreferredWidth(300);
-		columModel1.getColumn(3).setPreferredWidth(100);
+		columModel1.getColumn(2).setPreferredWidth(330);
+		columModel1.getColumn(3).setPreferredWidth(120);
 		columModel1.getColumn(4).setPreferredWidth(114);
 		scrollPaneOrden.setViewportView(tableOrden);
 		
-		JButton btnVerOrden = new JButton("VER");
+		JButton btnVerOrden = new JButton("");
+		btnVerOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnVerOrden.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerOrden.setBounds(10, 391, 70, 70);
 		panelOrdenes.add(btnVerOrden);
@@ -148,14 +155,15 @@ public class Inventario extends JDialog {
 		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnDuplicarCotizacion);
 		
-		btnSalirCotizacion = new JButton("SALIR");
+		btnSalirCotizacion = new JButton("");
+		btnSalirCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
 		btnSalirCotizacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		btnSalirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnSalirCotizacion.setBounds(639, 391, 70, 70);
+		btnSalirCotizacion.setBounds(689, 391, 70, 70);
 		panelCotizaciones.add(btnSalirCotizacion);
 		
 		JButton btnEliminarCotizacion = new JButton("ELIMINAR");
@@ -178,8 +186,7 @@ public class Inventario extends JDialog {
 		panelCotizaciones.add(cmbOrdenCotizacion);
 		
 		JPanel panelTablaCotizacion = new JPanel();
-		panelTablaCotizacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelTablaCotizacion.setBounds(10, 36, 699, 349);
+		panelTablaCotizacion.setBounds(10, 36, 749, 344);
 		panelCotizaciones.add(panelTablaCotizacion);
 		panelTablaCotizacion.setLayout(new BorderLayout(0, 0));
 		
@@ -198,12 +205,13 @@ public class Inventario extends JDialog {
 		TableColumnModel columModel2 = tableCotizacion.getColumnModel();
 		columModel2.getColumn(0).setPreferredWidth(90);
 		columModel2.getColumn(1).setPreferredWidth(90);
-		columModel2.getColumn(2).setPreferredWidth(300);
-		columModel2.getColumn(3).setPreferredWidth(100);
+		columModel2.getColumn(2).setPreferredWidth(330);
+		columModel2.getColumn(3).setPreferredWidth(120);
 		columModel2.getColumn(4).setPreferredWidth(114);
 		scrollPaneCotizacion.setViewportView(tableCotizacion);
 		
-		JButton btnVerCotizacion = new JButton("VER");
+		JButton btnVerCotizacion = new JButton("");
+		btnVerCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnVerCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerCotizacion.setBounds(90, 391, 70, 70);
 		panelCotizaciones.add(btnVerCotizacion);
@@ -227,7 +235,7 @@ public class Inventario extends JDialog {
 		panelDevoluciones.add(comboBox);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 36, 699, 344);
+		panel.setBounds(10, 36, 749, 344);
 		panelDevoluciones.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -246,8 +254,8 @@ public class Inventario extends JDialog {
 		TableColumnModel columModel4 = tableDevoluciones.getColumnModel();
 		columModel4.getColumn(0).setPreferredWidth(90);
 		columModel4.getColumn(1).setPreferredWidth(90);
-		columModel4.getColumn(2).setPreferredWidth(300);
-		columModel4.getColumn(3).setPreferredWidth(100);
+		columModel4.getColumn(2).setPreferredWidth(330);
+		columModel4.getColumn(3).setPreferredWidth(120);
 		columModel4.getColumn(4).setPreferredWidth(114);
 		scrollPane.setViewportView(tableDevoluciones);
 		
@@ -256,7 +264,8 @@ public class Inventario extends JDialog {
 		btnProcesar.setBounds(10, 391, 70, 70);
 		panelDevoluciones.add(btnProcesar);
 		
-		JButton button_1 = new JButton("VER");
+		JButton button_1 = new JButton("");
+		button_1.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_1.setBounds(90, 391, 70, 70);
 		panelDevoluciones.add(button_1);
@@ -281,9 +290,10 @@ public class Inventario extends JDialog {
 		button_5.setBounds(410, 391, 70, 70);
 		panelDevoluciones.add(button_5);
 		
-		JButton button_6 = new JButton("SALIR");
+		JButton button_6 = new JButton("");
+		button_6.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
 		button_6.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_6.setBounds(639, 391, 70, 70);
+		button_6.setBounds(689, 391, 70, 70);
 		panelDevoluciones.add(button_6);
 		
 		JPanel panelProductos = new JPanel();
@@ -309,12 +319,19 @@ public class Inventario extends JDialog {
 		btnEmitirDevolucion.setBounds(90, 391, 70, 70);
 		panelProductos.add(btnEmitirDevolucion);
 		
-		JButton btnCrearProducto = new JButton("VER PRODUCTO");
+		JButton btnCrearProducto = new JButton("");
+		btnCrearProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearProducto.setBounds(170, 391, 70, 70);
 		panelProductos.add(btnCrearProducto);
 		
 		JButton btnCrearProducto_1 = new JButton("CREAR PRODUCTO");
+		btnCrearProducto_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroComponente registroComponente = new RegistroComponente();
+				registroComponente.setVisible(true);
+			}
+		});
 		btnCrearProducto_1.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearProducto_1.setBounds(250, 391, 70, 70);
 		panelProductos.add(btnCrearProducto_1);
@@ -324,13 +341,14 @@ public class Inventario extends JDialog {
 		btnModificarProducto.setBounds(330, 391, 70, 70);
 		panelProductos.add(btnModificarProducto);
 		
-		JButton button_12 = new JButton("SALIR");
+		JButton button_12 = new JButton("");
+		button_12.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
 		button_12.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_12.setBounds(639, 391, 70, 70);
+		button_12.setBounds(689, 391, 70, 70);
 		panelProductos.add(button_12);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 36, 699, 344);
+		panel_1.setBounds(10, 36, 749, 344);
 		panelProductos.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		

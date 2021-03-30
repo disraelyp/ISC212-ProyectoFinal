@@ -1,7 +1,6 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -10,23 +9,32 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.JRadioButton;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ImageIcon;
 
 public class RegistroVenta extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private static DefaultTableModel model;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
+	private JTable table;
 
 	public RegistroVenta() {
 		setResizable(false);
@@ -56,6 +64,12 @@ public class RegistroVenta extends JDialog {
 			textField.setColumns(10);
 			
 			JButton btnNewButton_1 = new JButton("Buscar");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListadoClientes listadoClientes = new ListadoClientes(true);
+					listadoClientes.setVisible(true);
+				}
+			});
 			btnNewButton_1.setBounds(205, 19, 89, 23);
 			panel.add(btnNewButton_1);
 			
@@ -80,14 +94,28 @@ public class RegistroVenta extends JDialog {
 			textField_2.setColumns(10);
 		}
 		{
-			JButton btnNewButton = new JButton("Ver producto");
-			btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
-			btnNewButton.setHorizontalAlignment(SwingConstants.LEFT);
+			JButton btnNewButton = new JButton("");
+			btnNewButton.setEnabled(false);
+			btnNewButton.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					RegistroComponente registroComponente = new RegistroComponente();
+					registroComponente.setVisible(true);
+				}
+			});
+			btnNewButton.setVerticalAlignment(SwingConstants.TOP);
 			btnNewButton.setBounds(614, 173, 70, 70);
 			contentPanel.add(btnNewButton);
 		}
 		{
 			JButton btnEliminarProducto = new JButton("Agregar Producto");
+			btnEliminarProducto.setEnabled(false);
+			btnEliminarProducto.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListadoProductos listadoProductos = new ListadoProductos(true);
+					listadoProductos.setVisible(true);
+				}
+			});
 			btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 			btnEliminarProducto.setHorizontalAlignment(SwingConstants.LEFT);
 			btnEliminarProducto.setBounds(614, 251, 70, 70);
@@ -104,7 +132,8 @@ public class RegistroVenta extends JDialog {
 		lblNewLabel_2.setBounds(10, 26, 90, 14);
 		panel.add(lblNewLabel_2);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"EFECTIVO", "CREDITO"}));
 		comboBox.setBounds(110, 23, 155, 20);
 		panel.add(comboBox);
 		
@@ -129,12 +158,32 @@ public class RegistroVenta extends JDialog {
 		textField_4.setColumns(10);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(10, 132, 594, 270);
 		contentPanel.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_1.add(scrollPane, BorderLayout.CENTER);
+		
+		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		model = new DefaultTableModel();
+		table.setModel(model);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getTableHeader().setReorderingAllowed(false);
+		
+		String[] headers= {"Codigo", "Descripcion", "Cantidad", "Precio Unit.", "Monto Total"};
+		model.setColumnIdentifiers(headers);
+		TableColumnModel columModel = table.getColumnModel();
+		columModel.getColumn(0).setPreferredWidth(100);
+		columModel.getColumn(1).setPreferredWidth(200);
+		columModel.getColumn(2).setPreferredWidth(90);
+		columModel.getColumn(3).setPreferredWidth(100);
+		columModel.getColumn(4).setPreferredWidth(100);
+		scrollPane.setViewportView(table);
+		
 		JButton btnVerProducto = new JButton("Eliminar Producto");
+		btnVerProducto.setEnabled(false);
 		btnVerProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerProducto.setHorizontalAlignment(SwingConstants.LEFT);
 		btnVerProducto.setBounds(614, 332, 70, 70);
@@ -147,6 +196,12 @@ public class RegistroVenta extends JDialog {
 		contentPanel.add(btnCuentasPorCobrar);
 		
 		JButton btnCrearProducto = new JButton("Crear Producto");
+		btnCrearProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroComponente registroComponente = new RegistroComponente();
+				registroComponente.setVisible(true);
+			}
+		});
 		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearProducto.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCrearProducto.setBounds(614, 92, 70, 70);
@@ -154,7 +209,7 @@ public class RegistroVenta extends JDialog {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_2.setBounds(220, 413, 463, 78);
+		panel_2.setBounds(362, 413, 322, 78);
 		contentPanel.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -164,19 +219,28 @@ public class RegistroVenta extends JDialog {
 		textField_5.setForeground(Color.RED);
 		textField_5.setFont(new Font("Tahoma", Font.BOLD, 20));
 		textField_5.setText("$ 0.00     ");
-		textField_5.setBounds(213, 36, 240, 31);
+		textField_5.setBounds(10, 36, 302, 31);
 		panel_2.add(textField_5);
 		textField_5.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Monto a Pagar:");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblNewLabel_4.setBounds(213, 11, 240, 25);
+		lblNewLabel_4.setBounds(10, 11, 240, 25);
 		panel_2.add(lblNewLabel_4);
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_3.setBounds(10, 413, 200, 78);
-		contentPanel.add(panel_3);
-		panel_3.setLayout(null);
+		JButton btnNewButton_2 = new JButton("");
+		btnNewButton_2.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/facturar.png")));
+		btnNewButton_2.setBounds(10, 413, 78, 78);
+		contentPanel.add(btnNewButton_2);
+		
+		JButton btnSalir = new JButton("");
+		btnSalir.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/salir.png")));
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalir.setBounds(98, 413, 78, 78);
+		contentPanel.add(btnSalir);
 	}
 }

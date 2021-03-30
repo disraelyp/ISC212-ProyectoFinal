@@ -1,55 +1,114 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 public class ListadoProductos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private static DefaultTableModel model;
+	private JTextField textField;
+	private JTable table;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			ListadoProductos dialog = new ListadoProductos();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public ListadoProductos() {
-		setBounds(100, 100, 450, 300);
+	public ListadoProductos(Boolean seleccion) {
+		setResizable(false);
+		setModal(true);
+		setTitle("Listado de Productos");
+		setBounds(100, 100, 360, 525);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
+			JButton btnNewButton = new JButton("Salir");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			btnNewButton.setBounds(10, 458, 153, 23);
+			contentPanel.add(btnNewButton);
 		}
+		
+		textField = new JTextField();
+		textField.setBounds(10, 11, 210, 23);
+		contentPanel.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnNewButton_1 = new JButton("Buscar");
+		btnNewButton_1.setBounds(230, 11, 104, 23);
+		contentPanel.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Mostrar todos");
+		btnNewButton_2.setEnabled(false);
+		btnNewButton_2.setBounds(10, 45, 324, 23);
+		contentPanel.add(btnNewButton_2);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 79, 324, 310);
+		contentPanel.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, BorderLayout.CENTER);
+		
+		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		model = new DefaultTableModel();
+		table.setModel(model);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getTableHeader().setReorderingAllowed(false);
+		
+		String[] headers2= {"Cedula", "Nombre"};
+		model.setColumnIdentifiers(headers2);
+		TableColumnModel columModel = table.getColumnModel();
+		columModel.getColumn(0).setPreferredWidth(99);
+		columModel.getColumn(1).setPreferredWidth(220);
+		scrollPane.setViewportView(table);
+		
+		JButton btnVer = new JButton("Ver Producto");
+		btnVer.setEnabled(false);
+		btnVer.setBounds(10, 394, 100, 23);
+		contentPanel.add(btnVer);
+		
+		JButton btnModificar = new JButton("Modificar");
+		btnModificar.setEnabled(false);
+		btnModificar.setBounds(120, 394, 104, 23);
+		contentPanel.add(btnModificar);
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setEnabled(false);
+		btnEliminar.setBounds(234, 394, 100, 23);
+		contentPanel.add(btnEliminar);
+		
+		JButton btnSeleccionar = new JButton("Seleccionar");
+		btnSeleccionar.setEnabled(false);
+		btnSeleccionar.setBounds(181, 458, 153, 23);
+		contentPanel.add(btnSeleccionar);
+		
+		JButton btnNewButton_3 = new JButton("Crear Producto");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroComponente registroComponente = new RegistroComponente();
+				registroComponente.setVisible(true);
+			}
+		});
+		btnNewButton_3.setBounds(10, 424, 324, 23);
+		contentPanel.add(btnNewButton_3);
 	}
-
 }

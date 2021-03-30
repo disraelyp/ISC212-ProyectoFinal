@@ -47,7 +47,7 @@ public class Tienda {
 		frmCecomsaGestion = new JFrame();
 		frmCecomsaGestion.setTitle("Cecomsa - Gestion de Sucursal");
 		frmCecomsaGestion.setIconImage(Toolkit.getDefaultToolkit().getImage(Tienda.class.getResource("/resources/logo.png")));
-		frmCecomsaGestion.setBounds(100, 100, 900, 700);
+		frmCecomsaGestion.setBounds(100, 100, 1000, 700);
 		frmCecomsaGestion.setLocationRelativeTo(null);
 		frmCecomsaGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCecomsaGestion.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -129,6 +129,12 @@ public class Tienda {
 		mnNewMenu.add(mnNewMenu_2);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver/Modificar/Crear Proveedores");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListadoProveedores listadoProveedores = new ListadoProveedores(false);
+				listadoProveedores.setVisible(true);
+			}
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_2);
 		
 		JSeparator separator = new JSeparator();

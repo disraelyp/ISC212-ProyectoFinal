@@ -2,8 +2,6 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,9 +16,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import java.awt.Color;
-import java.awt.Component;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpinnerListModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RegistroComponente extends JDialog {
 
@@ -28,26 +27,21 @@ public class RegistroComponente extends JDialog {
 	private JTextField txtSerie;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JRadioButton rdbtnTarjetaMadre;
+	private JRadioButton rdbtnMicro;
+	private JRadioButton rdbtnDiscoDuro;
+	private JRadioButton rdbtnMemoriaRAM;
+	private JPanel panelTarjetaMadre;
+	private JPanel panelMicro;
+	private JPanel panelMemoriaRAM;
+	private JPanel panelDiscoDuro;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			RegistroComponente dialog = new RegistroComponente();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public RegistroComponente() {
 		setTitle("Registro de Componentes");
-		setBounds(100, 100, 546, 360);
+		setBounds(100, 100, 580, 370);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -59,7 +53,7 @@ public class RegistroComponente extends JDialog {
 			{
 				JPanel panelGeneral = new JPanel();
 				panelGeneral.setBorder(new TitledBorder(null, "Informaci\u00F3n General", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panelGeneral.setBounds(0, 0, 520, 107);
+				panelGeneral.setBounds(0, 0, 554, 107);
 				panel.add(panelGeneral);
 				panelGeneral.setLayout(null);
 				
@@ -68,7 +62,7 @@ public class RegistroComponente extends JDialog {
 				panelGeneral.add(lblSerie);
 				
 				txtSerie = new JTextField();
-				txtSerie.setBounds(58, 20, 189, 20);
+				txtSerie.setBounds(58, 20, 210, 20);
 				panelGeneral.add(txtSerie);
 				txtSerie.setColumns(10);
 				
@@ -77,7 +71,7 @@ public class RegistroComponente extends JDialog {
 				panelGeneral.add(lblModelo);
 				
 				textField = new JTextField();
-				textField.setBounds(58, 45, 189, 20);
+				textField.setBounds(58, 45, 210, 20);
 				panelGeneral.add(textField);
 				textField.setColumns(10);
 				
@@ -86,103 +80,157 @@ public class RegistroComponente extends JDialog {
 				panelGeneral.add(lblMarca);
 				
 				textField_1 = new JTextField();
-				textField_1.setBounds(58, 70, 189, 20);
+				textField_1.setBounds(58, 70, 210, 20);
 				panelGeneral.add(textField_1);
 				textField_1.setColumns(10);
 				
 				JLabel lblCantidad = new JLabel("Cantidad:");
-				lblCantidad.setBounds(266, 26, 65, 14);
+				lblCantidad.setBounds(295, 23, 65, 14);
 				panelGeneral.add(lblCantidad);
 				
 				JSpinner spnCantidad = new JSpinner();
-				spnCantidad.setBounds(321, 23, 49, 20);
+				spnCantidad.setBounds(356, 20, 49, 20);
 				panelGeneral.add(spnCantidad);
 				
 				JLabel lblMinima = new JLabel("Cant. M\u00EDnima:");
-				lblMinima.setBounds(387, 26, 101, 14);
+				lblMinima.setBounds(415, 23, 101, 14);
 				panelGeneral.add(lblMinima);
 				
 				JSpinner spnMinima = new JSpinner();
-				spnMinima.setBounds(461, 23, 49, 20);
+				spnMinima.setBounds(495, 20, 49, 20);
 				panelGeneral.add(spnMinima);
 				
 				JLabel lblCosto = new JLabel("Costo:");
-				lblCosto.setBounds(266, 51, 46, 14);
+				lblCosto.setBounds(295, 48, 46, 14);
 				panelGeneral.add(lblCosto);
 				
 				JLabel lblPrecio = new JLabel("Precio:");
-				lblPrecio.setBounds(266, 76, 46, 14);
+				lblPrecio.setBounds(295, 73, 46, 14);
 				panelGeneral.add(lblPrecio);
 				
 				JSpinner spnCosto = new JSpinner();
 				spnCosto.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
-				spnCosto.setBounds(321, 48, 189, 20);
+				spnCosto.setBounds(355, 45, 189, 20);
 				panelGeneral.add(spnCosto);
 				
 				JSpinner spnPrecio = new JSpinner();
-				spnPrecio.setBounds(321, 73, 189, 20);
+				spnPrecio.setBounds(355, 70, 189, 20);
 				panelGeneral.add(spnPrecio);
 			}
 			
 			JPanel panelTipo = new JPanel();
 			panelTipo.setBorder(new TitledBorder(null, "Tipo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelTipo.setBounds(0, 111, 520, 58);
+			panelTipo.setBounds(0, 111, 554, 58);
 			panel.add(panelTipo);
 			panelTipo.setLayout(null);
 			
-			JRadioButton rdbtnTarjetaMadre = new JRadioButton("Tarjeta Madre");
+			rdbtnTarjetaMadre = new JRadioButton("Tarjeta Madre");
+			rdbtnTarjetaMadre.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnTarjetaMadre.setSelected(true);
+					rdbtnDiscoDuro.setSelected(false);
+					rdbtnMemoriaRAM.setSelected(false);
+					rdbtnMicro.setSelected(false);
+					
+					panelTarjetaMadre.setVisible(true);
+					panelMicro.setVisible(false);
+					panelMemoriaRAM.setVisible(false);
+					panelDiscoDuro.setVisible(false);
+				}
+			});
 			rdbtnTarjetaMadre.setSelected(true);
 			rdbtnTarjetaMadre.setBounds(6, 20, 109, 23);
 			panelTipo.add(rdbtnTarjetaMadre);
 			
-			JRadioButton rdbtnDiscoDuro = new JRadioButton("Disco Duro");
+			rdbtnDiscoDuro = new JRadioButton("Disco Duro");
+			rdbtnDiscoDuro.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnTarjetaMadre.setSelected(false);
+					rdbtnDiscoDuro.setSelected(true);
+					rdbtnMemoriaRAM.setSelected(false);
+					rdbtnMicro.setSelected(false);
+					
+					panelTarjetaMadre.setVisible(false);
+					panelMicro.setVisible(false);
+					panelMemoriaRAM.setVisible(false);
+					panelDiscoDuro.setVisible(true);
+				}
+			});
 			rdbtnDiscoDuro.setBounds(287, 20, 109, 23);
 			panelTipo.add(rdbtnDiscoDuro);
 			
-			JRadioButton rdbtnMicro = new JRadioButton("Microprocesador");
+			rdbtnMicro = new JRadioButton("Microprocesador");
+			rdbtnMicro.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnTarjetaMadre.setSelected(false);
+					rdbtnDiscoDuro.setSelected(false);
+					rdbtnMemoriaRAM.setSelected(false);
+					rdbtnMicro.setSelected(true);
+					
+					panelTarjetaMadre.setVisible(false);
+					panelMicro.setVisible(true);
+					panelMemoriaRAM.setVisible(false);
+					panelDiscoDuro.setVisible(false);
+				}
+			});
 			rdbtnMicro.setBounds(137, 20, 126, 23);
 			panelTipo.add(rdbtnMicro);
 			
-			JRadioButton rdbtnMemoriaRAM = new JRadioButton("Memoria RAM");
-			rdbtnMemoriaRAM.setBounds(416, 20, 98, 23);
+			rdbtnMemoriaRAM = new JRadioButton("Memoria RAM");
+			rdbtnMemoriaRAM.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnTarjetaMadre.setSelected(false);
+					rdbtnDiscoDuro.setSelected(false);
+					rdbtnMemoriaRAM.setSelected(true);
+					rdbtnMicro.setSelected(false);
+					
+					panelTarjetaMadre.setVisible(false);
+					panelMicro.setVisible(false);
+					panelMemoriaRAM.setVisible(true);
+					panelDiscoDuro.setVisible(false);
+					
+				}
+			});
+			rdbtnMemoriaRAM.setBounds(416, 20, 132, 23);
 			panelTipo.add(rdbtnMemoriaRAM);
 			
-			JPanel panelTarjetaMadre = new JPanel();
+			panelTarjetaMadre = new JPanel();
 			panelTarjetaMadre.setBorder(new TitledBorder(null, "Tarjeta Madre", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelTarjetaMadre.setBounds(0, 173, 520, 106);
+			panelTarjetaMadre.setBounds(0, 173, 554, 115);
 			panel.add(panelTarjetaMadre);
 			panelTarjetaMadre.setLayout(null);
 			
+			
 			JLabel lblTipoMicro = new JLabel("Tipo de conexi\u00F3n del microprocesador:");
-			lblTipoMicro.setBounds(50, 27, 226, 14);
+			lblTipoMicro.setBounds(51, 26, 226, 14);
 			panelTarjetaMadre.add(lblTipoMicro);
 			
 			JLabel lblTipoDiscoDuro = new JLabel("Tipo de conexi\u00F3n del disco duro:");
-			lblTipoDiscoDuro.setBounds(50, 52, 226, 14);
+			lblTipoDiscoDuro.setBounds(51, 51, 226, 14);
 			panelTarjetaMadre.add(lblTipoDiscoDuro);
 			
 			JLabel lblTipoDeMemoria = new JLabel("Tipo de memoria RAM:");
-			lblTipoDeMemoria.setBounds(50, 77, 226, 14);
+			lblTipoDeMemoria.setBounds(51, 76, 226, 14);
 			panelTarjetaMadre.add(lblTipoDeMemoria);
 			
-			JComboBox cbxTipoMicro = new JComboBox();
-			cbxTipoMicro.setModel(new DefaultComboBoxModel(new String[] {"PGA", "BGA", "LGA"}));
-			cbxTipoMicro.setBounds(304, 21, 121, 20);
+			JComboBox<String> cbxTipoMicro = new JComboBox<String>();
+			cbxTipoMicro.setModel(new DefaultComboBoxModel<String>(new String[] {"PGA", "BGA", "LGA"}));
+			cbxTipoMicro.setBounds(304, 23, 200, 20);
 			panelTarjetaMadre.add(cbxTipoMicro);
 			
-			JComboBox cbxTipoDiscoDuro = new JComboBox();
-			cbxTipoDiscoDuro.setModel(new DefaultComboBoxModel(new String[] {"IDE", "SATA", "SATA-2", "SATA-3"}));
-			cbxTipoDiscoDuro.setBounds(304, 46, 121, 20);
+			JComboBox<String> cbxTipoDiscoDuro = new JComboBox<String>();
+			cbxTipoDiscoDuro.setModel(new DefaultComboBoxModel<String>(new String[] {"IDE", "SATA", "SATA-2", "SATA-3"}));
+			cbxTipoDiscoDuro.setBounds(304, 48, 200, 20);
 			panelTarjetaMadre.add(cbxTipoDiscoDuro);
 			
-			JComboBox cbxMemoriaRam = new JComboBox();
-			cbxMemoriaRam.setModel(new DefaultComboBoxModel(new String[] {"DDR", "DDR-2", "DDR-3", "DDR-4"}));
-			cbxMemoriaRam.setBounds(304, 71, 121, 20);
+			JComboBox<String> cbxMemoriaRam = new JComboBox<String>();
+			cbxMemoriaRam.setModel(new DefaultComboBoxModel<String>(new String[] {"DDR", "DDR-2", "DDR-3", "DDR-4"}));
+			cbxMemoriaRam.setBounds(304, 73, 200, 20);
 			panelTarjetaMadre.add(cbxMemoriaRam);
 			
-			JPanel panelMicro = new JPanel();
+			panelMicro = new JPanel();
 			panelMicro.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Microprocesador", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panelMicro.setBounds(0, 173, 520, 106);
+			panelMicro.setBounds(0, 173, 554, 115);
 			panel.add(panelMicro);
 			panelMicro.setLayout(null);
 			
@@ -190,8 +238,8 @@ public class RegistroComponente extends JDialog {
 			lblConexion.setBounds(50, 27, 226, 14);
 			panelMicro.add(lblConexion);
 			
-			JComboBox cbxConexion = new JComboBox();
-			cbxConexion.setModel(new DefaultComboBoxModel(new String[] {"PGA", "BGA", "LGA"}));
+			JComboBox<String> cbxConexion = new JComboBox<String>();
+			cbxConexion.setModel(new DefaultComboBoxModel<String>(new String[] {"PGA", "BGA", "LGA"}));
 			cbxConexion.setBounds(304, 21, 121, 20);
 			panelMicro.add(cbxConexion);
 			
@@ -217,10 +265,10 @@ public class RegistroComponente extends JDialog {
 			lblGHz.setBounds(396, 52, 26, 14);
 			panelMicro.add(lblGHz);
 			
-			JPanel panelMemoriaRAM = new JPanel();
+			panelMemoriaRAM = new JPanel();
 			panelMemoriaRAM.setBorder(new TitledBorder(null, "Memoria RAM", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panelMemoriaRAM.setLayout(null);
-			panelMemoriaRAM.setBounds(0, 173, 522, 106);
+			panelMemoriaRAM.setBounds(0, 173, 554, 115);
 			panel.add(panelMemoriaRAM);
 			
 			JLabel label = new JLabel("Capacidad de almacenamiento:");
@@ -241,21 +289,21 @@ public class RegistroComponente extends JDialog {
 			panelMemoriaRAM.add(lbl);
 			
 			JSpinner spinner_1 = new JSpinner();
-			spinner_1.setBounds(0, 0, 121, 20);
+			spinner_1.setBounds(302, 74, 121, 20);
 			panelMemoriaRAM.add(spinner_1);
 			
 			JLabel lblMemoriaRAM = new JLabel("Tipo de memoria RAM:");
 			lblMemoriaRAM.setBounds(50, 52, 226, 14);
 			panelMemoriaRAM.add(lblMemoriaRAM);
 			
-			JComboBox cbxMemoriaRAM = new JComboBox();
-			cbxMemoriaRAM.setModel(new DefaultComboBoxModel(new String[] {"DDR", "DDR-2", "DDR-3", "DDR-4"}));
+			JComboBox<String> cbxMemoriaRAM = new JComboBox<String>();
+			cbxMemoriaRAM.setModel(new DefaultComboBoxModel<String>(new String[] {"DDR", "DDR-2", "DDR-3", "DDR-4"}));
 			cbxMemoriaRAM.setBounds(304, 46, 121, 20);
 			panelMemoriaRAM.add(cbxMemoriaRAM);
 			
-			JPanel panelDiscoDuro = new JPanel();
+			panelDiscoDuro = new JPanel();
 			panelDiscoDuro.setBorder(new TitledBorder(null, "Disco Duro", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDiscoDuro.setBounds(0, 173, 520, 106);
+			panelDiscoDuro.setBounds(0, 173, 554, 115);
 			panel.add(panelDiscoDuro);
 			panelDiscoDuro.setLayout(null);
 			
@@ -285,10 +333,15 @@ public class RegistroComponente extends JDialog {
 			lblTipoDeConexion.setBounds(50, 52, 226, 14);
 			panelDiscoDuro.add(lblTipoDeConexion);
 			
-			JComboBox cbxConexionDD = new JComboBox();
-			cbxConexionDD.setModel(new DefaultComboBoxModel(new String[] {"IDE", "SATA", "SATA-1", "SATA-2", "SATA-3"}));
+			JComboBox<String> cbxConexionDD = new JComboBox<String>();
+			cbxConexionDD.setModel(new DefaultComboBoxModel<String>(new String[] {"IDE", "SATA", "SATA-1", "SATA-2", "SATA-3"}));
 			cbxConexionDD.setBounds(304, 46, 121, 20);
 			panelDiscoDuro.add(cbxConexionDD);
+			
+			JSpinner spinner = new JSpinner();
+			spinner.setModel(new SpinnerNumberModel(new Float(1500), new Float(1500), null, new Float(1)));
+			spinner.setBounds(304, 74, 119, 20);
+			panelDiscoDuro.add(spinner);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -306,5 +359,11 @@ public class RegistroComponente extends JDialog {
 				buttonPane.add(btnCancelar);
 			}
 		}
+		
+		panelTarjetaMadre.setVisible(true);
+		panelMicro.setVisible(false);
+		panelMemoriaRAM.setVisible(false);
+		panelDiscoDuro.setVisible(false);
+		
 	}
 }
