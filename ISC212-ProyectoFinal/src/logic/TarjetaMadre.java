@@ -4,23 +4,23 @@ import java.util.ArrayList;
 
 public class TarjetaMadre extends Componente{
 	
-	private String conexion;
+	private int tipoMicro;
 	private int tipoRAM;
 	private ArrayList<Integer> tipoDisco;
 	
 	public TarjetaMadre(String serie, String modelo, String marca, int cantidad, float precio, float costo,
-			String conexion, int tipoRAM, ArrayList<Integer> tipoDisco) {
+			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
 		super(serie, modelo, marca, cantidad, precio, costo);
-		this.conexion = conexion;
+		this.tipoMicro = tipoMicro;
 		this.tipoRAM = tipoRAM;
 		this.tipoDisco = tipoDisco;
 	}
 
-	public String getConexion() {
-		return conexion;
+	public int getTipoMicro() {
+		return tipoMicro;
 	}
-	public void setConexion(String conexion) {
-		this.conexion = conexion;
+	public void setTipoMicro(int tipoMicro) {
+		this.tipoMicro = tipoMicro;
 	}
 	public int getTipoRAM() {
 		return tipoRAM;
