@@ -2,35 +2,33 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import logic.Cliente;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-public class ListadoClientes extends JDialog {
+public class ListadoAdministradores extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel model;
 	private JTextField textField;
 	private JTable table;
 
-	public ListadoClientes(boolean seleccionar) {
-		setResizable(false);
+
+	public ListadoAdministradores(Boolean seleccion) {
 		setModal(true);
-		setTitle("Listado de Clientes.");
+		setResizable(false);
+		setTitle("Listado de Administradores.");
 		setBounds(100, 100, 360, 500);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
@@ -100,4 +98,5 @@ public class ListadoClientes extends JDialog {
 		btnEliminar.setBounds(234, 394, 100, 23);
 		contentPanel.add(btnEliminar);		
 	}
+
 }

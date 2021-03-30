@@ -17,44 +17,36 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Inventario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel model1;
 	private static DefaultTableModel model2;
+	private static DefaultTableModel model3;
+	private static DefaultTableModel model4;
 	private JTable tableOrden;
 	private JTable tableCotizacion;
 	private JButton btnCrearOrden;
 	private JButton btnModificarOrden;
 	private JButton btnDuplicarOrden;
-	private JButton btnEliminarOrden;
 	private JComboBox<String> cmbOrden;
 	private JComboBox<String> cmbOrdenCotizacion;
-	private JTable table;
+	private JButton btnSalirCotizacion;
+	private JButton btnSalirOrden;
+	private JTable tableDevoluciones;
+	private JTable tableProductos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Inventario dialog = new Inventario();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public Inventario() {
+		setResizable(false);
 		setTitle("Modulo de Inventario");
 		setModal(true);
 		setBounds(100, 100, 750, 550);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 734, 512);
+		setLocationRelativeTo(null);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
@@ -82,19 +74,19 @@ public class Inventario extends JDialog {
 		btnDuplicarOrden.setBounds(250, 391, 70, 70);
 		panelOrdenes.add(btnDuplicarOrden);
 		
-		JButton btnSalirOrden = new JButton("SALIR");
+		btnSalirOrden = new JButton("SALIR");
+		btnSalirOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnSalirOrden.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnSalirOrden.setBounds(639, 391, 70, 70);
 		panelOrdenes.add(btnSalirOrden);
 		
-		btnEliminarOrden = new JButton("ELIMINAR");
-		btnEliminarOrden.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEliminarOrden.setBounds(330, 391, 70, 70);
-		panelOrdenes.add(btnEliminarOrden);
-		
 		JButton btnDevolucionOrden = new JButton("DEVOLUCION");
 		btnDevolucionOrden.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnDevolucionOrden.setBounds(410, 391, 70, 70);
+		btnDevolucionOrden.setBounds(330, 391, 70, 70);
 		panelOrdenes.add(btnDevolucionOrden);
 		
 		JLabel lblOrdenar = new JLabel("Ordenar por:");
@@ -102,7 +94,7 @@ public class Inventario extends JDialog {
 		panelOrdenes.add(lblOrdenar);
 		
 		cmbOrden = new JComboBox<String>();
-		cmbOrden.setModel(new DefaultComboBoxModel<String>(new String[] {"Todos", "Proveedor", "Productos", "Monto", "Fecha"}));
+		cmbOrden.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
 		cmbOrden.setBounds(90, 8, 150, 20);
 		panelOrdenes.add(cmbOrden);
 		
@@ -141,53 +133,58 @@ public class Inventario extends JDialog {
 		tabbedPane.addTab("Cotizaciones", null, panelCotizaciones, null);
 		panelCotizaciones.setLayout(null);
 		
-		JButton button = new JButton("CREAR");
-		button.setVerticalAlignment(SwingConstants.BOTTOM);
-		button.setBounds(10, 391, 70, 70);
-		panelCotizaciones.add(button);
+		JButton btnCrearCotizacion = new JButton("CREAR");
+		btnCrearCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCrearCotizacion.setBounds(170, 391, 70, 70);
+		panelCotizaciones.add(btnCrearCotizacion);
 		
-		JButton button_1 = new JButton("MODIFICAR");
-		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_1.setBounds(90, 391, 70, 70);
-		panelCotizaciones.add(button_1);
+		JButton btnModificarCotizacion = new JButton("MODIFICAR");
+		btnModificarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnModificarCotizacion.setBounds(250, 391, 70, 70);
+		panelCotizaciones.add(btnModificarCotizacion);
 		
-		JButton button_2 = new JButton("DUPLICAR");
-		button_2.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_2.setBounds(170, 391, 70, 70);
-		panelCotizaciones.add(button_2);
+		JButton btnDuplicarCotizacion = new JButton("DUPLICAR");
+		btnDuplicarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
+		panelCotizaciones.add(btnDuplicarCotizacion);
 		
-		JButton button_3 = new JButton("SALIR");
-		button_3.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_3.setBounds(639, 391, 70, 70);
-		panelCotizaciones.add(button_3);
+		btnSalirCotizacion = new JButton("SALIR");
+		btnSalirCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnSalirCotizacion.setBounds(639, 391, 70, 70);
+		panelCotizaciones.add(btnSalirCotizacion);
 		
-		JButton button_4 = new JButton("ELIMINAR");
-		button_4.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_4.setBounds(250, 391, 70, 70);
-		panelCotizaciones.add(button_4);
+		JButton btnEliminarCotizacion = new JButton("ELIMINAR");
+		btnEliminarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
+		panelCotizaciones.add(btnEliminarCotizacion);
 		
-		JButton button_5 = new JButton("DEVOLUCION");
-		button_5.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_5.setBounds(330, 391, 70, 70);
-		panelCotizaciones.add(button_5);
+		JButton btnRecibirCotizacion = new JButton("RECIBIR");
+		btnRecibirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
+		panelCotizaciones.add(btnRecibirCotizacion);
 		
 		JLabel lblOrdenarCotizacion = new JLabel("Ordenar por:");
 		lblOrdenarCotizacion.setBounds(10, 11, 78, 14);
 		panelCotizaciones.add(lblOrdenarCotizacion);
 		
 		cmbOrdenCotizacion = new JComboBox<String>();
-		cmbOrdenCotizacion.setModel(new DefaultComboBoxModel<String>(new String[] {"Todos", "Proveedor", "Productos", "Monto", "Fecha"}));
+		cmbOrdenCotizacion.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
 		cmbOrdenCotizacion.setBounds(90, 8, 150, 20);
 		panelCotizaciones.add(cmbOrdenCotizacion);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 36, 699, 349);
-		panelCotizaciones.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		JPanel panelTablaCotizacion = new JPanel();
+		panelTablaCotizacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelTablaCotizacion.setBounds(10, 36, 699, 349);
+		panelCotizaciones.add(panelTablaCotizacion);
+		panelTablaCotizacion.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
+		JScrollPane scrollPaneCotizacion = new JScrollPane();
+		panelTablaCotizacion.add(scrollPaneCotizacion, BorderLayout.CENTER);
 		
 		tableCotizacion = new JTable();
 		tableCotizacion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -204,18 +201,158 @@ public class Inventario extends JDialog {
 		columModel2.getColumn(2).setPreferredWidth(300);
 		columModel2.getColumn(3).setPreferredWidth(100);
 		columModel2.getColumn(4).setPreferredWidth(114);
-		scrollPane.setViewportView(tableCotizacion);
+		scrollPaneCotizacion.setViewportView(tableCotizacion);
+		
+		JButton btnVerCotizacion = new JButton("VER");
+		btnVerCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnVerCotizacion.setBounds(90, 391, 70, 70);
+		panelCotizaciones.add(btnVerCotizacion);
 		
 		// EMPEZO AQUI
 		
 		
 		
 		// TERMINO AQUI
+		JPanel panelDevoluciones = new JPanel();
+		tabbedPane.addTab("Devoluciones", null, panelDevoluciones, null);
+		panelDevoluciones.setLayout(null);
+		
+		JLabel label = new JLabel("Ordenar por:");
+		label.setBounds(10, 11, 78, 14);
+		panelDevoluciones.add(label);
+		
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
+		comboBox.setBounds(90, 8, 150, 20);
+		panelDevoluciones.add(comboBox);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 36, 699, 344);
+		panelDevoluciones.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, BorderLayout.CENTER);
+		
+		tableDevoluciones = new JTable();
+		tableDevoluciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		model4 = new DefaultTableModel();
+		tableDevoluciones.setModel(model4);
+		tableDevoluciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableDevoluciones.getTableHeader().setReorderingAllowed(false);
+		
+		String[] headers4= {"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"};
+		model4.setColumnIdentifiers(headers4);
+		TableColumnModel columModel4 = tableDevoluciones.getColumnModel();
+		columModel4.getColumn(0).setPreferredWidth(90);
+		columModel4.getColumn(1).setPreferredWidth(90);
+		columModel4.getColumn(2).setPreferredWidth(300);
+		columModel4.getColumn(3).setPreferredWidth(100);
+		columModel4.getColumn(4).setPreferredWidth(114);
+		scrollPane.setViewportView(tableDevoluciones);
+		
+		JButton btnProcesar = new JButton("PROCESAR");
+		btnProcesar.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnProcesar.setBounds(10, 391, 70, 70);
+		panelDevoluciones.add(btnProcesar);
+		
+		JButton button_1 = new JButton("VER");
+		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_1.setBounds(90, 391, 70, 70);
+		panelDevoluciones.add(button_1);
+		
+		JButton button_2 = new JButton("CREAR");
+		button_2.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_2.setBounds(170, 391, 70, 70);
+		panelDevoluciones.add(button_2);
+		
+		JButton button_3 = new JButton("MODIFICAR");
+		button_3.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_3.setBounds(250, 391, 70, 70);
+		panelDevoluciones.add(button_3);
+		
+		JButton button_4 = new JButton("DUPLICAR");
+		button_4.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_4.setBounds(330, 391, 70, 70);
+		panelDevoluciones.add(button_4);
+		
+		JButton button_5 = new JButton("ELIMINAR");
+		button_5.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_5.setBounds(410, 391, 70, 70);
+		panelDevoluciones.add(button_5);
+		
+		JButton button_6 = new JButton("SALIR");
+		button_6.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_6.setBounds(639, 391, 70, 70);
+		panelDevoluciones.add(button_6);
 		
 		JPanel panelProductos = new JPanel();
 		tabbedPane.addTab("Listado de Productos", null, panelProductos, null);
+		panelProductos.setLayout(null);
 		
-		JPanel panelDevoluciones = new JPanel();
-		tabbedPane.addTab("Devoluciones", null, panelDevoluciones, null);
+		JLabel label_1 = new JLabel("Ordenar por:");
+		label_1.setBounds(10, 11, 78, 14);
+		panelProductos.add(label_1);
+		
+		JComboBox<String> comboBox_1 = new JComboBox<String>();
+		comboBox_1.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "DESCRIPCION", "CANTIDAD", "PRECIO", "PROVEEDOR"}));
+		comboBox_1.setBounds(90, 8, 150, 20);
+		panelProductos.add(comboBox_1);
+		
+		JButton btnEmitirOrden = new JButton("EMITIR ORDEN");
+		btnEmitirOrden.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEmitirOrden.setBounds(10, 391, 70, 70);
+		panelProductos.add(btnEmitirOrden);
+		
+		JButton btnEmitirDevolucion = new JButton("EMITIR DEVOLUCION");
+		btnEmitirDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEmitirDevolucion.setBounds(90, 391, 70, 70);
+		panelProductos.add(btnEmitirDevolucion);
+		
+		JButton btnCrearProducto = new JButton("VER PRODUCTO");
+		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCrearProducto.setBounds(170, 391, 70, 70);
+		panelProductos.add(btnCrearProducto);
+		
+		JButton btnCrearProducto_1 = new JButton("CREAR PRODUCTO");
+		btnCrearProducto_1.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCrearProducto_1.setBounds(250, 391, 70, 70);
+		panelProductos.add(btnCrearProducto_1);
+		
+		JButton btnModificarProducto = new JButton("MODIFICAR PRODUCTO");
+		btnModificarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnModificarProducto.setBounds(330, 391, 70, 70);
+		panelProductos.add(btnModificarProducto);
+		
+		JButton button_12 = new JButton("SALIR");
+		button_12.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_12.setBounds(639, 391, 70, 70);
+		panelProductos.add(button_12);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 36, 699, 344);
+		panelProductos.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPaneProductos = new JScrollPane();
+		panel_1.add(scrollPaneProductos, BorderLayout.CENTER);
+		
+		tableProductos = new JTable();
+		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		model3 = new DefaultTableModel();
+		tableProductos.setModel(model3);
+		tableProductos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableProductos.getTableHeader().setReorderingAllowed(false);
+		
+		String[] headers3= {"Codigo", "Descripcion", "Cantidad", "Precio total", "Proveedor"};
+		model3.setColumnIdentifiers(headers3);
+		TableColumnModel columModel3 = tableProductos.getColumnModel();
+		columModel3.getColumn(0).setPreferredWidth(90);
+		columModel3.getColumn(1).setPreferredWidth(302);
+		columModel3.getColumn(2).setPreferredWidth(90);
+		columModel3.getColumn(3).setPreferredWidth(100);
+		columModel3.getColumn(4).setPreferredWidth(114);
+		scrollPaneProductos.setViewportView(tableProductos);		
+		
 	}
 }

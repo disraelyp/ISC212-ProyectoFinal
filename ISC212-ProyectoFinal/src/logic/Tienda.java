@@ -3,15 +3,16 @@ package logic;
 import java.util.ArrayList;
 
 public class Tienda {
+	
 	private ArrayList<Componente> productos;
 	private ArrayList<PaqueteComponentes> ofertas;
-	
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Empleado> empleados;
 	private ArrayList<Proveedor> proveedores;
-	
 	private ArrayList<Venta> facturas;
 	private ArrayList<Compra> ordenes;
+	
+	private static Tienda tienda = null;
 	
 	
 	public Tienda() {
@@ -67,6 +68,13 @@ public class Tienda {
 	}
 	public void setOrdenes(ArrayList<Compra> ordenes) {
 		this.ordenes = ordenes;
+	}
+	
+	public static Tienda getInstance() {
+		if(tienda==null) {
+			tienda=new Tienda();
+		}
+		return tienda;
 	}
 	
 }
