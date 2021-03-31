@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DevolucionInventario extends OrdenInventario {
 	
@@ -8,13 +9,13 @@ public class DevolucionInventario extends OrdenInventario {
 	private String codigo;
 	private boolean retirada;
 	
-	public DevolucionInventario(Proveedor proveedor, Administrador administrador, ArrayList<Componente> componentes) {
-		super(proveedor, administrador, componentes);
+	public DevolucionInventario(Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago, ArrayList<Componente> componentes) {
+		super(proveedor, fecha, administrador, plazoPago, componentes);
 		this.codigo = "D-"+idDevolucion;
 		this.retirada = false;
 		idDevolucion++;
 	}
-
+	
 	public String getCodigo() {
 		return codigo;
 	}

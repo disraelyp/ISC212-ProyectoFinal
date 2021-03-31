@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CompraInventario extends OrdenInventario {
 	private static int idCompra=1;
@@ -8,14 +9,15 @@ public class CompraInventario extends OrdenInventario {
 	private boolean pagada;
 	private boolean recibida;
 	
-	public CompraInventario(Proveedor proveedor, Administrador administrador, ArrayList<Componente> componentes) {
-		super(proveedor, administrador, componentes);
+
+
+	public CompraInventario(Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago, ArrayList<Componente> componentes) {
+		super(proveedor, fecha, administrador, plazoPago, componentes);
 		this.codigo = "C-"+idCompra;
+		idCompra++;
 		this.pagada = false;
 		this.recibida = false;
-		idCompra++;
 	}
-
 	public String getCodigo() {
 		return codigo;
 	}

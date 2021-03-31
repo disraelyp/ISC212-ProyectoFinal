@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class Venta {
 	private String codigo;
 	private Cliente cliente;
-	private Vendedor vendedor;
+	private Empleado empleado;
 	private ArrayList<Componente> productos;
 	private ArrayList<PaqueteComponentes> paqueteProductos;
 	
-	public Venta(String codigo, Cliente cliente, Vendedor vendedor, ArrayList<Componente> productos,
+	public Venta(String codigo, Cliente cliente, Empleado empleado, ArrayList<Componente> productos,
 			ArrayList<PaqueteComponentes> paqueteProductos) {
 		super();
 		this.codigo = codigo;
 		this.cliente = cliente;
-		this.vendedor = vendedor;
+		this.empleado = empleado;
 		this.productos = productos;
 		this.paqueteProductos = paqueteProductos;
 	}
@@ -31,11 +31,11 @@ public class Venta {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	public Vendedor getVendedor() {
-		return vendedor;
+	public Empleado getVendedor() {
+		return empleado;
 	}
-	public void setVendedor(Vendedor vendedor) {
-		this.vendedor = vendedor;
+	public void setVendedor(Empleado empleado) {
+		this.empleado = empleado;
 	}
 	public ArrayList<Componente> getProductos() {
 		return productos;

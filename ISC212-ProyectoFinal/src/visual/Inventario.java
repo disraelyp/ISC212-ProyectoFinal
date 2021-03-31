@@ -14,7 +14,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import logic.Cliente;
+import logic.CompraInventario;
+import logic.OrdenInventario;
 import logic.Tienda;
 
 import javax.swing.JScrollPane;
@@ -71,8 +72,8 @@ public class Inventario extends JDialog {
 		btnCrearOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
 		btnCrearOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroVenta registroVenta = new RegistroVenta();
-				registroVenta.setVisible(true);
+				RegistroCompra registroCompra = new RegistroCompra();
+				registroCompra.setVisible(true);
 			}
 		});
 		btnCrearOrden.setBounds(90, 391, 70, 70);
@@ -404,9 +405,12 @@ public class Inventario extends JDialog {
 	private void cargarTablas() {
 		rows1 = new Object[model1.getColumnCount()];
 		model1.setRowCount(0);
-		//for(Cliente x: Tienda.getInstance().getClientes()) {
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof CompraInventario) {
+				rows1[0]= ((CompraInventario) x).getCodigo();
 
-			//model1.addRow(rows);
-		//}
+				model1.addRow(rows1);
+			}
+		}
 	}
 }

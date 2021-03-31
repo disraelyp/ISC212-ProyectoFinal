@@ -1,36 +1,20 @@
 package logic;
 
 public class Administrador extends Empleado{
-	
-	private int añosExperiencia;
-	private float extraSueldo;
-	private float comision;
-	
-	public Administrador(String cedula, String nombre, String telefono, String direccion, String codigo, float sueldoBase,
-			int horasExtra, int añosExperiencia, float extraSueldo, float comision) {
-		super(cedula, nombre, telefono, direccion, codigo, sueldoBase, horasExtra);
-		this.añosExperiencia = añosExperiencia;
-		this.extraSueldo = extraSueldo;
-		this.comision = comision;
+
+	private int cantidadCompras;
+
+	public Administrador(String cedula, String nombre, String telefono, String direccion, String codigo, float sueldo,
+			float comision, int cantidadVentas, String usuario, String contraseña, int cantidadCompras) {
+		super(cedula, nombre, telefono, direccion, codigo, sueldo, comision, cantidadVentas, usuario, contraseña);
+		this.cantidadCompras = cantidadCompras;
 	}
 
-	public int getAñosExperiencia() {
-		return añosExperiencia;
+	public int getCantidadCompras() {
+		return cantidadCompras;
 	}
-	public void setAñosExperiencia(int añosExperiencia) {
-		this.añosExperiencia = añosExperiencia;
-	}
-	public float getExtraSueldo() {
-		return extraSueldo;
-	}
-	public void setExtraSueldo(float extraSueldo) {
-		this.extraSueldo = extraSueldo;
-	}
-	public float getComision() {
-		return comision;
-	}
-	public void setComision(float comision) {
-		this.comision = comision;
-	}
+	public void setCantidadCompras(int cantidadCompras) {
+		this.cantidadCompras = cantidadCompras;
+	}	
 	
 }

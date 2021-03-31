@@ -21,6 +21,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+import java.util.Date;
+import java.util.Calendar;
 
 public class RegistroCompra extends JDialog {
 
@@ -31,10 +37,11 @@ public class RegistroCompra extends JDialog {
 	private JTextField textField_2;
 	private JTextField textField_5;
 	private JTable table;
+	private JSpinner spinner;
 	
 	public RegistroCompra() {
 		setResizable(false);
-		setTitle("Modulo de Facturacion");
+		setTitle("Modulo de Compras");
 		setModal(true);
 		setBounds(100, 100, 710, 534);	
 		setLocationRelativeTo(null);
@@ -49,7 +56,7 @@ public class RegistroCompra extends JDialog {
 			contentPanel.add(panel);
 			panel.setLayout(null);
 			{
-				JLabel lblCodigo = new JLabel("Cedula:");
+				JLabel lblCodigo = new JLabel("RNC:");
 				lblCodigo.setBounds(10, 23, 80, 14);
 				panel.add(lblCodigo);
 			}
@@ -124,6 +131,24 @@ public class RegistroCompra extends JDialog {
 		contentPanel.add(panel);
 		panel.setLayout(null);
 		
+		JLabel label = new JLabel("Metodo de pago:");
+		label.setBounds(10, 51, 90, 14);
+		panel.add(label);
+		
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"EFECTIVO", "CREDITO A 15 DIAS", "CREDITO A 30 DIAS", "CREDITO A 45 DIAS"}));
+		comboBox.setBounds(110, 48, 155, 20);
+		panel.add(comboBox);
+		
+		spinner = new JSpinner();
+		spinner.setModel(new SpinnerDateModel(Calendar.getInstance().getTime(), new Date(-2201282844000L), new Date(4110148800000L), Calendar.HOUR));
+		spinner.setBounds(110, 20, 155, 20);
+		panel.add(spinner);
+		
+		JLabel lblFecha = new JLabel("Fecha:");
+		lblFecha.setBounds(10, 24, 90, 14);
+		panel.add(lblFecha);	
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 132, 594, 270);
 		contentPanel.add(panel_1);
@@ -196,7 +221,7 @@ public class RegistroCompra extends JDialog {
 		panel_2.add(lblNewLabel_4);
 		
 		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/facturar.png")));
+		btnNewButton_2.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/comprar.png")));
 		btnNewButton_2.setBounds(10, 413, 78, 78);
 		contentPanel.add(btnNewButton_2);
 		
@@ -210,5 +235,4 @@ public class RegistroCompra extends JDialog {
 		btnSalir.setBounds(98, 413, 78, 78);
 		contentPanel.add(btnSalir);
 	}
-
 }
