@@ -13,6 +13,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import logic.Cliente;
+import logic.Tienda;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -24,9 +28,13 @@ public class Inventario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel model1;
+	private static Object[] rows1;
 	private static DefaultTableModel model2;
+	private static Object[] rows2;
 	private static DefaultTableModel model3;
+	private static Object[] rows3;
 	private static DefaultTableModel model4;
+	private static Object[] rows4;
 	private JTable tableOrden;
 	private JTable tableCotizacion;
 	private JButton btnCrearOrden;
@@ -59,24 +67,24 @@ public class Inventario extends JDialog {
 		tabbedPane.addTab("Ordenes de Compras", null, panelOrdenes, null);
 		panelOrdenes.setLayout(null);
 		
-		btnCrearOrden = new JButton("CREAR");
+		btnCrearOrden = new JButton("");
+		btnCrearOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
 		btnCrearOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegistroVenta registroVenta = new RegistroVenta();
 				registroVenta.setVisible(true);
 			}
 		});
-		btnCrearOrden.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearOrden.setBounds(90, 391, 70, 70);
 		panelOrdenes.add(btnCrearOrden);
 		
-		btnModificarOrden = new JButton("MODIFICAR");
-		btnModificarOrden.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnModificarOrden = new JButton("");
+		btnModificarOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		btnModificarOrden.setBounds(170, 391, 70, 70);
 		panelOrdenes.add(btnModificarOrden);
 		
-		btnDuplicarOrden = new JButton("DUPLICAR");
-		btnDuplicarOrden.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnDuplicarOrden = new JButton("");
+		btnDuplicarOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
 		btnDuplicarOrden.setBounds(250, 391, 70, 70);
 		panelOrdenes.add(btnDuplicarOrden);
 		
@@ -87,12 +95,11 @@ public class Inventario extends JDialog {
 				dispose();
 			}
 		});
-		btnSalirOrden.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnSalirOrden.setBounds(689, 391, 70, 70);
 		panelOrdenes.add(btnSalirOrden);
 		
-		JButton btnDevolucionOrden = new JButton("DEVOLUCION");
-		btnDevolucionOrden.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnDevolucionOrden = new JButton("");
+		btnDevolucionOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
 		btnDevolucionOrden.setBounds(330, 391, 70, 70);
 		panelOrdenes.add(btnDevolucionOrden);
 		
@@ -136,21 +143,34 @@ public class Inventario extends JDialog {
 		btnVerOrden.setBounds(10, 391, 70, 70);
 		panelOrdenes.add(btnVerOrden);
 		
+		JButton button = new JButton("");
+		button.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
+		button.setBounds(410, 391, 70, 70);
+		panelOrdenes.add(button);
+		
+		JButton btnRecibir = new JButton("");
+		btnRecibir.setIcon(new ImageIcon(Inventario.class.getResource("/resources/recibir.png")));
+		btnRecibir.setBounds(490, 391, 70, 70);
+		panelOrdenes.add(btnRecibir);
+		
 		JPanel panelCotizaciones = new JPanel();
 		tabbedPane.addTab("Cotizaciones", null, panelCotizaciones, null);
 		panelCotizaciones.setLayout(null);
 		
-		JButton btnCrearCotizacion = new JButton("CREAR");
+		JButton btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/cotizar.png")));
 		btnCrearCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearCotizacion.setBounds(170, 391, 70, 70);
 		panelCotizaciones.add(btnCrearCotizacion);
 		
-		JButton btnModificarCotizacion = new JButton("MODIFICAR");
+		JButton btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		btnModificarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnModificarCotizacion.setBounds(250, 391, 70, 70);
 		panelCotizaciones.add(btnModificarCotizacion);
 		
-		JButton btnDuplicarCotizacion = new JButton("DUPLICAR");
+		JButton btnDuplicarCotizacion = new JButton("");
+		btnDuplicarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
 		btnDuplicarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnDuplicarCotizacion);
@@ -166,12 +186,14 @@ public class Inventario extends JDialog {
 		btnSalirCotizacion.setBounds(689, 391, 70, 70);
 		panelCotizaciones.add(btnSalirCotizacion);
 		
-		JButton btnEliminarCotizacion = new JButton("ELIMINAR");
+		JButton btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
 		btnEliminarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
 		panelCotizaciones.add(btnEliminarCotizacion);
 		
-		JButton btnRecibirCotizacion = new JButton("RECIBIR");
+		JButton btnRecibirCotizacion = new JButton("");
+		btnRecibirCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
 		btnRecibirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
 		panelCotizaciones.add(btnRecibirCotizacion);
@@ -259,7 +281,8 @@ public class Inventario extends JDialog {
 		columModel4.getColumn(4).setPreferredWidth(114);
 		scrollPane.setViewportView(tableDevoluciones);
 		
-		JButton btnProcesar = new JButton("PROCESAR");
+		JButton btnProcesar = new JButton("");
+		btnProcesar.setIcon(new ImageIcon(Inventario.class.getResource("/resources/retirar.png")));
 		btnProcesar.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnProcesar.setBounds(10, 391, 70, 70);
 		panelDevoluciones.add(btnProcesar);
@@ -270,22 +293,26 @@ public class Inventario extends JDialog {
 		button_1.setBounds(90, 391, 70, 70);
 		panelDevoluciones.add(button_1);
 		
-		JButton button_2 = new JButton("CREAR");
+		JButton button_2 = new JButton("");
+		button_2.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
 		button_2.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_2.setBounds(170, 391, 70, 70);
 		panelDevoluciones.add(button_2);
 		
-		JButton button_3 = new JButton("MODIFICAR");
+		JButton button_3 = new JButton("");
+		button_3.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		button_3.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_3.setBounds(250, 391, 70, 70);
 		panelDevoluciones.add(button_3);
 		
-		JButton button_4 = new JButton("DUPLICAR");
+		JButton button_4 = new JButton("");
+		button_4.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
 		button_4.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_4.setBounds(330, 391, 70, 70);
 		panelDevoluciones.add(button_4);
 		
-		JButton button_5 = new JButton("ELIMINAR");
+		JButton button_5 = new JButton("");
+		button_5.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
 		button_5.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_5.setBounds(410, 391, 70, 70);
 		panelDevoluciones.add(button_5);
@@ -341,8 +368,7 @@ public class Inventario extends JDialog {
 		btnModificarProducto.setBounds(330, 391, 70, 70);
 		panelProductos.add(btnModificarProducto);
 		
-		JButton button_12 = new JButton("");
-		button_12.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
+		JButton button_12 = new JButton("Salir");
 		button_12.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_12.setBounds(689, 391, 70, 70);
 		panelProductos.add(button_12);
@@ -372,5 +398,15 @@ public class Inventario extends JDialog {
 		columModel3.getColumn(4).setPreferredWidth(114);
 		scrollPaneProductos.setViewportView(tableProductos);		
 		
+		cargarTablas();
+	}
+
+	private void cargarTablas() {
+		rows1 = new Object[model1.getColumnCount()];
+		model1.setRowCount(0);
+		//for(Cliente x: Tienda.getInstance().getClientes()) {
+
+			//model1.addRow(rows);
+		//}
 	}
 }

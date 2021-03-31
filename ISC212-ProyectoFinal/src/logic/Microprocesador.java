@@ -5,13 +5,13 @@ public class Microprocesador extends Componente{
 	private String conexion;
 	private float velocidad; //MHZ
 	
-	public Microprocesador(String serie, String modelo, String marca, int cantidad, float precio, float costo,
+	public Microprocesador(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
 			String conexion, float velocidad) {
-		super(serie, modelo, marca, cantidad, precio, costo);
+		super(modelo, marca, cantidad, cantidadMinima, precio, costo);
 		this.conexion = conexion;
 		this.velocidad = velocidad;
 	}
-
+	
 	public String getConexion() {
 		return conexion;
 	}

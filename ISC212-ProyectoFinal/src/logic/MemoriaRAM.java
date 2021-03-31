@@ -5,13 +5,13 @@ public class MemoriaRAM extends Componente{
 	private float capacidad; //MB
 	private int tipo; //1: DDR, 2: DDR2, 3: DDR3
 	
-	public MemoriaRAM(String serie, String modelo, String marca, int cantidad, float precio, float costo,
+	public MemoriaRAM(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
 			float capacidad, int tipo) {
-		super(serie, modelo, marca, cantidad, precio, costo);
+		super(modelo, marca, cantidad, cantidadMinima, precio, costo);
 		this.capacidad = capacidad;
 		this.tipo = tipo;
 	}
-
+	
 	public float getCapacidad() {
 		return capacidad;
 	}

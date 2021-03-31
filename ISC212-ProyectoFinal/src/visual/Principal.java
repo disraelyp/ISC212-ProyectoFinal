@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 
-public class Tienda {
+public class Principal {
 
 	private JFrame frmCecomsaGestion;
 
@@ -24,7 +24,7 @@ public class Tienda {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Tienda window = new Tienda();
+					Principal window = new Principal();
 					window.frmCecomsaGestion.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,7 +36,7 @@ public class Tienda {
 	/**
 	 * Create the application.
 	 */
-	public Tienda() {
+	public Principal() {
 		initialize();
 	}
 
@@ -46,7 +46,7 @@ public class Tienda {
 	private void initialize() {
 		frmCecomsaGestion = new JFrame();
 		frmCecomsaGestion.setTitle("Cecomsa - Gestion de Sucursal");
-		frmCecomsaGestion.setIconImage(Toolkit.getDefaultToolkit().getImage(Tienda.class.getResource("/resources/logo.png")));
+		frmCecomsaGestion.setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		frmCecomsaGestion.setBounds(100, 100, 1000, 700);
 		frmCecomsaGestion.setLocationRelativeTo(null);
 		frmCecomsaGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -203,5 +203,4 @@ public class Tienda {
 		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Reportes de pago");
 		mnNewMenu_4.add(mntmNewMenuItem_13);
 	}
-
 }

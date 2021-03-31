@@ -28,7 +28,7 @@ public class ListadoClientes extends JDialog {
 		setResizable(false);
 		setModal(true);
 		setTitle("Listado de Clientes.");
-		setBounds(100, 100, 360, 525);
+		setBounds(100, 100, 360, 472);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -41,7 +41,7 @@ public class ListadoClientes extends JDialog {
 					dispose();
 				}
 			});
-			btnNewButton.setBounds(10, 458, 153, 23);
+			btnNewButton.setBounds(181, 400, 153, 23);
 			contentPanel.add(btnNewButton);
 		}
 		
@@ -82,28 +82,9 @@ public class ListadoClientes extends JDialog {
 		columModel.getColumn(1).setPreferredWidth(220);
 		scrollPane.setViewportView(table);
 		
-		JButton btnVer = new JButton("Ver Cliente");
-		btnVer.setEnabled(false);
-		btnVer.setBounds(10, 394, 100, 23);
-		contentPanel.add(btnVer);
-		
-		JButton btnModificar = new JButton("Modificar");
-		btnModificar.setEnabled(false);
-		btnModificar.setBounds(120, 394, 104, 23);
-		contentPanel.add(btnModificar);
-		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setEnabled(false);
-		btnEliminar.setBounds(234, 394, 100, 23);
-		contentPanel.add(btnEliminar);
-		
 		JButton btnSeleccionar = new JButton("Seleccionar");
 		btnSeleccionar.setEnabled(false);
-		btnSeleccionar.setBounds(181, 458, 153, 23);
+		btnSeleccionar.setBounds(10, 400, 153, 23);
 		contentPanel.add(btnSeleccionar);
-		
-		JButton btnNewButton_3 = new JButton("Crear Cliente");
-		btnNewButton_3.setBounds(10, 424, 324, 23);
-		contentPanel.add(btnNewButton_3);
 	}
 }
