@@ -15,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import logic.CompraInventario;
+import logic.CotizacionInventario;
+import logic.DevolucionInventario;
 import logic.OrdenInventario;
 import logic.Tienda;
 
@@ -49,12 +51,14 @@ public class Inventario extends JDialog {
 	private JTable tableProductos;
 
 	public Inventario() {
-		setResizable(false);
+		
 		setTitle("Modulo de Inventario");
-		setModal(true);
+		
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 784, 512);
+		setResizable(false);
+		setModal(true);
 		setLocationRelativeTo(null);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
@@ -223,14 +227,13 @@ public class Inventario extends JDialog {
 		tableCotizacion.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableCotizacion.getTableHeader().setReorderingAllowed(false);
 		
-		String[] headers2= {"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"};
+		String[] headers2= {"Codigo", "Fecha", "Proveedor", "Monto Total"};
 		model2.setColumnIdentifiers(headers2);
 		TableColumnModel columModel2 = tableCotizacion.getColumnModel();
 		columModel2.getColumn(0).setPreferredWidth(90);
 		columModel2.getColumn(1).setPreferredWidth(90);
-		columModel2.getColumn(2).setPreferredWidth(330);
-		columModel2.getColumn(3).setPreferredWidth(120);
-		columModel2.getColumn(4).setPreferredWidth(114);
+		columModel2.getColumn(2).setPreferredWidth(450);
+		columModel2.getColumn(3).setPreferredWidth(114);
 		scrollPaneCotizacion.setViewportView(tableCotizacion);
 		
 		JButton btnVerCotizacion = new JButton("");
@@ -267,19 +270,19 @@ public class Inventario extends JDialog {
 		
 		tableDevoluciones = new JTable();
 		tableDevoluciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model4 = new DefaultTableModel();
-		tableDevoluciones.setModel(model4);
+		model3 = new DefaultTableModel();
+		tableDevoluciones.setModel(model3);
 		tableDevoluciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableDevoluciones.getTableHeader().setReorderingAllowed(false);
 		
-		String[] headers4= {"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"};
-		model4.setColumnIdentifiers(headers4);
-		TableColumnModel columModel4 = tableDevoluciones.getColumnModel();
-		columModel4.getColumn(0).setPreferredWidth(90);
-		columModel4.getColumn(1).setPreferredWidth(90);
-		columModel4.getColumn(2).setPreferredWidth(330);
-		columModel4.getColumn(3).setPreferredWidth(120);
-		columModel4.getColumn(4).setPreferredWidth(114);
+		String[] headers3= {"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"};
+		model3.setColumnIdentifiers(headers3);
+		TableColumnModel columModel3 = tableDevoluciones.getColumnModel();
+		columModel3.getColumn(0).setPreferredWidth(90);
+		columModel3.getColumn(1).setPreferredWidth(90);
+		columModel3.getColumn(2).setPreferredWidth(330);
+		columModel3.getColumn(3).setPreferredWidth(120);
+		columModel3.getColumn(4).setPreferredWidth(114);
 		scrollPane.setViewportView(tableDevoluciones);
 		
 		JButton btnProcesar = new JButton("");
@@ -384,33 +387,104 @@ public class Inventario extends JDialog {
 		
 		tableProductos = new JTable();
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model3 = new DefaultTableModel();
-		tableProductos.setModel(model3);
+		model4 = new DefaultTableModel();
+		tableProductos.setModel(model4);
 		tableProductos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableProductos.getTableHeader().setReorderingAllowed(false);
 		
-		String[] headers3= {"Codigo", "Descripcion", "Cantidad", "Precio total", "Proveedor"};
-		model3.setColumnIdentifiers(headers3);
-		TableColumnModel columModel3 = tableProductos.getColumnModel();
-		columModel3.getColumn(0).setPreferredWidth(90);
-		columModel3.getColumn(1).setPreferredWidth(302);
-		columModel3.getColumn(2).setPreferredWidth(90);
-		columModel3.getColumn(3).setPreferredWidth(100);
-		columModel3.getColumn(4).setPreferredWidth(114);
+		String[] headers4= {"Codigo", "Descripcion", "Cantidad", "Precio total", "Proveedor"};
+		model4.setColumnIdentifiers(headers4);
+		TableColumnModel columModel4 = tableProductos.getColumnModel();
+		columModel4.getColumn(0).setPreferredWidth(90);
+		columModel4.getColumn(1).setPreferredWidth(302);
+		columModel4.getColumn(2).setPreferredWidth(90);
+		columModel4.getColumn(3).setPreferredWidth(100);
+		columModel4.getColumn(4).setPreferredWidth(114);
 		scrollPaneProductos.setViewportView(tableProductos);		
+		
+		JButton btnEliminar = new JButton("");
+		btnEliminar.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
+		btnEliminar.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEliminar.setBounds(410, 391, 70, 70);
+		panelProductos.add(btnEliminar);
+		
+		JButton button_7 = new JButton("CREAR PRODUCTO");
+		button_7.setVerticalAlignment(SwingConstants.BOTTOM);
+		button_7.setBounds(490, 391, 70, 70);
+		panelProductos.add(button_7);
 		
 		cargarTablas();
 	}
-
+	//"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"
 	private void cargarTablas() {
+		
+		// ORDENES DE COMPRA
 		rows1 = new Object[model1.getColumnCount()];
 		model1.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
 			if(x instanceof CompraInventario) {
 				rows1[0]= ((CompraInventario) x).getCodigo();
-
+				rows1[1]=x.getFechaTexto();
+				rows1[2]=x.getProveedor().getNombre();
+				if(((CompraInventario) x).isRecibida()) {
+					rows1[3]="RECIBIDA";
+				} else {
+					rows1[3]="SIN RECIBIR";
+				}
+				rows1[4]=x.getCostoTotal();
 				model1.addRow(rows1);
 			}
 		}
+		
+		// COTIZACIONES
+		rows2 = new Object[model2.getColumnCount()];
+		model2.setRowCount(0);
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof CotizacionInventario) {
+				rows2[0]= ((CotizacionInventario) x).getCodigo();
+				rows2[1]=x.getFechaTexto();
+				rows2[2]=x.getProveedor().getNombre();
+				rows2[3]=x.getCostoTotal();
+				model2.addRow(rows2);
+			}
+		}
+		
+		// DEVOLUCIONES 
+		rows3 = new Object[model3.getColumnCount()];
+		model3.setRowCount(0);
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof DevolucionInventario) {
+				rows3[0]= ((DevolucionInventario) x).getCodigo();
+				rows3[1]=x.getFechaTexto();
+				rows3[2]=x.getProveedor().getNombre();
+				if(((DevolucionInventario) x).isRetirada()) {
+					rows3[3]="RETIRADA";
+				} else {
+					rows3[3]="SIN RETIRAR";
+				}
+				rows3[4]=x.getCostoTotal();
+				model3.addRow(rows3);
+			}
+		}
+		
+		// LISTADO DE PRODUCTOS
+		//String[] headers3= {"Codigo", "Descripcion", "Cantidad", "Precio total", "Proveedor"};
+		rows4 = new Object[model4.getColumnCount()];
+		model3.setRowCount(0);
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof DevolucionInventario) {
+				rows4[0]= ((DevolucionInventario) x).getCodigo();
+				rows4[1]=x.getFechaTexto();
+				rows4[2]=x.getProveedor().getNombre();
+				if(((DevolucionInventario) x).isRetirada()) {
+					rows4[3]="RETIRADA";
+				} else {
+					rows4[3]="SIN RETIRAR";
+				}
+				rows3[4]=x.getCostoTotal();
+				model3.addRow(rows4);
+			}
+		}
+		
 	}
 }

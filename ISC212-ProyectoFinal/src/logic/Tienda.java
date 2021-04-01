@@ -5,12 +5,11 @@ import java.util.Date;
 
 public class Tienda {
 
-	private ArrayList<Componente> productos;
-	private ArrayList<PaqueteComponentes> ofertas;
+	private ArrayList<Producto> productos;
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Empleado> empleados;
 	private ArrayList<Proveedor> proveedores;
-	private ArrayList<Venta> facturas;
+	private ArrayList<OrdenVenta> facturas;
 	private ArrayList<OrdenInventario> ordenes;
 
 	private static Tienda tienda = null;
@@ -18,12 +17,11 @@ public class Tienda {
 
 	public Tienda() {
 		super();
-		this.productos = new ArrayList<Componente>();
-		this.ofertas = new ArrayList<PaqueteComponentes>();
+		this.productos = new ArrayList<Producto>();
 		this.clientes = new ArrayList<Cliente>();
 		this.empleados = new ArrayList<Empleado>();
 		this.proveedores = new ArrayList<Proveedor>();
-		this.facturas = new ArrayList<Venta>();
+		this.facturas = new ArrayList<OrdenVenta>();
 		this.ordenes = new ArrayList<OrdenInventario>();
 	}
 
@@ -34,17 +32,11 @@ public class Tienda {
 		return tienda;
 	}
 
-	public ArrayList<Componente> getProductos() {
+	public ArrayList<Producto> getProductos() {
 		return productos;
 	}
-	public void setProductos(ArrayList<Componente> productos) {
+	public void setProductos(ArrayList<Producto> productos) {
 		this.productos = productos;
-	}
-	public ArrayList<PaqueteComponentes> getOfertas() {
-		return ofertas;
-	}
-	public void setOfertas(ArrayList<PaqueteComponentes> ofertas) {
-		this.ofertas = ofertas;
 	}
 	public ArrayList<Cliente> getClientes() {
 		return clientes;
@@ -64,10 +56,10 @@ public class Tienda {
 	public void setProveedores(ArrayList<Proveedor> proveedores) {
 		this.proveedores = proveedores;
 	}
-	public ArrayList<Venta> getFacturas() {
+	public ArrayList<OrdenVenta> getFacturas() {
 		return facturas;
 	}
-	public void setFacturas(ArrayList<Venta> facturas) {
+	public void setFacturas(ArrayList<OrdenVenta> facturas) {
 		this.facturas = facturas;
 	}
 	public ArrayList<OrdenInventario> getOrdenes() {
@@ -137,10 +129,10 @@ public class Tienda {
 	public void recibirCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
 		if(compraInventario.isRecibida()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: compraInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						x.setCantidad(x.getCantidad()+y.getCantidad());
+						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
 					}
 				}
 			}
@@ -156,10 +148,10 @@ public class Tienda {
 	public void retirarCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
 		if(compraInventario.isRecibida()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: compraInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						x.setCantidad(x.getCantidad()-y.getCantidad());
+						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()-y.getCantidad());
 					}
 				}
 			}
@@ -169,10 +161,10 @@ public class Tienda {
 	public Boolean isRetirableCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
 		if(compraInventario.isRecibida()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: compraInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						if(x.getCantidad()<y.getCantidad()) {
+						if(((Componente) (x)).getCantidad()<y.getCantidad()) {
 							return false;
 						}
 					}
@@ -242,10 +234,10 @@ public class Tienda {
 	public void recibirDevolucionInventario(String codigo) {
 		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
 		if(devolucionInventario.isRetirada()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: devolucionInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						x.setCantidad(x.getCantidad()+y.getCantidad());
+						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
 					}
 				}
 			}
@@ -261,10 +253,10 @@ public class Tienda {
 	public void retirarDevolucionInventario(String codigo) {
 		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
 		if(!devolucionInventario.isRetirada()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: devolucionInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						x.setCantidad(x.getCantidad()-y.getCantidad());
+						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()-y.getCantidad());
 					}
 				}
 			}
@@ -274,10 +266,10 @@ public class Tienda {
 	public Boolean isRetirableDevolucionInventario(String codigo) {
 		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
 		if(!devolucionInventario.isRetirada()) {
-			for(Componente x: productos) {
+			for(Producto x: productos) {
 				for(Componente y: devolucionInventario.getComponentes()) {
 					if(x.getCodigo().equals(y.getCodigo())) {
-						if(x.getCantidad()<y.getCantidad()) {
+						if(((Componente) (x)).getCantidad()<y.getCantidad()) {
 							return false;
 						}
 					}
@@ -376,4 +368,67 @@ public class Tienda {
 		}
 	}
 	
+	// FUNCIONES DE FACTURACION
+	public void generarFactura(Cliente cliente, Empleado empleado, ArrayList<Producto> carrito) {
+		OrdenVenta factura = new OrdenVenta(cliente, empleado, carrito);
+		retirarFactura(carrito);
+		this.facturas.add(factura);
+	}
+	public OrdenVenta buscarFactura(String codigo) {
+		for(OrdenVenta x: facturas) {
+			if(x.getCodigo().equals(codigo)) {
+				return x;
+			}
+		}
+		return null;
+	}
+	public boolean verificarFactura(String codigo) {
+		for(OrdenVenta x: facturas) {
+			if(x.getCodigo().equals(codigo)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public void duplicarFactura(String codigo) {
+		OrdenVenta factura = buscarFactura(codigo);
+		generarFactura(factura.getCliente(), factura.getEmpleado(), factura.getProductos());
+	}
+	public void recibirFactura(ArrayList<Producto> carrito) {
+		for(Producto x: productos) {
+			for(Producto y: carrito) {
+				if(x.getCodigo().equals(y.getCodigo())) {
+					x.setCantidad(x.getCantidad()+y.getCantidad());
+				}
+			}
+		}
+	}
+	public void retirarFactura(ArrayList<Producto> carrito) {
+		for(Producto x: productos) {
+			for(Producto y: carrito) {
+				if(x.getCodigo().equals(y.getCodigo())) {
+					x.setCantidad(x.getCantidad()-y.getCantidad());
+				}
+			}
+		}
+	}
+	public void modificarFactura(String codigo, Cliente cliente, Empleado empleado, ArrayList<Producto> carrito) {
+		OrdenVenta factura = buscarFactura(codigo);
+		recibirFactura(carrito);
+		for(OrdenVenta x: facturas) {
+			if(x==factura) {
+				x.setCliente(cliente);
+				x.setEmpleado(empleado);
+				x.setProductos(carrito);
+			}
+		}
+	}
+	public void eliminarFactura(String codigo) {
+		OrdenVenta factura = buscarFactura(codigo);
+		this.facturas.remove(factura);
+		retirarFactura(factura.getProductos());
+	}
+
+
+
 }

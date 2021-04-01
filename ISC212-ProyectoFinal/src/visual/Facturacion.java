@@ -28,7 +28,7 @@ public class Facturacion extends JDialog {
 	private static DefaultTableModel model1;
 	private static DefaultTableModel model2;
 	private static DefaultTableModel model4;
-	private JTable tableOrden;
+	private JTable tableFactura;
 	private JTable tableCotizacion;
 	private JButton btnCrearFactura;
 	private JButton btnModificarFactura;
@@ -106,31 +106,31 @@ public class Facturacion extends JDialog {
 		cmbOrden.setBounds(90, 8, 150, 20);
 		panelFacturas.add(cmbOrden);
 		
-		JPanel panelTablaOrden = new JPanel();
-		panelTablaOrden.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelTablaOrden.setBounds(10, 36, 699, 349);
-		panelFacturas.add(panelTablaOrden);
-		panelTablaOrden.setLayout(new BorderLayout(0, 0));
+		JPanel panelTablaFactura = new JPanel();
+		panelTablaFactura.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelTablaFactura.setBounds(10, 36, 699, 349);
+		panelFacturas.add(panelTablaFactura);
+		panelTablaFactura.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPaneOrden = new JScrollPane();
-		panelTablaOrden.add(scrollPaneOrden, BorderLayout.CENTER);
+		JScrollPane scrollPaneFactura = new JScrollPane();
+		panelTablaFactura.add(scrollPaneFactura, BorderLayout.CENTER);
 		
-		tableOrden = new JTable();
-		tableOrden.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableFactura = new JTable();
+		tableFactura.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		model1 = new DefaultTableModel();
-		tableOrden.setModel(model1);
-		tableOrden.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tableOrden.getTableHeader().setReorderingAllowed(false);
+		tableFactura.setModel(model1);
+		tableFactura.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableFactura.getTableHeader().setReorderingAllowed(false);
 		
 		String[] headers1= {"Codigo", "Fecha", "Cliente", "Vendedor", "Monto Total"};
 		model1.setColumnIdentifiers(headers1);
-		TableColumnModel columModel1 = tableOrden.getColumnModel();
+		TableColumnModel columModel1 = tableFactura.getColumnModel();
 		columModel1.getColumn(0).setPreferredWidth(90);
 		columModel1.getColumn(1).setPreferredWidth(90);
 		columModel1.getColumn(2).setPreferredWidth(300);
 		columModel1.getColumn(3).setPreferredWidth(100);
 		columModel1.getColumn(4).setPreferredWidth(114);
-		scrollPaneOrden.setViewportView(tableOrden);
+		scrollPaneFactura.setViewportView(tableFactura);
 		
 		JButton btnVerFactura = new JButton("");
 		btnVerFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));

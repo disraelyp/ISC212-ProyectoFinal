@@ -96,6 +96,12 @@ public class Principal {
 		mnNewMenu_3.add(separator_6);
 		
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Cuentas por cobrar");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CuentasCobrar cuentasCobrar = new CuentasCobrar();
+				cuentasCobrar.setVisible(true);
+			}
+		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
 		
 		JSeparator separator_7 = new JSeparator();

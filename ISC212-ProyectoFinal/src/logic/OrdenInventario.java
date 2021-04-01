@@ -6,15 +6,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class OrdenInventario {
+	protected String codigo;
 	protected Proveedor proveedor;
 	protected Date fecha;
 	protected Administrador administrador;
 	protected int plazoPago;
 	protected ArrayList<Componente> componentes;
 	
-	public OrdenInventario(Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago,
+	public OrdenInventario(String codigo, Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago,
 			ArrayList<Componente> componentes) {
 		super();
+		this.codigo=codigo;
 		this.proveedor = proveedor;
 		this.fecha = fecha;
 		this.administrador = administrador;
@@ -22,6 +24,12 @@ public class OrdenInventario {
 		this.componentes = componentes;
 	}
 	
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
@@ -52,7 +60,6 @@ public class OrdenInventario {
 	public void setPlazoPago(int plazoPago) {
 		this.plazoPago = plazoPago;
 	}
-	
 	
 	public String getFechaTexto() {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyy");
