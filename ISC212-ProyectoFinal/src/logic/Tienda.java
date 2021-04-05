@@ -186,6 +186,33 @@ public class Tienda implements Serializable{
 		return null;
 	}
 	
+	//FUNCIONES DE CLIENTES
+	
+	public void generarCliente(String cedula, String nombre, String telefono, String direccion, float creditoLimite) {
+		Cliente cliente = new Cliente(cedula, nombre, telefono, direccion, creditoLimite);
+		clientes.add(cliente);
+		
+	}
+	
+	public boolean verificarCliente(String cedula) {
+		for(Cliente x: clientes) {
+			if(x.getCedula().equalsIgnoreCase(cedula)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Cliente buscarCliente(String cedula) {
+		for(Cliente x: clientes) {
+			if(x.getCedula().equalsIgnoreCase(cedula)) {
+				return x;
+			}
+		}
+		return null;
+	}
+	
+	
 	// FUNCIONES DE PROVEEDORES
 	public void generarProveedor(String rnc, String nombre, String telefono, String direccion, Persona representante) {
 		Proveedor proveedor = new Proveedor(rnc, nombre, telefono, direccion, representante);
@@ -541,10 +568,5 @@ public class Tienda implements Serializable{
 		facturas.remove(factura);
 		retirarFactura(factura.getProductos());
 	}
-
-
-
-
-
 
 }
