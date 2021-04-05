@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,25 +20,46 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
+
+import javax.swing.DefaultCellEditor;
+
+import logic.Componente;
+import logic.PaqueteComponentes;
+import logic.Producto;
+import logic.Tienda;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class RegistroCompra extends JDialog {
 
+	
+	private static ArrayList<Producto> carrito = new ArrayList<Producto>();
+	
 	private final JPanel contentPanel = new JPanel();
-	private static DefaultTableModel model;
+	private static DefaultTableModel modelProductos;
+	private static Object[] rowsProductos;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_5;
-	private JTable table;
+	private JTable tableProductos;
 	private JSpinner spinner;
+	
+
 	
 	public RegistroCompra() {
 		setResizable(false);
@@ -112,11 +134,17 @@ public class RegistroCompra extends JDialog {
 		}
 		{
 			JButton btnEliminarProducto = new JButton("Agregar Producto");
-			btnEliminarProducto.setEnabled(false);
 			btnEliminarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoProductos listadoProductos = new ListadoProductos(true);
-					listadoProductos.setVisible(true);
+					ListadoProductos listadoProductos = new ListadoProductos();
+					String codigo = listadoProductos.showDialog();
+					if(codigo!=null) {
+						System.out.printf(codigo);
+						Producto producto = Tienda.getInstance().buscarProducto(codigo);
+						producto.setCantidad(1);
+						carrito.add(producto);
+						cargarCarrito();
+					}
 				}
 			});
 			btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -157,22 +185,31 @@ public class RegistroCompra extends JDialog {
 		JScrollPane scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model = new DefaultTableModel();
-		table.setModel(model);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.getTableHeader().setReorderingAllowed(false);
+		tableProductos = new JTable();
 		
+		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		modelProductos = new DefaultTableModel() {
+			@Override 
+			public boolean isCellEditable(int row, int column) {
+				if(column==2) {
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		tableProductos.setModel(modelProductos);
+		tableProductos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableProductos.getTableHeader().setReorderingAllowed(false);
 		String[] headers= {"Codigo", "Descripcion", "Cantidad", "Costo Unit.", "Monto Total"};
-		model.setColumnIdentifiers(headers);
-		TableColumnModel columModel = table.getColumnModel();
+		modelProductos.setColumnIdentifiers(headers);
+		TableColumnModel columModel = tableProductos.getColumnModel();
 		columModel.getColumn(0).setPreferredWidth(100);
 		columModel.getColumn(1).setPreferredWidth(200);
 		columModel.getColumn(2).setPreferredWidth(90);
 		columModel.getColumn(3).setPreferredWidth(100);
 		columModel.getColumn(4).setPreferredWidth(100);
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(tableProductos);
 		
 		JButton btnVerProducto = new JButton("Eliminar Producto");
 		btnVerProducto.setEnabled(false);
@@ -234,5 +271,30 @@ public class RegistroCompra extends JDialog {
 		});
 		btnSalir.setBounds(98, 413, 78, 78);
 		contentPanel.add(btnSalir);
+		
+		JButton btnNewButton_3 = new JButton("update");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cargarCarrito();
+			}
+		});
+		btnNewButton_3.setBounds(218, 413, 89, 23);
+		contentPanel.add(btnNewButton_3);
+	}
+	private void cargarCarrito() {
+		rowsProductos = new Object[modelProductos.getColumnCount()];
+		modelProductos.setRowCount(0);
+		for(Producto x: carrito) {
+			rowsProductos[0]= x.getCodigo();
+			if(x instanceof Componente) {
+				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+			} else {
+				rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+			}		
+			rowsProductos[2]=x.getCantidad();
+			rowsProductos[3]=x.getCosto();
+			rowsProductos[4]=x.getCantidad()*x.getCosto();
+			modelProductos.addRow(rowsProductos);
+		}
 	}
 }

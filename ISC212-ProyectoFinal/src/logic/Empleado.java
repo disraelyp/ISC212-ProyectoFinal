@@ -2,30 +2,27 @@ package logic;
 
 public class Empleado extends Persona{
 	
-	protected String codigo;
+	protected static int idEmpleado=0;
+	
+	protected int codigo;
 	protected float sueldo;
 	protected float comision;
 	protected int cantidadVentas;
 	protected String usuario;
 	protected String contraseña;
 	
-	public Empleado(String cedula, String nombre, String telefono, String direccion, String codigo, float sueldo,
-			float comision, int cantidadVentas, String usuario, String contraseña) {
+	public Empleado(String cedula, String nombre, String telefono, String direccion, float sueldo,
+			float comision, String usuario, String contraseña) {
 		super(cedula, nombre, telefono, direccion);
-		this.codigo = codigo;
+		this.codigo = idEmpleado;
+		idEmpleado++;
 		this.sueldo = sueldo;
 		this.comision = comision;
-		this.cantidadVentas = cantidadVentas;
+		this.cantidadVentas = 0;
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 	}
 
-	public String getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
 	public float getSueldo() {
 		return sueldo;
 	}

@@ -2,9 +2,6 @@ package logic;
 
 public class Componente extends Producto{
 	
-	private static int idComponente=0;
-	
-	protected String codigo;
 	protected String modelo;
 	protected String marca;
 	protected int cantidadMinima;
@@ -12,8 +9,7 @@ public class Componente extends Producto{
 	protected float costo;
 	
 	public Componente(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
-		super("C-"+idComponente, cantidad);
-		idComponente++;
+		super(new String("C-"), cantidad);
 		this.modelo = modelo;
 		this.marca = marca;
 		this.cantidadMinima = cantidadMinima;
@@ -21,9 +17,6 @@ public class Componente extends Producto{
 		this.costo = costo;
 	}
 
-	public String getCodigo() {
-		return codigo;
-	}
 	public String getModelo() {
 		return modelo;
 	}

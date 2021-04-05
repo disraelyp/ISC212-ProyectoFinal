@@ -1,13 +1,16 @@
 package logic;
 
-public class Administrador extends Empleado{
+import java.io.Serializable;
 
+public class Administrador extends Empleado implements Serializable{
+
+	private static final long serialVersionUID =1L;
 	private int cantidadCompras;
 
-	public Administrador(String cedula, String nombre, String telefono, String direccion, String codigo, float sueldo,
-			float comision, int cantidadVentas, String usuario, String contraseña, int cantidadCompras) {
-		super(cedula, nombre, telefono, direccion, codigo, sueldo, comision, cantidadVentas, usuario, contraseña);
-		this.cantidadCompras = cantidadCompras;
+	public Administrador(String cedula, String nombre, String telefono, String direccion, float sueldo,
+			float comision, String usuario, String contraseña) {
+		super(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
+		this.cantidadCompras = 0;
 	}
 
 	public int getCantidadCompras() {

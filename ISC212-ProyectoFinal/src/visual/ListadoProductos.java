@@ -6,109 +6,163 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import logic.Componente;
+import logic.PaqueteComponentes;
+import logic.Producto;
+import logic.Tienda;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class ListadoProductos extends JDialog {
 
+	private static String codigo=null;
+	
 	private final JPanel contentPanel = new JPanel();
-	private static DefaultTableModel model;
-	private JTextField textField;
-	private JTable table;
+	private static DefaultTableModel modelProductos;
+	private static Object[] rowsProductos;
+	private JTextField txtCodigo;
+	private JButton btnSalir;
+	private JButton btnSeleccionar;
+	private JTable tableProductos;
+	private JButton btnMostrarTodos;
 
-	public ListadoProductos(Boolean seleccion) {
+	String showDialog() {
+	    setVisible(true);
+	    return codigo;
+	}
+	
+	public ListadoProductos() {
 		setResizable(false);
 		setModal(true);
 		setTitle("Listado de Productos");
-		setBounds(100, 100, 360, 525);
+		setBounds(100, 100, 360, 500);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
-		{
-			JButton btnNewButton = new JButton("Salir");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dispose();
-				}
-			});
-			btnNewButton.setBounds(10, 458, 153, 23);
-			contentPanel.add(btnNewButton);
-		}
-		
-		textField = new JTextField();
-		textField.setBounds(10, 11, 210, 23);
-		contentPanel.add(textField);
-		textField.setColumns(10);
-		
-		JButton btnNewButton_1 = new JButton("Buscar");
-		btnNewButton_1.setBounds(230, 11, 104, 23);
-		contentPanel.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Mostrar todos");
-		btnNewButton_2.setEnabled(false);
-		btnNewButton_2.setBounds(10, 45, 324, 23);
-		contentPanel.add(btnNewButton_2);
+		contentPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 79, 324, 310);
-		contentPanel.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		contentPanel.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
 		
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model = new DefaultTableModel();
-		table.setModel(model);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.getTableHeader().setReorderingAllowed(false);
+		txtCodigo = new JTextField();
+		txtCodigo.setBounds(10, 11, 210, 23);
+		panel.add(txtCodigo);
+		txtCodigo.setColumns(10);
 		
-		String[] headers2= {"Cedula", "Nombre"};
-		model.setColumnIdentifiers(headers2);
-		TableColumnModel columModel = table.getColumnModel();
-		columModel.getColumn(0).setPreferredWidth(99);
-		columModel.getColumn(1).setPreferredWidth(220);
-		scrollPane.setViewportView(table);
-		
-		JButton btnVer = new JButton("Ver Producto");
-		btnVer.setEnabled(false);
-		btnVer.setBounds(10, 394, 100, 23);
-		contentPanel.add(btnVer);
-		
-		JButton btnModificar = new JButton("Modificar");
-		btnModificar.setEnabled(false);
-		btnModificar.setBounds(120, 394, 104, 23);
-		contentPanel.add(btnModificar);
-		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setEnabled(false);
-		btnEliminar.setBounds(234, 394, 100, 23);
-		contentPanel.add(btnEliminar);
-		
-		JButton btnSeleccionar = new JButton("Seleccionar");
-		btnSeleccionar.setEnabled(false);
-		btnSeleccionar.setBounds(181, 458, 153, 23);
-		contentPanel.add(btnSeleccionar);
-		
-		JButton btnNewButton_3 = new JButton("Crear Producto");
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton btnNewButton_1 = new JButton("Buscar");
+		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroComponente registroComponente = new RegistroComponente();
-				registroComponente.setVisible(true);
+				if(Tienda.getInstance().verificarProducto(txtCodigo.getText())) {
+					cargarTabla(true);
+					btnMostrarTodos.setEnabled(true);
+				} else {
+					btnMostrarTodos.setEnabled(false);
+					btnSeleccionar.setEnabled(false);
+					JOptionPane.showConfirmDialog(null, "ERROR: EL codigo '"+txtCodigo.getText()+"' no fue encontrado.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
-		btnNewButton_3.setBounds(10, 424, 324, 23);
-		contentPanel.add(btnNewButton_3);
+		btnNewButton_1.setBounds(230, 11, 104, 23);
+		panel.add(btnNewButton_1);
+		
+		btnMostrarTodos = new JButton("Mostrar todos");
+		btnMostrarTodos.setEnabled(false);
+		btnMostrarTodos.setBounds(10, 45, 324, 23);
+		panel.add(btnMostrarTodos);
+		
+		btnSeleccionar = new JButton("Seleccionar");
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSeleccionar.setEnabled(false);
+		btnSeleccionar.setBounds(181, 428, 153, 23);
+		panel.add(btnSeleccionar);
+		
+		btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				codigo=null;
+				dispose();
+			}
+		});
+		btnSalir.setBounds(10, 428, 153, 23);
+		panel.add(btnSalir);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 79, 324, 338);
+		panel.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_1.add(scrollPane, BorderLayout.CENTER);
+		
+		tableProductos = new JTable();
+		tableProductos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableProductos.getSelectedRow();
+				codigo = tableProductos.getValueAt(seleccion,  0).toString();
+				btnSeleccionar.setEnabled(true);
+			}
+		});
+		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		modelProductos = new DefaultTableModel();
+		tableProductos.setModel(modelProductos);
+		tableProductos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableProductos.getTableHeader().setReorderingAllowed(false);
+		
+		String[] headers= {"Codigo", "Descripcion"};
+		modelProductos.setColumnIdentifiers(headers);
+		TableColumnModel columModel = tableProductos.getColumnModel();
+		columModel.getColumn(0).setPreferredWidth(90);
+		columModel.getColumn(1).setPreferredWidth(229);
+		scrollPane.setViewportView(tableProductos);
+		
+		cargarTabla(false);
+	}
+
+	private void cargarTabla(boolean busqueda) {
+		rowsProductos = new Object[modelProductos.getColumnCount()];
+		modelProductos.setRowCount(0);
+		if(busqueda) {
+			for(Producto x: Tienda.getInstance().getProductos()) {
+				if(x.getCodigo().equalsIgnoreCase(txtCodigo.getText())) {
+					rowsProductos[0]= x.getCodigo();
+					if(x instanceof Componente) {
+						rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+					} else {
+						rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+					}		
+					modelProductos.addRow(rowsProductos);
+				}
+			}
+		} else {
+			for(Producto x: Tienda.getInstance().getProductos()) {
+				rowsProductos[0]= x.getCodigo();
+				if(x instanceof Componente) {
+					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+				} else {
+					rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+				}		
+				modelProductos.addRow(rowsProductos);
+			}
+		}
+		
 	}
 }

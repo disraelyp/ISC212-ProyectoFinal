@@ -4,17 +4,19 @@ import java.util.ArrayList;
 
 public class PaqueteComponentes extends Producto{
 	
-	private static int idPaqueteComponentes =1;
+	private static int idPaqueteComponentes=1;
 	
 	private Administrador administrador;
+	private int contador;
 	private ArrayList<Componente> productos;
 	private float descuento;
 	
 	public PaqueteComponentes(Administrador administrador, ArrayList<Componente> productos, float descuento, int cantidad) {
-		super("P-"+idPaqueteComponentes, cantidad);
+		super(new String("P-"), cantidad);
 		this.administrador = administrador;
 		this.productos = productos;
 		this.descuento = descuento;
+		this.setContador(idPaqueteComponentes);
 		idPaqueteComponentes++;
 	}
 
@@ -45,6 +47,13 @@ public class PaqueteComponentes extends Producto{
 	public void setDescuento(float descuento) {
 		this.descuento = descuento;
 	}
+	public int getContador() {
+		return contador;
+	}
+	public void setContador(int contador) {
+		this.contador = contador;
+	}
+	
 	
 	@Override
 	public float getPrecio() {

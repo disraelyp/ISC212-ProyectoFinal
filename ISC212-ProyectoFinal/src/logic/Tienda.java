@@ -1,19 +1,21 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Tienda {
+public class Tienda implements Serializable{
 
+	private static final long serialVersionUID =1L;
+	private static Tienda tienda=null;
+	private static Empleado loginUser;
+	
 	private ArrayList<Producto> productos;
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Empleado> empleados;
 	private ArrayList<Proveedor> proveedores;
 	private ArrayList<OrdenVenta> facturas;
 	private ArrayList<OrdenInventario> ordenes;
-
-	private static Tienda tienda = null;
-
 
 	public Tienda() {
 		super();
@@ -31,7 +33,17 @@ public class Tienda {
 		}
 		return tienda;
 	}
-
+	
+	public static void setTienda(Tienda tiendaCargada) {
+		tienda = tiendaCargada;
+	}
+	
+	public static Empleado getLoginUser() {
+		return loginUser;
+	}
+	public static void setLoginUser(Empleado loginUser) {
+		Tienda.loginUser = loginUser;
+	}
 	public ArrayList<Producto> getProductos() {
 		return productos;
 	}
@@ -69,12 +81,61 @@ public class Tienda {
 		this.ordenes = ordenes;
 	}
 
+	// FUNCIONES DE LOS PRODUCTOS
+	public boolean verificarProducto(String codigo) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public Producto buscarProducto(String codigo) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo)) {
+				return x;
+			}
+		}
+		return null;
+	}
+	
+	// FUNCIONES DE LOS COMPONENTES
+	public void generarComponente(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
+		Componente componente = new Componente(modelo, marca, cantidad, cantidadMinima, precio, costo);
+		System.out.printf(""+componente.getCodigo());
+		productos.add(componente);
+	}
+	
+	// FUNCIONES DE LOS PAQUETES DE COMPONENTES
+	
+	
+	// FUNCIONES DE LOS EMPLEADOS
+	public boolean iniciarSesion(String usuario, String contrasena) {
+		boolean login = false;
+		for(Empleado usuarios: empleados) {
+			if(usuarios.getUsuario().equalsIgnoreCase(usuario) && usuarios.getContraseña().equalsIgnoreCase(contrasena)) {
+				loginUser = usuarios;
+				login = true;
+			}
+		}
+		return login;
+	}
+	public void generarEmpleado(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
+		Empleado empleado = new Empleado(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
+		empleados.add(empleado);
+		
+	}
+	
 	//FUNCIONES DE ADMINISTRADORES
-
+	public void generarAdministrador(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
+		Administrador administrador = new Administrador(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
+		empleados.add(administrador);
+	}
+	
 	// FUNCIONES DE PROVEEDORES
 	public void generarProveedor(String rnc, String nombre, String telefono, String direccion, Persona representante) {
 		Proveedor proveedor = new Proveedor(rnc, nombre, telefono, direccion, representante);
-		this.proveedores.add(proveedor);
+		proveedores.add(proveedor);
 	}
 	public boolean verificarRnc(String rnc) {
 		for(Proveedor x: proveedores) {
@@ -96,7 +157,7 @@ public class Tienda {
 	// FUNCIONES DE COMPRAS DE INVENTARIO
 	public void generarCompraInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
 		CompraInventario compraInventario = new CompraInventario(proveedor, fecha, administrador, plazoPago, componentes);
-		this.ordenes.add(compraInventario);
+		ordenes.add(compraInventario);
 	}
 	public OrdenInventario buscarCompraInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
@@ -121,19 +182,17 @@ public class Tienda {
 	public void compraInventarioToDevolucionInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
 		retirarCompraInventario(codigo);
-		this.ordenes.remove(compraInventario);
+		ordenes.remove(compraInventario);
 		DevolucionInventario devolucionInventario = new DevolucionInventario(compraInventario.getProveedor(), compraInventario.getFecha(), compraInventario.getAdministrador(), compraInventario.getPlazoPago(), compraInventario.getComponentes());
 		devolucionInventario.setRetirada(true);
-		this.ordenes.add(devolucionInventario);
+		ordenes.add(devolucionInventario);
 	}
 	public void recibirCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		if(compraInventario.isRecibida()) {
-			for(Producto x: productos) {
-				for(Componente y: compraInventario.getComponentes()) {
-					if(x.getCodigo().equals(y.getCodigo())) {
-						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
-					}
+		for(Producto x: productos) {
+			for(Componente y: compraInventario.getComponentes()) {
+				if(x.getCodigo().equals(y.getCodigo())) {
+					((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
 				}
 			}
 		}
@@ -193,10 +252,8 @@ public class Tienda {
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof CompraInventario) {
 				if(x==compraInventario) {
-					if(((CompraInventario) x).isRecibida()) {
-						retirarCompraInventario(codigo);
-					}
-					this.ordenes.remove(x);
+					ordenes.remove(x);
+					break;
 				}
 			}
 		}
@@ -209,7 +266,7 @@ public class Tienda {
 	// FUNCIONES DE DEVOLUCION DE INVENTARIO
 	public void generarDevolucionInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
 		DevolucionInventario devolucionInventario = new DevolucionInventario(proveedor, fecha, administrador, plazoPago, componentes);
-		this.ordenes.add(devolucionInventario);
+		ordenes.add(devolucionInventario);
 	}
 	public OrdenInventario buscarDevolucionInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
@@ -301,7 +358,8 @@ public class Tienda {
 					if(((DevolucionInventario) x).isRetirada()) {
 						recibirDevolucionInventario(codigo);
 					}
-					this.ordenes.remove(x);
+					ordenes.remove(x);
+					break;
 				}
 			}
 		}
@@ -314,7 +372,7 @@ public class Tienda {
 	// FUNCIONES DE COTIZACION DE INVENTARIO
 	public void generarCotizacionInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
 		CotizacionInventario devolucionInventario = new CotizacionInventario(proveedor, fecha, administrador, plazoPago, componentes);
-		this.ordenes.add(devolucionInventario);
+		ordenes.add(devolucionInventario);
 	}
 	public OrdenInventario buscarCotizacionInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
@@ -338,7 +396,7 @@ public class Tienda {
 	}
 	public void cotizacionInventarioToCompraInventario(String codigo) {
 		CotizacionInventario cotizacionInventario = (CotizacionInventario) buscarCotizacionInventario(codigo);
-		this.ordenes.remove(cotizacionInventario);
+		ordenes.remove(cotizacionInventario);
 		generarCompraInventario(cotizacionInventario.getProveedor(), cotizacionInventario.getAdministrador(), cotizacionInventario.getPlazoPago(), cotizacionInventario.getFecha(), cotizacionInventario.getComponentes());
 	}
 	public void eliminarCotizacionInventario(String codigo) {
@@ -346,7 +404,8 @@ public class Tienda {
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof CotizacionInventario) {
 				if(x==cotizacionInventario) {
-					this.ordenes.remove(x);
+					ordenes.remove(x);
+					break;
 				}
 			}
 		}
@@ -372,7 +431,7 @@ public class Tienda {
 	public void generarFactura(Cliente cliente, Empleado empleado, ArrayList<Producto> carrito) {
 		OrdenVenta factura = new OrdenVenta(cliente, empleado, carrito);
 		retirarFactura(carrito);
-		this.facturas.add(factura);
+		facturas.add(factura);
 	}
 	public OrdenVenta buscarFactura(String codigo) {
 		for(OrdenVenta x: facturas) {
@@ -425,9 +484,12 @@ public class Tienda {
 	}
 	public void eliminarFactura(String codigo) {
 		OrdenVenta factura = buscarFactura(codigo);
-		this.facturas.remove(factura);
+		facturas.remove(factura);
 		retirarFactura(factura.getProductos());
 	}
+
+
+
 
 
 

@@ -111,7 +111,7 @@ public class RegistroVenta extends JDialog {
 			JButton btnEliminarProducto = new JButton("Agregar Producto");
 			btnEliminarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoProductos listadoProductos = new ListadoProductos(true);
+					ListadoProductos listadoProductos = new ListadoProductos();
 					listadoProductos.setVisible(true);
 				}
 			});

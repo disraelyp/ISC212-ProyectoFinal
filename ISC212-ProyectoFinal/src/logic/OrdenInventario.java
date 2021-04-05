@@ -1,11 +1,15 @@
 package logic;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class OrdenInventario {
+public class OrdenInventario implements Serializable{
+	
+	private static final long serialVersionUID =1L;
+	
 	protected String codigo;
 	protected Proveedor proveedor;
 	protected Date fecha;

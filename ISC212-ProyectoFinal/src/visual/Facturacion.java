@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -45,15 +44,20 @@ public class Facturacion extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 750, 550);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 734, 512);
+		contentPanel.setBounds(0, 0, 744, 522);
 		setLocationRelativeTo(null);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(new BorderLayout(0, 0));
 		
+		JPanel panelT = new JPanel();
+		contentPanel.add(panelT, BorderLayout.CENTER);
+		panelT.setLayout(null);
+		
+		// EMPIEZA AQUI
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(5, 5, 724, 500);
-		contentPanel.add(tabbedPane);
+		tabbedPane.setBounds(5, 5, 719, 496);
+		panelT.add(tabbedPane);
 		
 		JPanel panelFacturas = new JPanel();
 		tabbedPane.addTab("Facturas", null, panelFacturas, null);
@@ -67,17 +71,16 @@ public class Facturacion extends JDialog {
 				registroVenta.setVisible(true);
 			}
 		});
-		btnCrearFactura.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearFactura.setBounds(90, 391, 70, 70);
 		panelFacturas.add(btnCrearFactura);
 		
-		btnModificarFactura = new JButton("MODIFICAR");
-		btnModificarFactura.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnModificarFactura = new JButton("");
+		btnModificarFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
 		btnModificarFactura.setBounds(170, 391, 70, 70);
 		panelFacturas.add(btnModificarFactura);
 		
-		btnDuplicarFactura = new JButton("DUPLICAR");
-		btnDuplicarFactura.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnDuplicarFactura = new JButton("");
+		btnDuplicarFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
 		btnDuplicarFactura.setBounds(250, 391, 70, 70);
 		panelFacturas.add(btnDuplicarFactura);
 		
@@ -88,12 +91,11 @@ public class Facturacion extends JDialog {
 				dispose();
 			}
 		});
-		btnSalirFactura.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnSalirFactura.setBounds(639, 391, 70, 70);
+		btnSalirFactura.setBounds(634, 391, 70, 70);
 		panelFacturas.add(btnSalirFactura);
 		
-		JButton btnDevolucionFactura = new JButton("DEVOLUCION");
-		btnDevolucionFactura.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnDevolucionFactura = new JButton("");
+		btnDevolucionFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/devolver.png")));
 		btnDevolucionFactura.setBounds(330, 391, 70, 70);
 		panelFacturas.add(btnDevolucionFactura);
 		
@@ -108,7 +110,7 @@ public class Facturacion extends JDialog {
 		
 		JPanel panelTablaFactura = new JPanel();
 		panelTablaFactura.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelTablaFactura.setBounds(10, 36, 699, 349);
+		panelTablaFactura.setBounds(10, 36, 694, 349);
 		panelFacturas.add(panelTablaFactura);
 		panelTablaFactura.setLayout(new BorderLayout(0, 0));
 		
@@ -134,7 +136,6 @@ public class Facturacion extends JDialog {
 		
 		JButton btnVerFactura = new JButton("");
 		btnVerFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
-		btnVerFactura.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerFactura.setBounds(10, 391, 70, 70);
 		panelFacturas.add(btnVerFactura);
 		
@@ -142,18 +143,18 @@ public class Facturacion extends JDialog {
 		tabbedPane.addTab("Cotizaciones", null, panelCotizaciones, null);
 		panelCotizaciones.setLayout(null);
 		
-		JButton btnCrearCotizacion = new JButton("CREAR");
-		btnCrearCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/cotizar.png")));
 		btnCrearCotizacion.setBounds(170, 391, 70, 70);
 		panelCotizaciones.add(btnCrearCotizacion);
 		
-		JButton btnModificarCotizacion = new JButton("MODIFICAR");
-		btnModificarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
 		btnModificarCotizacion.setBounds(250, 391, 70, 70);
 		panelCotizaciones.add(btnModificarCotizacion);
 		
-		JButton btnDuplicarCotizacion = new JButton("DUPLICAR");
-		btnDuplicarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnDuplicarCotizacion = new JButton("");
+		btnDuplicarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
 		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnDuplicarCotizacion);
 		
@@ -164,18 +165,16 @@ public class Facturacion extends JDialog {
 				dispose();
 			}
 		});
-		btnSalirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnSalirCotizacion.setBounds(639, 391, 70, 70);
+		btnSalirCotizacion.setBounds(634, 391, 70, 70);
 		panelCotizaciones.add(btnSalirCotizacion);
 		
-		JButton btnEliminarCotizacion = new JButton("ELIMINAR");
-		btnEliminarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/eliminar.png")));
 		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
 		panelCotizaciones.add(btnEliminarCotizacion);
 		
 		JButton btnRecibirCotizacion = new JButton("");
 		btnRecibirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
-		btnRecibirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
 		panelCotizaciones.add(btnRecibirCotizacion);
 		
@@ -190,7 +189,7 @@ public class Facturacion extends JDialog {
 		
 		JPanel panelTablaCotizacion = new JPanel();
 		panelTablaCotizacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelTablaCotizacion.setBounds(10, 36, 699, 349);
+		panelTablaCotizacion.setBounds(10, 36, 694, 349);
 		panelCotizaciones.add(panelTablaCotizacion);
 		panelTablaCotizacion.setLayout(new BorderLayout(0, 0));
 		
@@ -216,7 +215,6 @@ public class Facturacion extends JDialog {
 		
 		JButton btnVerCotizacion = new JButton("");
 		btnVerCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
-		btnVerCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerCotizacion.setBounds(90, 391, 70, 70);
 		panelCotizaciones.add(btnVerCotizacion);
 		
@@ -234,7 +232,7 @@ public class Facturacion extends JDialog {
 		panelDevoluciones.add(comboBox);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 36, 699, 344);
+		panel.setBounds(10, 36, 694, 344);
 		panelDevoluciones.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -258,40 +256,42 @@ public class Facturacion extends JDialog {
 		columModel4.getColumn(4).setPreferredWidth(114);
 		scrollPane.setViewportView(tableDevoluciones);
 		
-		JButton btnProcesar = new JButton("PROCESAR");
-		btnProcesar.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton btnProcesar = new JButton("");
+		btnProcesar.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/retirar.png")));
 		btnProcesar.setBounds(10, 391, 70, 70);
 		panelDevoluciones.add(btnProcesar);
 		
 		JButton button_1 = new JButton("");
 		button_1.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
-		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
 		button_1.setBounds(90, 391, 70, 70);
 		panelDevoluciones.add(button_1);
 		
-		JButton button_2 = new JButton("CREAR");
-		button_2.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton button_2 = new JButton("");
+		button_2.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/devolver.png")));
 		button_2.setBounds(170, 391, 70, 70);
 		panelDevoluciones.add(button_2);
 		
-		JButton button_3 = new JButton("MODIFICAR");
-		button_3.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton button_3 = new JButton("");
+		button_3.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
 		button_3.setBounds(250, 391, 70, 70);
 		panelDevoluciones.add(button_3);
 		
-		JButton button_4 = new JButton("DUPLICAR");
-		button_4.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton button_4 = new JButton("");
+		button_4.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
 		button_4.setBounds(330, 391, 70, 70);
 		panelDevoluciones.add(button_4);
 		
-		JButton button_5 = new JButton("ELIMINAR");
-		button_5.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton button_5 = new JButton("");
+		button_5.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/eliminar.png")));
 		button_5.setBounds(410, 391, 70, 70);
 		panelDevoluciones.add(button_5);
 		
-		JButton button_6 = new JButton("SALIR");
-		button_6.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_6.setBounds(639, 391, 70, 70);
+		JButton button_6 = new JButton("");
+		button_6.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
+		button_6.setBounds(634, 391, 70, 70);
 		panelDevoluciones.add(button_6);
+		// TERMINA AQUI
+		
+		
 	}
 }

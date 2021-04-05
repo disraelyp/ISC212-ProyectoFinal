@@ -1,6 +1,10 @@
 package logic;
 
-public class Proveedor {
+import java.io.Serializable;
+
+public class Proveedor implements Serializable {
+	
+	private static final long serialVersionUID =1L;
 	private String rnc;
 	private String nombre;
 	private String telefono;

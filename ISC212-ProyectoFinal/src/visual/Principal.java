@@ -1,63 +1,64 @@
 package visual;
 
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JMenuBar;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Toolkit;
+import javax.swing.border.EmptyBorder;
 
-public class Principal {
+import logic.Administrador;
+import logic.Tienda;
 
-	private JFrame frmCecomsaGestion;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
+public class Principal extends JFrame {
+
+	private JPanel contentPane;
+
+	public Principal() {
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				FileOutputStream tienda2;
+				ObjectOutputStream write;
 				try {
-					Principal window = new Principal();
-					window.frmCecomsaGestion.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+					tienda2 = new FileOutputStream("data.dat");
+					write = new ObjectOutputStream(tienda2);
+					write.writeObject(Tienda.getInstance());
+				} catch(FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch(IOException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public Principal() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frmCecomsaGestion = new JFrame();
-		frmCecomsaGestion.setTitle("Cecomsa - Gestion de Sucursal");
-		frmCecomsaGestion.setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
-		frmCecomsaGestion.setBounds(100, 100, 1000, 700);
-		frmCecomsaGestion.setLocationRelativeTo(null);
-		frmCecomsaGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmCecomsaGestion.getContentPane().setLayout(new BorderLayout(0, 0));
+				
+		setTitle("Cecomsa - Gestion de Sucursal");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
+		setBounds(100, 100, 1000, 700);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		frmCecomsaGestion.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(new BorderLayout(0, 0));
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
 		JMenuBar menuBar = new JMenuBar();
-		frmCecomsaGestion.setJMenuBar(menuBar);
+		setJMenuBar(menuBar);
 		
 		JMenu mnNewMenu_1 = new JMenu("Facturacion");
 		menuBar.add(mnNewMenu_1);
@@ -111,6 +112,9 @@ public class Principal {
 		mnNewMenu_3.add(mntmNewMenuItem_9);
 		
 		JMenu mnNewMenu = new JMenu("Inventario");
+		if(!(Tienda.getLoginUser() instanceof Administrador)) {
+			mnNewMenu.setEnabled(false);
+		}
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Modulo de Inventario");
@@ -147,6 +151,12 @@ public class Principal {
 		mnNewMenu_2.add(separator);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Cuentas por pagar");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CuentasPagar cuentasPagar = new CuentasPagar();
+				cuentasPagar.setVisible(true);
+			}
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 		
 		JSeparator separator_1 = new JSeparator();
@@ -156,6 +166,9 @@ public class Principal {
 		mnNewMenu_2.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu_4 = new JMenu("Empleados");
+		if(!(Tienda.getLoginUser() instanceof Administrador)) {
+			mnNewMenu_4.setEnabled(false);
+		}
 		menuBar.add(mnNewMenu_4);
 		
 		JMenu mnNewMenu_5 = new JMenu("Vendedores");
@@ -208,5 +221,7 @@ public class Principal {
 		
 		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Reportes de pago");
 		mnNewMenu_4.add(mntmNewMenuItem_13);
+
 	}
+
 }

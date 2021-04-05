@@ -1,33 +1,34 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import java.awt.Toolkit;
-import javax.swing.ImageIcon;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CuentasCobrar extends JDialog {
+public class CuentasPagar extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private static DefaultTableModel model;
 
-	public CuentasCobrar() {
+	public CuentasPagar() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CuentasCobrar.class.getResource("/resources/logo.png")));
-		setTitle("Cecomsa - Cuentas por Cobrar");
+		setTitle("Cecomsa - Cuentas por Pagar");
 		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 805, 505);
@@ -46,7 +47,7 @@ public class CuentasCobrar extends JDialog {
 		panel.add(lblBuscar);
 		
 		JComboBox<String> cbxOrdenar = new JComboBox<String>();
-		cbxOrdenar.setModel(new DefaultComboBoxModel<String>(new String[] {"FECHA DE COMPRA", "FECHA LIMITE DE PAGO", "CLIENTE", "VENDEDOR", "MONTO TOTAL"}));
+		cbxOrdenar.setModel(new DefaultComboBoxModel<String>(new String[] {"FECHA DE COMPRA", "FECHA LIMITE DE PAGO", "PROVEEDOR", "ADMINISTRADOR", "MONTO TOTAL"}));
 		cbxOrdenar.setBounds(90, 8, 160, 20);
 		panel.add(cbxOrdenar);
 		
@@ -84,7 +85,7 @@ public class CuentasCobrar extends JDialog {
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getTableHeader().setReorderingAllowed(false);
 		
-		String[] headers= {"Fecha", "Cliente", "Vendedor", "Fecha Limite de Pago", "Monto Total"};
+		String[] headers= {"Fecha", "Proveedor", "Administrador", "Fecha Limite de Pago", "Monto Total"};
 		model.setColumnIdentifiers(headers);
 		TableColumnModel columModel = table.getColumnModel();
 		columModel.getColumn(0).setPreferredWidth(90);

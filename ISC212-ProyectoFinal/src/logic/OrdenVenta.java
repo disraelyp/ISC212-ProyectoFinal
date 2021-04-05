@@ -1,9 +1,13 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class OrdenVenta {
+public class OrdenVenta implements Serializable {
+	
+	private static final long serialVersionUID =1L;
 	private static int idFactura=1;
+	
 	private String codigo;
 	private Cliente cliente;
 	private Empleado empleado;
