@@ -106,6 +106,24 @@ public class Tienda implements Serializable{
 		productos.add(componente);
 	}
 	
+	public boolean verificarComponente(String codigo) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Componente) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Componente buscarComponente(String codigo) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Componente) {
+				return (Componente) x;
+			}
+		}
+		return null;
+	}
+	
 	// FUNCIONES DE LOS PAQUETES DE COMPONENTES
 	
 	
@@ -126,10 +144,46 @@ public class Tienda implements Serializable{
 		
 	}
 	
+	public boolean verificarEmpleado(int codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo() == codigo) && (!(x instanceof Administrador))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Empleado buscarEmpleado(int codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo() == codigo) && (!(x instanceof Administrador))) {
+				return (Empleado) x;
+			}
+		}
+		return null;
+	}
+	
 	//FUNCIONES DE ADMINISTRADORES
 	public void generarAdministrador(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
 		Administrador administrador = new Administrador(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
 		empleados.add(administrador);
+	}
+	
+	public boolean verificarAdministrador(int codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo() == codigo) && (x instanceof Administrador)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Administrador buscarAdministrador(int codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo() == codigo) && (x instanceof Administrador)) {
+				return (Administrador) x;
+			}
+		}
+		return null;
 	}
 	
 	// FUNCIONES DE PROVEEDORES

@@ -7,22 +7,26 @@ public class Empleado extends Persona{
 	protected int codigo;
 	protected float sueldo;
 	protected float comision;
-	protected int cantidadVentas;
 	protected String usuario;
 	protected String contraseña;
 	
-	public Empleado(String cedula, String nombre, String telefono, String direccion, float sueldo,
+	public Empleado(String cedula, String nombre, String telefono, String direccion, float sueldo, 
 			float comision, String usuario, String contraseña) {
 		super(cedula, nombre, telefono, direccion);
 		this.codigo = idEmpleado;
 		idEmpleado++;
 		this.sueldo = sueldo;
 		this.comision = comision;
-		this.cantidadVentas = 0;
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 	}
-
+	
+	public int getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
 	public float getSueldo() {
 		return sueldo;
 	}
@@ -34,12 +38,6 @@ public class Empleado extends Persona{
 	}
 	public void setComision(float comision) {
 		this.comision = comision;
-	}
-	public int getCantidadVentas() {
-		return cantidadVentas;
-	}
-	public void setCantidadVentas(int cantidadVentas) {
-		this.cantidadVentas = cantidadVentas;
 	}
 	public String getUsuario() {
 		return usuario;

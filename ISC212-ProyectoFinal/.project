@@ -20,5 +20,10 @@
 			<type>1</type>
 			<location>C:/Users/yelid/Downloads/provee.png</location>
 		</link>
+		<link>
+			<name>src/resources/registrar.png</name>
+			<type>1</type>
+			<location>C:/Users/yelid/Downloads/registrar.png</location>
+		</link>
 	</linkedResources>
 </projectDescription>

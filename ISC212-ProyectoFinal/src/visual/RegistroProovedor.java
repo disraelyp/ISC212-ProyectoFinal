@@ -44,78 +44,76 @@ public class RegistroProovedor extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroProovedor.class.getResource("/resources/provee.png")));
 		setTitle("Registro de Proveedores");
 		setResizable(false);
-		setBounds(100, 100, 516, 454);
+		setBounds(100, 100, 509, 518);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		contentPanel.setLayout(null);
 		{
 			JPanel panel = new JPanel();
+			panel.setBounds(5, 5, 484, 367);
 			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Registro de Proveedores", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			contentPanel.add(panel, BorderLayout.CENTER);
+			contentPanel.add(panel);
 			panel.setLayout(null);
 			
 			JLabel lblRNC = new JLabel("RNC:");
-			lblRNC.setBounds(10, 51, 124, 14);
+			lblRNC.setBounds(27, 49, 124, 14);
 			panel.add(lblRNC);
 			
 			JLabel lblNewLabel = new JLabel("Nombre de la empresa:");
-			lblNewLabel.setBounds(10, 116, 172, 14);
+			lblNewLabel.setBounds(27, 112, 172, 14);
 			panel.add(lblNewLabel);
 			
 			JLabel lblNewLabel_1 = new JLabel("Direcci\u00F3n:");
-			lblNewLabel_1.setBounds(10, 181, 124, 14);
+			lblNewLabel_1.setBounds(27, 175, 124, 14);
 			panel.add(lblNewLabel_1);
 			
 			JLabel lblNewLabel_2 = new JLabel("Tel\u00E9fono:");
-			lblNewLabel_2.setBounds(10, 246, 124, 14);
+			lblNewLabel_2.setBounds(27, 238, 124, 14);
 			panel.add(lblNewLabel_2);
 			
 			JLabel lblNewLabel_3 = new JLabel("Representante:");
-			lblNewLabel_3.setBounds(10, 311, 124, 14);
+			lblNewLabel_3.setBounds(27, 301, 124, 14);
 			panel.add(lblNewLabel_3);
 			
 			txtRNC = new JTextField();
-			txtRNC.setBounds(153, 46, 138, 20);
+			txtRNC.setBounds(178, 44, 138, 20);
 			panel.add(txtRNC);
 			txtRNC.setColumns(10);
 			
 			txtNombre = new JTextField();
-			txtNombre.setBounds(153, 112, 275, 20);
+			txtNombre.setBounds(178, 108, 275, 20);
 			panel.add(txtNombre);
 			txtNombre.setColumns(10);
 			
 			txtDireccion = new JTextField();
-			txtDireccion.setBounds(153, 178, 275, 20);
+			txtDireccion.setBounds(178, 172, 275, 20);
 			panel.add(txtDireccion);
 			txtDireccion.setColumns(10);
 			
 			txtTelefono = new JTextField();
-			txtTelefono.setBounds(153, 244, 138, 20);
+			txtTelefono.setBounds(178, 236, 138, 20);
 			panel.add(txtTelefono);
 			txtTelefono.setColumns(10);
 			
 			txtRepresentante = new JTextField();
-			txtRepresentante.setBounds(153, 310, 275, 20);
+			txtRepresentante.setBounds(178, 300, 275, 20);
 			panel.add(txtRepresentante);
 			txtRepresentante.setColumns(10);
 		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton btnRegistrar = new JButton("Registrar");
-				btnRegistrar.setActionCommand("OK");
-				buttonPane.add(btnRegistrar);
-				getRootPane().setDefaultButton(btnRegistrar);
-			}
-			{
-				JButton btnCancelar = new JButton("Cancelar");
-				btnCancelar.setActionCommand("Cancel");
-				buttonPane.add(btnCancelar);
-			}
-		}
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(5, 375, 484, 92);
+		contentPanel.add(panel);
+		panel.setLayout(null);
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(396, 11, 70, 70);
+		panel.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("New button");
+		btnNewButton_1.setBounds(316, 11, 70, 70);
+		panel.add(btnNewButton_1);
 	}
 }
