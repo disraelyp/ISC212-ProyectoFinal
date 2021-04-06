@@ -13,6 +13,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import logic.Componente;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
@@ -26,6 +29,9 @@ import javax.swing.ImageIcon;
 
 public class RegistroVenta extends JDialog {
 
+	
+	//private static Componente productoSeleccionado=null;
+	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel model;
 	private JTextField textField;
@@ -99,8 +105,8 @@ public class RegistroVenta extends JDialog {
 			btnNewButton.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					RegistroComponente registroComponente = new RegistroComponente();
-					registroComponente.setVisible(true);
+					//RegistroComponente registroComponente = new RegistroComponente();
+					//registroComponente.setVisible(true);
 				}
 			});
 			btnNewButton.setVerticalAlignment(SwingConstants.TOP);
@@ -197,7 +203,7 @@ public class RegistroVenta extends JDialog {
 		JButton btnCrearProducto = new JButton("Crear Producto");
 		btnCrearProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroComponente registroComponente = new RegistroComponente();
+				RegistroComponente registroComponente = new RegistroComponente(null, 0);
 				registroComponente.setVisible(true);
 			}
 		});

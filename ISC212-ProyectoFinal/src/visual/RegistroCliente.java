@@ -8,11 +8,20 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import logic.Cliente;
+import logic.Tienda;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class RegistroCliente extends JDialog {
 
@@ -21,13 +30,16 @@ public class RegistroCliente extends JDialog {
 	private JTextField txtNombre;
 	private JTextField txtTelefono;
 	private JTextField txtDireccion;
+	private JSpinner spnCredito;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			RegistroCliente dialog = new RegistroCliente();
+			RegistroCliente dialog = new RegistroCliente(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -38,14 +50,22 @@ public class RegistroCliente extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroCliente() {
-		setTitle("Registro de Clientes");
+	public RegistroCliente(Cliente aux) {
+		
+		if(aux == null) {
+			setTitle("Registro de Clientes");
+		} else {
+			setTitle("Modificador de Clientes");
+			cargarCliente(aux);
+		}
+		
 		setBounds(100, 100, 456, 366);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 439, 327);
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
+		setLocationRelativeTo(null);
 		{
 			JPanel panel = new JPanel();
 			panel.setBounds(5, 5, 429, 225);
@@ -75,6 +95,9 @@ public class RegistroCliente extends JDialog {
 			
 			txtCedula = new JTextField();
 			txtCedula.setBounds(140, 23, 124, 20);
+			if(aux!=null){
+				txtCedula.setEnabled(false);
+			}
 			panel.add(txtCedula);
 			txtCedula.setColumns(10);
 			
@@ -94,16 +117,44 @@ public class RegistroCliente extends JDialog {
 			panel.add(txtDireccion);
 			txtDireccion.setColumns(10);
 			
-			JSpinner spnCredito = new JSpinner();
+			spnCredito = new JSpinner();
 			spnCredito.setBounds(140, 185, 124, 20);
 			panel.add(spnCredito);
 		}
 		
-		JButton btnNewButton = new JButton("Cancelar");
+		btnNewButton = new JButton("Cancelar");
 		btnNewButton.setBounds(339, 241, 70, 70);
 		contentPanel.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Registrar");
+		
+		
+		if(aux == null) { // aqui cambian los botones
+			btnNewButton_1 = new JButton("Registrar");
+		} else {
+			btnNewButton_1 = new JButton("Modificar");
+		}
+		
+		
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(aux == null) { 
+					if(Tienda.getInstance().verificarCliente(txtCedula.getText())) {
+						Tienda.getInstance().generarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
+					} else {
+						JOptionPane.showMessageDialog(null, "Esta cédula ya pertenece a un cliente", "Error", JOptionPane.ERROR_MESSAGE);;
+					}
+					clean();
+				} else {
+					Tienda.getInstance().modificarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
+					dispose();
+				}
+				
+				
+				
+			}
+
+			
+		});
 		btnNewButton_1.setBounds(246, 241, 70, 70);
 		contentPanel.add(btnNewButton_1);
 		
@@ -111,5 +162,22 @@ public class RegistroCliente extends JDialog {
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(5, 235, 429, 81);
 		contentPanel.add(panel);
+	}
+
+	private void cargarCliente(Cliente aux) {
+		txtCedula.setText(aux.getCedula());
+		txtNombre.setText(aux.getNombre());
+		txtTelefono.setText(aux.getTelefono());
+		txtDireccion.setText(aux.getDireccion());
+		spnCredito.setValue(aux.getCreditoLimite());		
+	}
+	
+	private void clean() {
+		txtCedula.setText("");
+		txtNombre.setText("");
+		txtTelefono.setText("");
+		txtDireccion.setText("");
+		spnCredito.setValue(0);
+		
 	}
 }

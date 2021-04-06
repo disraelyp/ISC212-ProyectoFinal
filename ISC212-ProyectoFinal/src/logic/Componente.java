@@ -8,7 +8,7 @@ public class Componente extends Producto{
 	protected float precio;
 	protected float costo;
 	
-	public Componente(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
+	public Componente(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
 		super(new String("C-"), cantidad);
 		this.modelo = modelo;
 		this.marca = marca;

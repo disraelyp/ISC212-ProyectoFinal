@@ -29,9 +29,13 @@ import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Inventario extends JDialog {
 
+	private static Producto productoSeleccionado=null;
+	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelOrddenes;
 	private static Object[] rowsOrdenes;
@@ -52,6 +56,7 @@ public class Inventario extends JDialog {
 	private JButton btnSalirOrden;
 	private JTable tableDevoluciones;
 	private JTable tableProductos;
+	private JButton btnCrearProducto;
 
 	public Inventario() {
 		
@@ -343,17 +348,16 @@ public class Inventario extends JDialog {
 		comboBox_1.setBounds(90, 8, 150, 20);
 		panelProductos.add(comboBox_1);
 		
-		JButton btnEmitirOrden = new JButton("EMITIR ORDEN");
-		btnEmitirOrden.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEmitirOrden.setBounds(10, 391, 70, 70);
-		panelProductos.add(btnEmitirOrden);
-		
-		JButton btnEmitirDevolucion = new JButton("EMITIR DEVOLUCION");
-		btnEmitirDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEmitirDevolucion.setBounds(90, 391, 70, 70);
-		panelProductos.add(btnEmitirDevolucion);
-		
-		JButton btnCrearProducto = new JButton("");
+		btnCrearProducto = new JButton("");
+		btnCrearProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(productoSeleccionado instanceof Componente) {
+					RegistroComponente registroComponente = new RegistroComponente((Componente) productoSeleccionado, 1);
+					registroComponente.setVisible(true);
+				}
+			}
+		});
+		btnCrearProducto.setEnabled(false);
 		btnCrearProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCrearProducto.setBounds(170, 391, 70, 70);
@@ -362,17 +366,18 @@ public class Inventario extends JDialog {
 		JButton btnCrearProducto_1 = new JButton("CREAR PRODUCTO");
 		btnCrearProducto_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroComponente registroComponente = new RegistroComponente();
-				registroComponente.setVisible(true);
+				RegistroComponente registroComponente = new RegistroComponente(null, 0);
+				registroComponente.setVisible(true); //bien
 			}
 		});
 		btnCrearProducto_1.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnCrearProducto_1.setBounds(250, 391, 70, 70);
+		btnCrearProducto_1.setBounds(10, 391, 70, 70);
 		panelProductos.add(btnCrearProducto_1);
 		
-		JButton btnModificarProducto = new JButton("MODIFICAR PRODUCTO");
+		JButton btnModificarProducto = new JButton("");
+		btnModificarProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		btnModificarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnModificarProducto.setBounds(330, 391, 70, 70);
+		btnModificarProducto.setBounds(250, 391, 70, 70);
 		panelProductos.add(btnModificarProducto);
 		
 		JButton button_12 = new JButton("Salir");
@@ -389,6 +394,15 @@ public class Inventario extends JDialog {
 		panel_1.add(scrollPaneProductos, BorderLayout.CENTER);
 		
 		tableProductos = new JTable();
+		tableProductos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableProductos.getSelectedRow();
+				productoSeleccionado = Tienda.getInstance().buscarProducto(tableProductos.getValueAt(seleccion,  0).toString());
+				btnCrearProducto.setEnabled(true);
+			}
+		});
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modelProductos = new DefaultTableModel();
 		tableProductos.setModel(modelProductos);
@@ -409,12 +423,12 @@ public class Inventario extends JDialog {
 		JButton btnEliminar = new JButton("");
 		btnEliminar.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
 		btnEliminar.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEliminar.setBounds(410, 391, 70, 70);
+		btnEliminar.setBounds(330, 391, 70, 70);
 		panelProductos.add(btnEliminar);
 		
 		JButton button_7 = new JButton("CREAR PRODUCTO");
 		button_7.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_7.setBounds(490, 391, 70, 70);
+		button_7.setBounds(90, 391, 70, 70);
 		panelProductos.add(button_7);
 		
 		cargarTablas();

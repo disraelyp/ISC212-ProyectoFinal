@@ -100,8 +100,30 @@ public class Tienda implements Serializable{
 	}
 	
 	// FUNCIONES DE LOS COMPONENTES
-	public void generarComponente(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
-		Componente componente = new Componente(modelo, marca, cantidad, cantidadMinima, precio, costo);
+	public void generarTarjetaMadre(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
+		TarjetaMadre componente = new TarjetaMadre(codigo, modelo, marca, cantidad, cantidadMinima, precio, costo, tipoMicro, tipoRAM, tipoDisco);
+		System.out.printf(""+componente.getCodigo());
+		productos.add(componente);
+	}
+	
+	public void generarMicro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			int conexion, float velocidad, int nucleos) {
+		Microprocesador componente = new Microprocesador(codigo, modelo, marca, cantidad, cantidadMinima, precio, costo, conexion, velocidad, nucleos);
+		System.out.printf(""+componente.getCodigo());
+		productos.add(componente);
+	}
+	
+	public void generarDiscoDuro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			float capacidad, int tipo, int rpm) {
+		DiscoDuro componente = new DiscoDuro(codigo, modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, rpm);
+		System.out.printf(""+componente.getCodigo());
+		productos.add(componente);
+	}
+	
+	public void generarMemoriaRAM(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			float capacidad, int tipo, int frecuencia) {
+		MemoriaRAM componente = new MemoriaRAM(codigo, modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, frecuencia);
 		System.out.printf(""+componente.getCodigo());
 		productos.add(componente);
 	}
@@ -115,6 +137,7 @@ public class Tienda implements Serializable{
 		return false;
 	}
 	
+	
 	public Componente buscarComponente(String codigo) {
 		for(Producto x: productos) {
 			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Componente) {
@@ -122,6 +145,78 @@ public class Tienda implements Serializable{
 			}
 		}
 		return null;
+	}
+	
+	public void modificarTarjetaMadre(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
+		/*for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
+				x.setCodigo(codigo);
+				x.setModelo(modelo);
+				x.setMarca(marca);
+				x.setCantidad(cantidad);
+				x.setCantidadMinima(cantidadMinima);
+				x.setPrecio(precio);
+				x.setCosto(costo);
+				x.setTipoMicro(tipoMicro);
+				x.setTipoRAM(tipoRAM);
+				x.setTipoDisco(tipoDisco);
+			}
+		}*/
+	}
+	
+	public void modificarMicro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			int conexion, float velocidad, int nucleos) {
+		/*for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
+				x.setCodigo(codigo);
+				x.setModelo(modelo);
+				x.setMarca(marca);
+				x.setCantidad(cantidad);
+				x.setCantidadMinima(cantidadMinima);
+				x.setPrecio(precio);
+				x.setCosto(costo);
+				x.setTipoMicro(conexion);
+				x.setTipoRAM(velocidad);
+				x.setTipoDisco(nucleos);
+			}
+		}*/
+	}
+	
+	public void modificarDiscoDuro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			float capacidad, int tipo, int rpm) {
+		/*for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
+				x.setCodigo(codigo);
+				x.setModelo(modelo);
+				x.setMarca(marca);
+				x.setCantidad(cantidad);
+				x.setCantidadMinima(cantidadMinima);
+				x.setPrecio(precio);
+				x.setCosto(costo);
+				x.setTipoMicro(capacidad);
+				x.setTipoRAM(tipo);
+				x.setTipoDisco(rpm);
+			}
+		}*/
+	}
+	
+	public void modificarMemoriaRAM(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+			float capacidad, int tipo, int frecuencia) {
+		/*for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
+				x.setCodigo(codigo);
+				x.setModelo(modelo);
+				x.setMarca(marca);
+				x.setCantidad(cantidad);
+				x.setCantidadMinima(cantidadMinima);
+				x.setPrecio(precio);
+				x.setCosto(costo);
+				x.setTipoMicro(capacidad);
+				x.setTipoRAM(tipo);
+				x.setTipoDisco(frecuencia);
+			}
+		}*/
 	}
 	
 	// FUNCIONES DE LOS PAQUETES DE COMPONENTES
@@ -188,11 +283,11 @@ public class Tienda implements Serializable{
 	
 	//FUNCIONES DE CLIENTES
 	
-	public void generarCliente(String cedula, String nombre, String telefono, String direccion, float creditoLimite) {
-		Cliente cliente = new Cliente(cedula, nombre, telefono, direccion, creditoLimite);
+	public void generarCliente(String cedula, String nombre, String telefono, String direccion,	float creditoLimite) {
+		Cliente cliente = new Cliente(cedula, nombre, telefono, direccion,	creditoLimite);
 		clientes.add(cliente);
-		
 	}
+	
 	
 	public boolean verificarCliente(String cedula) {
 		for(Cliente x: clientes) {
@@ -212,10 +307,20 @@ public class Tienda implements Serializable{
 		return null;
 	}
 	
+	public void modificarCliente(String cedula, String nombre, String telefono, String direccion,	float creditoLimite) {
+		for(Cliente x: clientes) {
+			if(x.getCedula().equalsIgnoreCase(cedula)) {
+				x.setCreditoLimite(creditoLimite);
+				x.setNombre(nombre);
+				x.setTelefono(telefono);
+				x.setDireccion(direccion);
+			}
+		}
+	}
 	
 	// FUNCIONES DE PROVEEDORES
-	public void generarProveedor(String rnc, String nombre, String telefono, String direccion, Persona representante) {
-		Proveedor proveedor = new Proveedor(rnc, nombre, telefono, direccion, representante);
+	public void generarProveedor(String rnc, String nombre, String telefono, String direccion, String nombreRepre, String telefonoRepre) {
+		Proveedor proveedor = new Proveedor(rnc, nombre, telefono, direccion, nombreRepre, telefonoRepre);
 		proveedores.add(proveedor);
 	}
 	public boolean verificarRnc(String rnc) {
@@ -233,6 +338,18 @@ public class Tienda implements Serializable{
 			}
 		}
 		return null;
+	}
+	
+	public void modificarProveedor(String rnc, String nombre, String telefono, String direccion, String nombreRepre, String telefonoRepre) {
+		for(Proveedor x: proveedores) {
+			if(x.getRnc().equalsIgnoreCase(rnc)) {
+				x.setNombre(nombre);
+				x.setTelefono(telefono);
+				x.setDireccion(direccion);
+				x.setNombreRepre(nombreRepre);
+				x.setTelefonoRepre(telefonoRepre);
+			}
+		}
 	}
 
 	// FUNCIONES DE COMPRAS DE INVENTARIO

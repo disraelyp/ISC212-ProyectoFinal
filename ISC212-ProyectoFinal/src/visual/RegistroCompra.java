@@ -111,7 +111,7 @@ public class RegistroCompra extends JDialog {
 			JLabel lblNewLabel_1 = new JLabel("Telefono:");
 			lblNewLabel_1.setBounds(10, 82, 67, 14);
 			panel.add(lblNewLabel_1);
-			
+			// HOLAA
 			textField_2 = new JTextField();
 			textField_2.setEditable(false);
 			textField_2.setBounds(66, 79, 228, 20);
@@ -124,8 +124,8 @@ public class RegistroCompra extends JDialog {
 			btnNewButton.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					RegistroComponente registroComponente = new RegistroComponente();
-					registroComponente.setVisible(true);
+					//RegistroComponente registroComponente = new RegistroComponente();
+					//registroComponente.setVisible(true);
 				}
 			});
 			btnNewButton.setVerticalAlignment(SwingConstants.TOP);
@@ -227,7 +227,7 @@ public class RegistroCompra extends JDialog {
 		JButton btnCrearProducto = new JButton("Crear Producto");
 		btnCrearProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroComponente registroComponente = new RegistroComponente();
+				RegistroComponente registroComponente = new RegistroComponente(null, 0);
 				registroComponente.setVisible(true);
 			}
 		});

@@ -51,9 +51,9 @@ public class IniciarSesion extends JFrame {
 						write = new ObjectOutputStream(tienda2);
 						Tienda.getInstance().generarAdministrador("0000", "Administrador", "0000", "0000", 0, 0, "admin", "1234");
 						Tienda.getInstance().generarEmpleado("0000", "Vendedor", "0000", "0000", 0, 0, "vendedor", "1234");
-						Tienda.getInstance().generarComponente("23432", "HP", 10, 2, 10, 1);
-						Tienda.getInstance().generarComponente("231243", "DELL", 10, 2, 10, 1);
-						Tienda.getInstance().generarComponente("5012334", "ASUS", 10, 2, 10, 1);
+						//Tienda.getInstance().generarComponente("23432", "HP", 10, 2, 10, 1);
+						//Tienda.getInstance().generarComponente("231243", "DELL", 10, 2, 10, 1);
+						//Tienda.getInstance().generarComponente("5012334", "ASUS", 10, 2, 10, 1);
 						write.writeObject(Tienda.getInstance());
 						tienda2.close();
 						write.close();
@@ -123,6 +123,7 @@ public class IniciarSesion extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(null,"Error: Usuario o Contraseña invalidos","Error",JOptionPane.ERROR_MESSAGE);
 				}
+				
 			}
 		});
 		btnNewButton_1.setBounds(117, 218, 89, 23);
