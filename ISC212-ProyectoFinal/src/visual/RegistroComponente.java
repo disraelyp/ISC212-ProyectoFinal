@@ -1,7 +1,6 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,10 +13,8 @@ import logic.DiscoDuro;
 import logic.MemoriaRAM;
 import logic.Microprocesador;
 import logic.TarjetaMadre;
-import logic.Tienda;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JRadioButton;
@@ -34,7 +31,6 @@ import javax.swing.ImageIcon;
 public class RegistroComponente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtCodigo;
 	private JTextField txtModelo;
 	private JTextField txtMarca;
 	private JRadioButton rdbtnTarjetaMadre;
@@ -100,18 +96,6 @@ public class RegistroComponente extends JDialog {
 				panelGeneral.setBounds(0, 0, 554, 107);
 				panel.add(panelGeneral);
 				panelGeneral.setLayout(null);
-				
-				JLabel lblSerie = new JLabel("C\u00F3digo:");
-				lblSerie.setBounds(10, 23, 46, 14);
-				panelGeneral.add(lblSerie);
-				
-				txtCodigo = new JTextField();
-				txtCodigo.setBounds(58, 20, 210, 20);
-				if(aux != null){
-					txtCodigo.setEnabled(false);
-				}
-				panelGeneral.add(txtCodigo);
-				txtCodigo.setColumns(10);
 				
 				JLabel lblModelo = new JLabel("Modelo:");
 				lblModelo.setBounds(10, 48, 46, 14);
@@ -395,13 +379,8 @@ public class RegistroComponente extends JDialog {
 			btnAccion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (aux == null && abrir == 0) {
-						if (Tienda.getInstance().verificarComponente(txtCodigo.getText())) {
-							if (rdbtnTarjetaMadre.isSelected()) {
+						if (rdbtnTarjetaMadre.isSelected()) {
 							//	Tienda.getInstance().generarTarjetaMadre(txtCodigo.getText(), txtMarca.getText(), (Integer) spnCantidad.getValue(), (Integer) spnCantMin.getValue(), (Float) spnPrecio.getValue(), (Float) spnCosto.getValue(), cbxTipoMicro.getSelectedIndex(), cbxTipoDiscoDuro.getSelectedIndex(), cbxMemoriaRam.getSelectedIndex());
-							}
-							
-						}else {
-							JOptionPane.showMessageDialog(null, "Esta componente ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);;
 						}
 						clean();
 					}else {
@@ -410,8 +389,7 @@ public class RegistroComponente extends JDialog {
 						}
 					}
 				}
-			});
-			
+			});	
 		}
 		
 		panelTarjetaMadre.setVisible(true);
@@ -422,7 +400,6 @@ public class RegistroComponente extends JDialog {
 	}
 
 	private void bloquearDatos(Componente aux) {
-		txtCodigo.setEnabled(false);
 		txtMarca.setEnabled(false);
 		txtModelo.setEnabled(false);
 		spnCantidad.setEnabled(false);
@@ -452,8 +429,6 @@ public class RegistroComponente extends JDialog {
 	}
 
 	private void cargarComponente(Componente aux) {
-		
-		txtCodigo.setText(aux.getCodigo());
 		txtMarca.setText(aux.getMarca());
 		txtModelo.setText(aux.getModelo());
 		spnCantidad.setValue(aux.getCantidad());
@@ -544,7 +519,6 @@ public class RegistroComponente extends JDialog {
 	}
 	
 	private void clean () {
-		txtCodigo.setText("");
 		txtMarca.setText("");
 		txtModelo.setText("");
 		spnCantidad.setValue(1);

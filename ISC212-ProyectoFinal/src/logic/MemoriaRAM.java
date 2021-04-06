@@ -6,9 +6,9 @@ public class MemoriaRAM extends Componente{
 	private int tipo; //1: DDR, 2: DDR2, 3: DDR3
 	private int frecuencia; //MHz
 	
-	public MemoriaRAM(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
+	public MemoriaRAM(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
 			float capacidad, int tipo, int frecuencia) {
-		super(codigo, modelo, marca, cantidad, cantidadMinima, precio, costo);
+		super(modelo, marca, cantidad, cantidadMinima, precio, costo);
 		this.capacidad = capacidad;
 		this.tipo = tipo;
 		this.frecuencia = frecuencia;
