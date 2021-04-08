@@ -87,8 +87,8 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Ver/Modificar/Crear Clientes");
 		mntmNewMenuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListadoClientes listadoClientes = new ListadoClientes(false);
-				listadoClientes.setVisible(true);
+				Entidades entidades = new Entidades(0);
+				entidades.setVisible(true);
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_7);
@@ -141,8 +141,8 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver/Modificar/Crear Proveedores");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListadoProveedores listadoProveedores = new ListadoProveedores(false);
-				listadoProveedores.setVisible(true);
+				Entidades entidades = new Entidades(2);
+				entidades.setVisible(true);
 			}
 		});
 		mnNewMenu_2.add(mntmNewMenuItem_2);
@@ -171,14 +171,14 @@ public class Principal extends JFrame {
 		}
 		menuBar.add(mnNewMenu_4);
 		
-		JMenu mnNewMenu_5 = new JMenu("Vendedores");
+		JMenu mnNewMenu_5 = new JMenu("Empleados");
 		mnNewMenu_4.add(mnNewMenu_5);
 		
-		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Ver/Modificar/Crear Vendedores");
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Ver/Modificar/Crear Empleados");
 		mntmNewMenuItem_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListadoVendedores listadoVendedores = new ListadoVendedores(false);
-				listadoVendedores.setVisible(true);
+				Entidades entidades = new Entidades(1);
+				entidades.setVisible(true);
 			}
 		});
 		mnNewMenu_5.add(mntmNewMenuItem_11);
@@ -188,27 +188,6 @@ public class Principal extends JFrame {
 		
 		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Reportes");
 		mnNewMenu_5.add(mntmNewMenuItem_14);
-		
-		JSeparator separator_12 = new JSeparator();
-		mnNewMenu_4.add(separator_12);
-		
-		JMenu mnNewMenu_6 = new JMenu("Administradores");
-		mnNewMenu_4.add(mnNewMenu_6);
-		
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Ver/Modificar/Crear Administradores");
-		mntmNewMenuItem_10.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ListadoAdministradores listadoAdministradores = new ListadoAdministradores(false);
-				listadoAdministradores.setVisible(true);
-			}
-		});
-		mnNewMenu_6.add(mntmNewMenuItem_10);
-		
-		JSeparator separator_8 = new JSeparator();
-		mnNewMenu_6.add(separator_8);
-		
-		JMenuItem mntmNewMenuItem_15 = new JMenuItem("Reportes");
-		mnNewMenu_6.add(mntmNewMenuItem_15);
 		
 		JSeparator separator_10 = new JSeparator();
 		mnNewMenu_4.add(separator_10);

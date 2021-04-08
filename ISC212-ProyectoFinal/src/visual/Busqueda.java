@@ -7,10 +7,15 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import logic.Cliente;
+import logic.Empleado;
+import logic.Proveedor;
 import logic.Tienda;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,6 +36,9 @@ public class Busqueda extends JDialog {
 		 * 	5: Factura
 		 * 	6: Cotizacion de una factura
 		 * 	7: Devolucion de una factura
+		 *  8: Clientes
+		 *  9: Proveedores
+		 *  10:Empleados
 		 * 
 		 * Tipos de Funciones:
 		 * 	0: Modificar
@@ -46,28 +54,37 @@ public class Busqueda extends JDialog {
 		
 		switch(tipoDocumento) {
 		case 0:
-			nombreDocumento="Orden de Compra";
+			nombreDocumento="ordenes de Compra.";
 			break;
 		case 1:
-			nombreDocumento="Cotizacion de inventario";
+			nombreDocumento="cotizaciones de inventario.";
 			break;
 		case 2:
-			nombreDocumento="Devolucion de inventario";
+			nombreDocumento="devoluciones de inventario.";
 			break;
 		case 3:
-			nombreDocumento="Componente";
+			nombreDocumento="componentes.";
 			break;
 		case 4:
-			nombreDocumento="Paquete de componentes";
+			nombreDocumento="paquete de componentes.";
 			break;
 		case 5:
-			nombreDocumento="Factura";
+			nombreDocumento="facturas.";
 			break;
 		case 6:
-			nombreDocumento="Cotizacion de venta";
+			nombreDocumento="cotizacion de ventas.";
 			break;
 		case 7:
-			nombreDocumento="Devolucion de venta";
+			nombreDocumento="devolucion de ventas.";
+			break;
+		case 8:
+			nombreDocumento="clientes.";
+			break;
+		case 9:
+			nombreDocumento="proveedores.";
+			break;
+		case 10:
+			nombreDocumento="empleados.";
 			break;
 		}
 		
@@ -92,10 +109,10 @@ public class Busqueda extends JDialog {
 			break;
 		}
 		
-		
-		
-		setTitle(nombreDocumento+"-"+Funcion);
+		setTitle("Busqueda para "+Funcion+" "+nombreDocumento);
 		setBounds(100, 100, 340, 250);
+		setLocationRelativeTo(null);
+		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -159,17 +176,17 @@ public class Busqueda extends JDialog {
 					case 1:
 						//nombreDocumento="Cotizacion de inventario";
 						if(Tienda.getInstance().verificarCotizacionInventario(txtCodigo.getText())) {
-							
+
 						} else {
-							
+
 						}
 						break;
 					case 2:
 						//nombreDocumento="Devolucion de inventario";
 						if(Tienda.getInstance().verificarDevolucionInventario(txtCodigo.getText())) {
-							
+
 						} else {
-							
+
 						}
 						break;
 					case 3:
@@ -187,7 +204,90 @@ public class Busqueda extends JDialog {
 					case 7:
 						//nombreDocumento="Devolucion de venta";
 						break;
-					}
+					case 8:
+						// CLIENTES
+						if(!Tienda.getInstance().verificarCliente(codigo)) {
+							Cliente cliente = Tienda.getInstance().buscarCliente(codigo);
+							switch(tipoFuncion) {
+							case 0:
+								// Modificar
+								RegistroCliente registroCliente0 = new RegistroCliente(cliente, 0);
+								dispose();
+								registroCliente0.setVisible(true);
+								break;
+							case 2:
+								// Abrir
+								RegistroCliente registroCliente1 = new RegistroCliente(cliente, 1);
+								dispose();
+								registroCliente1.setVisible(true);
+								break;
+							case 3:
+								// Eliminar
+								RegistroCliente registroCliente2 = new RegistroCliente(cliente, 2);
+								dispose();
+								registroCliente2.setVisible(true);
+								break;
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "La cedula ("+codigo+") ingresada no fue encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						break;
+					case 9:
+						// PROVEEDOR
+						if(!(Tienda.getInstance().verificarRnc(codigo))) {
+							Proveedor proveedor = Tienda.getInstance().buscarProveedor(codigo);
+							switch(tipoFuncion) {
+							case 0:
+								// Modificar
+								RegistroProveedor registroProveedor0 = new RegistroProveedor(proveedor, 0);
+								dispose();
+								registroProveedor0.setVisible(true);
+								break;
+							case 2:
+								// Abrir
+								RegistroProveedor registroProveedor1 = new RegistroProveedor(proveedor, 1);
+								dispose();
+								registroProveedor1.setVisible(true);
+								break;
+							case 3:
+								// Eliminar
+								RegistroProveedor registroProveedor2 = new RegistroProveedor(proveedor, 2);
+								dispose();
+								registroProveedor2.setVisible(true);
+								break;
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "El RNC ("+codigo+") ingresado no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						break;
+					case 10:
+						if(!(Tienda.getInstance().verificarEmpleado(codigo))) {
+							Empleado empleado = Tienda.getInstance().buscarEmpleado(codigo);
+							switch(tipoFuncion) {
+							case 0:
+								// Modificar
+								RegistroEmpleado registroEmpleado0 = new RegistroEmpleado(empleado, 0);
+								dispose();
+								registroEmpleado0.setVisible(true);
+								break;
+							case 2:
+								// Abrir
+								RegistroEmpleado registroEmpleado1 = new RegistroEmpleado(empleado, 1);
+								dispose();
+								registroEmpleado1.setVisible(true);
+								break;
+							case 3:
+								// Eliminar
+								RegistroEmpleado registroEmpleado2 = new RegistroEmpleado(empleado, 2);
+								dispose();
+								registroEmpleado2.setVisible(true);
+								break;
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "El codigo ("+codigo+") ingresado no fue encontrado,", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						break;
+					}	
 				}
 			});
 			btnAceptar.setBounds(234, 121, 70, 70);

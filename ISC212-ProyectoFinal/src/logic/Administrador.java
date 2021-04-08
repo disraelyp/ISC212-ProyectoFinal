@@ -11,8 +11,8 @@ public class Administrador extends Empleado implements Serializable{
 			float comision, String usuario, String contraseña) {
 		super(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
 		this.cantidadCompras = 0;
+		super.setCodigo("A-"+(super.getIdEmpleado()-1));
 	}
-
 	public int getCantidadCompras() {
 		return cantidadCompras;
 	}

@@ -1,13 +1,14 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import logic.Empleado;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
@@ -21,29 +22,13 @@ public class RegistroEmpleado extends JDialog {
 	private JTextField txtTelefono;
 	private JTextField txtNombre;
 	private JTextField txtCedula;
-	private JTextField txtCodigo;
 	private JTextField txtUsuario;
 	private JTextField txtContraseña;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			RegistroEmpleado dialog = new RegistroEmpleado();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public RegistroEmpleado() {
+	public RegistroEmpleado(Empleado aux, int accion) {
 		setTitle("Registro de Empledos");
 		setBounds(100, 100, 456, 552);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -56,113 +41,101 @@ public class RegistroEmpleado extends JDialog {
 			panel.setLayout(null);
 			{
 				JLabel label = new JLabel("Direcci\u00F3n:");
-				label.setBounds(21, 191, 108, 14);
+				label.setBounds(22, 157, 108, 14);
 				panel.add(label);
 			}
 			{
 				txtDireccion = new JTextField();
 				txtDireccion.setText("");
 				txtDireccion.setColumns(10);
-				txtDireccion.setBounds(139, 185, 262, 20);
+				txtDireccion.setBounds(140, 151, 262, 20);
 				panel.add(txtDireccion);
 			}
 			{
 				txtTelefono = new JTextField();
 				txtTelefono.setColumns(10);
-				txtTelefono.setBounds(139, 144, 262, 20);
+				txtTelefono.setBounds(140, 110, 262, 20);
 				panel.add(txtTelefono);
 			}
 			{
 				txtNombre = new JTextField();
 				txtNombre.setColumns(10);
-				txtNombre.setBounds(139, 103, 262, 20);
+				txtNombre.setBounds(140, 69, 262, 20);
 				panel.add(txtNombre);
 			}
 			{
 				txtCedula = new JTextField();
 				txtCedula.setColumns(10);
-				txtCedula.setBounds(139, 62, 262, 20);
+				txtCedula.setBounds(140, 28, 262, 20);
 				panel.add(txtCedula);
 			}
 			{
 				JLabel label = new JLabel("C\u00E9dula:");
-				label.setBounds(21, 68, 108, 14);
+				label.setBounds(22, 34, 108, 14);
 				panel.add(label);
 			}
 			{
 				JLabel label = new JLabel("Nombre:");
-				label.setBounds(21, 109, 108, 14);
+				label.setBounds(22, 75, 108, 14);
 				panel.add(label);
 			}
 			{
 				JLabel label = new JLabel("Tel\u00E9fono:");
-				label.setBounds(21, 150, 108, 14);
+				label.setBounds(22, 116, 108, 14);
 				panel.add(label);
 			}
 			{
-				JLabel lblCodigo = new JLabel("C\u00F3digo:");
-				lblCodigo.setBounds(21, 27, 108, 14);
-				panel.add(lblCodigo);
-			}
-			{
-				txtCodigo = new JTextField();
-				txtCodigo.setEnabled(false);
-				txtCodigo.setColumns(10);
-				txtCodigo.setBounds(139, 21, 91, 20);
-				panel.add(txtCodigo);
-			}
-			{
 				JLabel lblSueldoBase = new JLabel("Sueldo base:");
-				lblSueldoBase.setBounds(21, 232, 108, 14);
+				lblSueldoBase.setBounds(22, 198, 108, 14);
 				panel.add(lblSueldoBase);
 			}
 			{
 				JSpinner spnSueldoBase = new JSpinner();
 				spnSueldoBase.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-				spnSueldoBase.setBounds(139, 226, 91, 20);
+				spnSueldoBase.setBounds(140, 192, 91, 20);
 				panel.add(spnSueldoBase);
 			}
 			{
 				JLabel lblUsuario = new JLabel("Usuario:");
-				lblUsuario.setBounds(21, 314, 108, 14);
+				lblUsuario.setBounds(22, 280, 108, 14);
 				panel.add(lblUsuario);
 			}
 			{
 				txtUsuario = new JTextField();
-				txtUsuario.setBounds(139, 308, 262, 20);
+				txtUsuario.setBounds(140, 274, 262, 20);
 				panel.add(txtUsuario);
 				txtUsuario.setColumns(10);
 			}
 			{
 				txtContraseña = new JTextField();
 				txtContraseña.setText("");
-				txtContraseña.setBounds(139, 349, 262, 20);
+				txtContraseña.setBounds(140, 315, 262, 20);
 				panel.add(txtContraseña);
 				txtContraseña.setColumns(10);
 			}
 			{
 				JLabel lblContraseña = new JLabel("Contrase\u00F1a:");
-				lblContraseña.setBounds(21, 355, 108, 14);
+				lblContraseña.setBounds(22, 321, 108, 14);
 				panel.add(lblContraseña);
 			}
 			{
 				JLabel lblComision = new JLabel("Comisi\u00F3n:");
-				lblComision.setBounds(21, 273, 108, 14);
+				lblComision.setBounds(22, 239, 108, 14);
 				panel.add(lblComision);
 			}
 			{
 				JSpinner spnComision = new JSpinner();
 				spnComision.setModel(new SpinnerNumberModel(1, 1, 10, 1));
-				spnComision.setBounds(139, 270, 91, 20);
+				spnComision.setBounds(140, 236, 91, 20);
 				panel.add(spnComision);
 			}
 			
 			JRadioButton rdbtnNewRadioButton = new JRadioButton("Administrador");
-			rdbtnNewRadioButton.setBounds(263, 228, 125, 23);
+			rdbtnNewRadioButton.setBounds(264, 194, 125, 23);
 			panel.add(rdbtnNewRadioButton);
 			
 			JPanel panelAdmin = new JPanel();
-			panelAdmin.setBounds(240, 258, 161, 39);
+			panelAdmin.setBounds(241, 224, 161, 39);
 			panel.add(panelAdmin);
 			panelAdmin.setLayout(null);
 			

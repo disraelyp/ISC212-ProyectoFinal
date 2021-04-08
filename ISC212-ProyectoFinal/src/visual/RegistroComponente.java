@@ -1,19 +1,16 @@
 package visual;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-
 import logic.Componente;
 import logic.DiscoDuro;
 import logic.MemoriaRAM;
 import logic.Microprocesador;
 import logic.TarjetaMadre;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
@@ -69,14 +66,13 @@ public class RegistroComponente extends JDialog {
 			setTitle("Registro de Componentes");
 		} else {
 			if(aux != null && abrir == 0) {
-				setTitle("Modificador de Componentes");
+				setTitle("Modificar componente (Codigo: " +aux.getCodigo()+")");
 			} else {
 				setTitle("Ver componente (Codigo: " +aux.getCodigo()+")");
 				bloquearDatos(aux);
 			}
 			cargarComponente(aux);
 		}
-		
 		
 		setBounds(100, 100, 580, 447);
 		setLocationRelativeTo(null);

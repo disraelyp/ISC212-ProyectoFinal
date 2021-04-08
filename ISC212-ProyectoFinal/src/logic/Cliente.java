@@ -8,7 +8,6 @@ public class Cliente extends Persona{
 		this.creditoLimite = creditoLimite;
 	}
 
-
 	public float getCreditoLimite() {
 		return creditoLimite;
 	}

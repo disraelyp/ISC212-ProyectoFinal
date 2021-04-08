@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 public class Tienda implements Serializable{
 
 	private static final long serialVersionUID =1L;
@@ -105,25 +107,21 @@ public class Tienda implements Serializable{
 		TarjetaMadre componente = new TarjetaMadre(modelo, marca, cantidad, cantidadMinima, precio, costo, tipoMicro, tipoRAM, tipoDisco);
 		productos.add(componente);
 	}
-	
 	public void generarMicro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			int conexion, float velocidad, int nucleos) {
 		Microprocesador componente = new Microprocesador(modelo, marca, cantidad, cantidadMinima, precio, costo, conexion, velocidad, nucleos);
 		productos.add(componente);
 	}
-	
 	public void generarDiscoDuro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			float capacidad, int tipo, int rpm) {
 		DiscoDuro componente = new DiscoDuro(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, rpm);
 		productos.add(componente);
 	}
-	
 	public void generarMemoriaRAM(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			float capacidad, int tipo, int frecuencia) {
 		MemoriaRAM componente = new MemoriaRAM(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, frecuencia);
 		productos.add(componente);
 	}
-	
 	public boolean verificarComponente(String codigo) {
 		for(Producto x: productos) {
 			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Componente) {
@@ -132,8 +130,6 @@ public class Tienda implements Serializable{
 		}
 		return false;
 	}
-	
-	
 	public Componente buscarComponente(String codigo) {
 		for(Producto x: productos) {
 			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Componente) {
@@ -142,7 +138,6 @@ public class Tienda implements Serializable{
 		}
 		return null;
 	}
-	
 	public void modificarTarjetaMadre(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
 		/*for(Producto x: productos) {
@@ -160,7 +155,6 @@ public class Tienda implements Serializable{
 			}
 		}*/
 	}
-	
 	public void modificarMicro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			int conexion, float velocidad, int nucleos) {
 		/*for(Producto x: productos) {
@@ -178,7 +172,6 @@ public class Tienda implements Serializable{
 			}
 		}*/
 	}
-	
 	public void modificarDiscoDuro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			float capacidad, int tipo, int rpm) {
 		/*for(Producto x: productos) {
@@ -196,7 +189,6 @@ public class Tienda implements Serializable{
 			}
 		}*/
 	}
-	
 	public void modificarMemoriaRAM(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			float capacidad, int tipo, int frecuencia) {
 		for(Producto x: productos) {
@@ -228,25 +220,59 @@ public class Tienda implements Serializable{
 		}
 		return login;
 	}
-	public void generarEmpleado(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
-		Empleado empleado = new Empleado(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
-		empleados.add(empleado);
-		
-	}
-	
-	public boolean verificarEmpleado(int codigo) {
+	public boolean verificarEmpleado(String codigo) {
 		for(Empleado x: empleados) {
-			if((x.getCodigo() == codigo) && (!(x instanceof Administrador))) {
+			if(x.getCodigo().equalsIgnoreCase(codigo)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public Empleado buscarEmpleado(int codigo) {
+	public Empleado buscarEmpleado(String codigo) {
 		for(Empleado x: empleados) {
-			if((x.getCodigo() == codigo) && (!(x instanceof Administrador))) {
-				return (Empleado) x;
+			if(x.getCodigo().equalsIgnoreCase(codigo)) {
+				return x;
+			}
+		}
+		return null;
+	}
+	public void eliminarEmpleado(String codigo) {
+		empleados.remove(buscarEmpleado(codigo));
+		JOptionPane.showMessageDialog(null, "El empleado (Codigo: "+codigo+") fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public void modificarEmpleado(String codigo, String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
+		for(Empleado x: empleados) {
+			if(x.getCodigo().equalsIgnoreCase(codigo)) {
+				x.setCedula(cedula);
+				x.setComision(comision);
+				x.setContraseña(contraseña);
+				x.setUsuario(usuario);
+				x.setDireccion(direccion);
+				x.setSueldo(sueldo);
+				x.setTelefono(telefono);
+				x.setNombre(nombre);
+				JOptionPane.showMessageDialog(null, "El empleado (Codigo: "+codigo+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+		}
+	}
+	
+	// FUNCIONES DE LOS VENDEDORES
+	public void generarVendedor(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
+		empleados.add(new Empleado(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña));
+	}
+	public boolean verificarVendedor(String codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo().equalsIgnoreCase(codigo)) && !(x instanceof Administrador)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public Empleado buscarVendedor(String codigo) {
+		for(Empleado x: empleados) {
+			if((x.getCodigo().equalsIgnoreCase(codigo)) && !(x instanceof Administrador)) {
+				return x;
 			}
 		}
 		return null;
@@ -254,22 +280,19 @@ public class Tienda implements Serializable{
 	
 	//FUNCIONES DE ADMINISTRADORES
 	public void generarAdministrador(String cedula, String nombre, String telefono, String direccion, float sueldo, float comision, String usuario, String contraseña) {
-		Administrador administrador = new Administrador(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña);
-		empleados.add(administrador);
+		empleados.add(new Administrador(cedula, nombre, telefono, direccion, sueldo, comision, usuario, contraseña));
 	}
-	
-	public boolean verificarAdministrador(int codigo) {
+	public boolean verificarAdministrador(String codigo) {
 		for(Empleado x: empleados) {
-			if((x.getCodigo() == codigo) && (x instanceof Administrador)) {
+			if((x.getCodigo().equalsIgnoreCase(codigo)) && (x instanceof Administrador)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public Administrador buscarAdministrador(int codigo) {
+	public Administrador buscarAdministrador(String codigo) {
 		for(Empleado x: empleados) {
-			if((x.getCodigo() == codigo) && (x instanceof Administrador)) {
+			if((x.getCodigo().equalsIgnoreCase(codigo)) && (x instanceof Administrador)) {
 				return (Administrador) x;
 			}
 		}
@@ -278,8 +301,8 @@ public class Tienda implements Serializable{
 	
 	//FUNCIONES DE CLIENTES
 	public void generarCliente(String cedula, String nombre, String telefono, String direccion,	float creditoLimite) {
-		Cliente cliente = new Cliente(cedula, nombre, telefono, direccion,	creditoLimite);
-		clientes.add(cliente);
+		clientes.add(new Cliente(cedula, nombre, telefono, direccion,	creditoLimite));
+		JOptionPane.showMessageDialog(null, "El cliente fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public boolean verificarCliente(String cedula) {
 		for(Cliente x: clientes) {
@@ -304,14 +327,20 @@ public class Tienda implements Serializable{
 				x.setNombre(nombre);
 				x.setTelefono(telefono);
 				x.setDireccion(direccion);
+				JOptionPane.showMessageDialog(null, "El cliente (Cedula: "+cedula+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
 			}
 		}
+	}
+	public void eliminarCliente(String cedula) {
+		clientes.remove(buscarCliente(cedula));
+		JOptionPane.showMessageDialog(null, "El cliente (Cedula: "+cedula+") fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	// FUNCIONES DE PROVEEDORES
 	public void generarProveedor(String rnc, String nombre, String telefono, String direccion, String nombreRepre, String telefonoRepre) {
-		Proveedor proveedor = new Proveedor(rnc, nombre, telefono, direccion, nombreRepre, telefonoRepre);
-		proveedores.add(proveedor);
+		proveedores.add(new Proveedor(rnc, nombre, telefono, direccion, nombreRepre, telefonoRepre));
+		JOptionPane.showMessageDialog(null, "El proveedor fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public boolean verificarRnc(String rnc) {
 		for(Proveedor x: proveedores) {
@@ -323,13 +352,12 @@ public class Tienda implements Serializable{
 	}
 	public Proveedor buscarProveedor(String rnc) {
 		for(Proveedor x: proveedores) {
-			if(x.getRnc().equals(rnc)) {
+			if(x.getRnc().equalsIgnoreCase(rnc)) {
 				return x;
 			}
 		}
 		return null;
 	}
-	
 	public void modificarProveedor(String rnc, String nombre, String telefono, String direccion, String nombreRepre, String telefonoRepre) {
 		for(Proveedor x: proveedores) {
 			if(x.getRnc().equalsIgnoreCase(rnc)) {
@@ -338,8 +366,14 @@ public class Tienda implements Serializable{
 				x.setDireccion(direccion);
 				x.setNombreRepre(nombreRepre);
 				x.setTelefonoRepre(telefonoRepre);
+				JOptionPane.showMessageDialog(null, "El proveedor (RNC: "+rnc+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
 			}
 		}
+	}
+	public void eliminarProveedor(String rnc) {
+		proveedores.remove(buscarProveedor(rnc));
+		JOptionPane.showMessageDialog(null, "El proveedor (RNC: "+rnc+") fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 
 	// FUNCIONES DE COMPRAS DE INVENTARIO

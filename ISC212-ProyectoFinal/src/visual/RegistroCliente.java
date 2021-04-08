@@ -7,23 +7,24 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 import logic.Cliente;
 import logic.Tienda;
 
+import java.awt.Toolkit;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
+import java.awt.Color;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.UIManager;
-import java.awt.Color;
+import javax.swing.border.TitledBorder;
 
 public class RegistroCliente extends JDialog {
+	
+	private static Cliente cliente=null;
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCedula;
@@ -31,153 +32,173 @@ public class RegistroCliente extends JDialog {
 	private JTextField txtTelefono;
 	private JTextField txtDireccion;
 	private JSpinner spnCredito;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton;
+	private JButton btnAccion;
+	private JButton btnCancelar;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			RegistroCliente dialog = new RegistroCliente(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public RegistroCliente(Cliente aux) {
+	public RegistroCliente(Cliente aux, int funcion) {
 		
-		if(aux == null) {
+		cliente=aux;
+		if(cliente == null) {
 			setTitle("Registro de Clientes");
 		} else {
-			setTitle("Modificador de Clientes");
-			cargarCliente(aux);
+			if(funcion==0) {
+				setTitle("Modificador de Clientes (Cedula:"+cliente.getCedula()+")");
+			}  else {
+				if(funcion==1) {
+					setTitle("Ver cliente (Cedula:"+cliente.getCedula()+")");
+				} else {
+					setTitle("Eliminar cliente (Cedula:"+cliente.getCedula()+")");
+				}
+			}
 		}
 		
-		setBounds(100, 100, 456, 366);
-		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 439, 327);
-		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		getContentPane().add(contentPanel);
-		contentPanel.setLayout(null);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroCliente.class.getResource("/resources/logo.png")));
+		setBounds(100, 100, 375, 270);
 		setLocationRelativeTo(null);
+		setModal(true);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
-			panel.setBounds(5, 5, 429, 225);
-			panel.setBorder(new TitledBorder(null, "Datos del Cliente", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			contentPanel.add(panel);
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
-			
-			JLabel lblNombre = new JLabel("Nombre:");
-			lblNombre.setBounds(22, 66, 108, 14);
-			panel.add(lblNombre);
-			
-			JLabel lblCedula = new JLabel("C\u00E9dula:");
-			lblCedula.setBounds(22, 26, 108, 14);
-			panel.add(lblCedula);
-			
-			JLabel lblTelefono = new JLabel("Tel\u00E9fono:");
-			lblTelefono.setBounds(22, 106, 108, 14);
-			panel.add(lblTelefono);
-			
-			JLabel lblDireccion = new JLabel("Direcci\u00F3n:");
-			lblDireccion.setBounds(22, 146, 108, 14);
-			panel.add(lblDireccion);
-			
-			JLabel lblCreditoLimite = new JLabel("Cr\u00E9dito l\u00EDmite:");
-			lblCreditoLimite.setBounds(22, 188, 108, 14);
-			panel.add(lblCreditoLimite);
+			{
+				JLabel lblCedula = new JLabel("Cedula:");
+				lblCedula.setBounds(10, 11, 46, 14);
+				panel.add(lblCedula);
+			}
 			
 			txtCedula = new JTextField();
-			txtCedula.setBounds(140, 23, 124, 20);
-			if(aux!=null){
-				txtCedula.setEnabled(false);
-			}
+			txtCedula.setBounds(86, 8, 150, 20);
 			panel.add(txtCedula);
 			txtCedula.setColumns(10);
 			
 			txtNombre = new JTextField();
-			txtNombre.setBounds(140, 63, 262, 20);
+			txtNombre.setBounds(86, 39, 250, 20);
 			panel.add(txtNombre);
 			txtNombre.setColumns(10);
 			
+			JLabel lblNombre = new JLabel("Nombre:");
+			lblNombre.setBounds(10, 42, 46, 14);
+			panel.add(lblNombre);
+			
+			JLabel lblTelefono = new JLabel("Telefono");
+			lblTelefono.setBounds(10, 73, 86, 14);
+			panel.add(lblTelefono);
+			
 			txtTelefono = new JTextField();
-			txtTelefono.setBounds(140, 103, 262, 20);
-			panel.add(txtTelefono);
 			txtTelefono.setColumns(10);
+			txtTelefono.setBounds(86, 70, 250, 20);
+			panel.add(txtTelefono);
 			
 			txtDireccion = new JTextField();
-			txtDireccion.setBounds(140, 143, 262, 20);
-			txtDireccion.setText("");
-			panel.add(txtDireccion);
 			txtDireccion.setColumns(10);
+			txtDireccion.setBounds(86, 98, 250, 20);
+			panel.add(txtDireccion);
+			
+			JLabel lblDireccion = new JLabel("Direccion:");
+			lblDireccion.setBounds(10, 101, 86, 14);
+			panel.add(lblDireccion);
 			
 			spnCredito = new JSpinner();
-			spnCredito.setBounds(140, 185, 124, 20);
+			spnCredito.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
+			spnCredito.setBounds(125, 140, 211, 20);
 			panel.add(spnCredito);
+			
+			JLabel lblNewLabel = new JLabel("Limite de Credito:");
+			lblNewLabel.setForeground(Color.RED);
+			lblNewLabel.setBounds(10, 143, 117, 14);
+			panel.add(lblNewLabel);
 		}
-		
-		btnNewButton = new JButton("Cancelar");
-		btnNewButton.setBounds(339, 241, 70, 70);
-		contentPanel.add(btnNewButton);
-		
-		
-		
-		if(aux == null) { // aqui cambian los botones
-			btnNewButton_1 = new JButton("Registrar");
-		} else {
-			btnNewButton_1 = new JButton("Modificar");
-		}
-		
-		
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(aux == null) { 
-					if(Tienda.getInstance().verificarCliente(txtCedula.getText())) {
-						Tienda.getInstance().generarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
-					} else {
-						JOptionPane.showMessageDialog(null, "Esta cédula ya pertenece a un cliente", "Error", JOptionPane.ERROR_MESSAGE);;
-					}
-					clean();
+		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				if(cliente == null) {
+					btnAccion = new JButton("Registrar");
 				} else {
-					Tienda.getInstance().modificarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
-					dispose();
+					if(funcion==0) {
+						btnAccion = new JButton("Modificar");
+						txtCedula.setEnabled(false);
+					}  else {
+						if(funcion==2) {
+							btnAccion = new JButton("Eliminar");
+						} else {
+							btnAccion = new JButton("Abrir");
+							btnAccion.setVisible(false);
+						}
+					}
 				}
 				
-				
-				
+				btnAccion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(cliente == null) { 
+							if(!Tienda.getInstance().verificarCliente(txtCedula.getText())) {
+								Tienda.getInstance().generarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
+								clean();
+							} else {
+								JOptionPane.showMessageDialog(null, "Esta cédula ya pertenece a un cliente", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} else {
+							if(funcion==0) {
+								Tienda.getInstance().modificarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());								
+								dispose();
+							}  else {
+								if(funcion==2) {
+									Tienda.getInstance().eliminarCliente(cliente.getCedula());
+									dispose();
+								}
+							}
+						}
+					}
+				});
+				buttonPane.add(btnAccion);
+				getRootPane().setDefaultButton(btnAccion);
 			}
-
-			
-		});
-		btnNewButton_1.setBounds(246, 241, 70, 70);
-		contentPanel.add(btnNewButton_1);
+			{
+				btnCancelar = new JButton("Salir");
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				btnCancelar.setActionCommand("Cancel");
+				buttonPane.add(btnCancelar);
+			}
+		}
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(5, 235, 429, 81);
-		contentPanel.add(panel);
-	}
-
-	private void cargarCliente(Cliente aux) {
-		txtCedula.setText(aux.getCedula());
-		txtNombre.setText(aux.getNombre());
-		txtTelefono.setText(aux.getTelefono());
-		txtDireccion.setText(aux.getDireccion());
-		spnCredito.setValue(aux.getCreditoLimite());		
+		if(cliente != null) {
+			if(funcion!=0) {
+				bloquearCampos();
+			}
+			cargarCliente();
+		}
 	}
 	
+	private void bloquearCampos() {
+		txtCedula.setEnabled(false);
+		txtNombre.setEnabled(false);
+		txtTelefono.setEnabled(false);
+		txtDireccion.setEnabled(false);
+		spnCredito.setEnabled(false);	
+	}
+	private void cargarCliente() {
+		txtCedula.setText(cliente.getCedula());
+		txtNombre.setText(cliente.getNombre());
+		txtTelefono.setText(cliente.getTelefono());
+		txtDireccion.setText(cliente.getDireccion());
+		spnCredito.setValue(cliente.getCreditoLimite());		
+	}
 	private void clean() {
 		txtCedula.setText("");
 		txtNombre.setText("");
 		txtTelefono.setText("");
 		txtDireccion.setText("");
 		spnCredito.setValue(0);
-		
 	}
 }

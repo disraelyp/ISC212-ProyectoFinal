@@ -50,10 +50,7 @@ public class IniciarSesion extends JFrame {
 						tienda2 = new FileOutputStream("data.dat");
 						write = new ObjectOutputStream(tienda2);
 						Tienda.getInstance().generarAdministrador("0000", "Administrador", "0000", "0000", 0, 0, "admin", "1234");
-						Tienda.getInstance().generarEmpleado("0000", "Vendedor", "0000", "0000", 0, 0, "vendedor", "1234");
-						//Tienda.getInstance().generarComponente("23432", "HP", 10, 2, 10, 1);
-						//Tienda.getInstance().generarComponente("231243", "DELL", 10, 2, 10, 1);
-						//Tienda.getInstance().generarComponente("5012334", "ASUS", 10, 2, 10, 1);
+						Tienda.getInstance().generarVendedor("0000", "Vendedor", "0000", "0000", 0, 0, "vendedor", "1234");
 						write.writeObject(Tienda.getInstance());
 						tienda2.close();
 						write.close();
@@ -82,6 +79,7 @@ public class IniciarSesion extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

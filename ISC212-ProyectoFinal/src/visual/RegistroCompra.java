@@ -10,7 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,12 +19,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
-
-import javax.swing.DefaultCellEditor;
 
 import logic.Componente;
 import logic.PaqueteComponentes;
@@ -39,16 +34,10 @@ import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class RegistroCompra extends JDialog {
 
-	
 	private static ArrayList<Producto> carrito = new ArrayList<Producto>();
-	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelProductos;
 	private static Object[] rowsProductos;
@@ -62,6 +51,8 @@ public class RegistroCompra extends JDialog {
 
 	
 	public RegistroCompra() {
+		
+		
 		setResizable(false);
 		setTitle("Modulo de Compras");
 		setModal(true);
