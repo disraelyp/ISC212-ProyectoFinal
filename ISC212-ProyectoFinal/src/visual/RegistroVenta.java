@@ -70,7 +70,7 @@ public class RegistroVenta extends JDialog {
 			JButton btnNewButton_1 = new JButton("Buscar");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoClientes listadoClientes = new ListadoClientes(true);
+					ListadoClientes listadoClientes = new ListadoClientes();
 					listadoClientes.setVisible(true);
 				}
 			});

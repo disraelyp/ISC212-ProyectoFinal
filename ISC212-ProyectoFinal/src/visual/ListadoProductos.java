@@ -27,8 +27,6 @@ public class ListadoProductos extends JDialog {
 
 	private static String codigo=null;
 	
-	
-	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelProductos;
 	private static Object[] rowsProductos;

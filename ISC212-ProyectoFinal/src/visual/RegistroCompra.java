@@ -25,6 +25,7 @@ import javax.swing.table.TableColumnModel;
 import logic.Componente;
 import logic.PaqueteComponentes;
 import logic.Producto;
+import logic.Proveedor;
 import logic.Tienda;
 
 import javax.swing.JComboBox;
@@ -34,21 +35,29 @@ import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistroCompra extends JDialog {
 
+	
+	
 	private static ArrayList<Producto> carrito = new ArrayList<Producto>();
+	private static Proveedor proveedor=null;
+	private static Producto productoSeleccionado=null;
+	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelProductos;
 	private static Object[] rowsProductos;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_5;
+	private JTextField txtRnc;
+	private JTextField txtNombreP;
+	private JTextField txtTelefonoP;
+	private JTextField txtMontoTotal;
 	private JTable tableProductos;
 	private JSpinner spinner;
-	
-
+	private JButton btnAgregarProducto;
+	private JButton btnEliminarProducto;
+	private JButton btnAccion;
 	
 	public RegistroCompra() {
 		
@@ -74,63 +83,79 @@ public class RegistroCompra extends JDialog {
 				panel.add(lblCodigo);
 			}
 			
-			textField = new JTextField();
-			textField.setBounds(66, 20, 129, 20);
-			panel.add(textField);
-			textField.setColumns(10);
+			txtRnc = new JTextField();
+			txtRnc.setBounds(66, 20, 129, 20);
+			panel.add(txtRnc);
+			txtRnc.setColumns(10);
 			
-			JButton btnNewButton_1 = new JButton("Buscar");
-			btnNewButton_1.addActionListener(new ActionListener() {
+			JButton btnBuscar = new JButton("Buscar");
+			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoClientes listadoClientes = new ListadoClientes(true);
-					listadoClientes.setVisible(true);
+					if(Tienda.getInstance().verificarRnc(txtRnc.getText())) {
+						proveedor=Tienda.getInstance().buscarProveedor(txtRnc.getText());
+						txtNombreP.setText(proveedor.getNombre());
+						txtTelefonoP.setText(proveedor.getTelefono());
+						btnAgregarProducto.setEnabled(true);
+					} else {
+						ListadoProveedores listadoProveedores = new ListadoProveedores();
+						String rnc = listadoProveedores.showDialog();
+						if(rnc!=null) {
+							proveedor=Tienda.getInstance().buscarProveedor(rnc);
+							txtNombreP.setText(proveedor.getNombre());
+							txtTelefonoP.setText(proveedor.getTelefono());
+							btnAgregarProducto.setEnabled(true);
+						}
+					}					
 				}
 			});
-			btnNewButton_1.setBounds(205, 19, 89, 23);
-			panel.add(btnNewButton_1);
+			btnBuscar.setBounds(205, 19, 89, 23);
+			panel.add(btnBuscar);
 			
 			JLabel lblNewLabel = new JLabel("Nombre:");
 			lblNewLabel.setBounds(10, 51, 46, 14);
 			panel.add(lblNewLabel);
 			
-			textField_1 = new JTextField();
-			textField_1.setEditable(false);
-			textField_1.setBounds(66, 48, 228, 20);
-			panel.add(textField_1);
-			textField_1.setColumns(10);
+			txtNombreP = new JTextField();
+			txtNombreP.setEditable(false);
+			txtNombreP.setBounds(66, 48, 228, 20);
+			panel.add(txtNombreP);
+			txtNombreP.setColumns(10);
 			
 			JLabel lblNewLabel_1 = new JLabel("Telefono:");
 			lblNewLabel_1.setBounds(10, 82, 67, 14);
 			panel.add(lblNewLabel_1);
 			// HOLAA
-			textField_2 = new JTextField();
-			textField_2.setEditable(false);
-			textField_2.setBounds(66, 79, 228, 20);
-			panel.add(textField_2);
-			textField_2.setColumns(10);
+			txtTelefonoP = new JTextField();
+			txtTelefonoP.setEditable(false);
+			txtTelefonoP.setBounds(66, 79, 228, 20);
+			panel.add(txtTelefonoP);
+			txtTelefonoP.setColumns(10);
 		}
 		{
-			JButton btnNewButton = new JButton("");
-			btnNewButton.setEnabled(false);
-			btnNewButton.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
-			btnNewButton.addActionListener(new ActionListener() {
+			JButton btnAbrirProducto = new JButton("");
+			btnAbrirProducto.setEnabled(false);
+			btnAbrirProducto.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
+			btnAbrirProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//RegistroComponente registroComponente = new RegistroComponente();
-					//registroComponente.setVisible(true);
+					if(productoSeleccionado instanceof Componente) {
+						RegistroComponente registroComponente = new RegistroComponente((Componente) productoSeleccionado, 1);
+						registroComponente.setVisible(true);
+					}
+					
 				}
 			});
-			btnNewButton.setVerticalAlignment(SwingConstants.TOP);
-			btnNewButton.setBounds(614, 173, 70, 70);
-			contentPanel.add(btnNewButton);
+			btnAbrirProducto.setVerticalAlignment(SwingConstants.TOP);
+			btnAbrirProducto.setBounds(614, 173, 70, 70);
+			contentPanel.add(btnAbrirProducto);
 		}
 		{
-			JButton btnEliminarProducto = new JButton("Agregar Producto");
-			btnEliminarProducto.addActionListener(new ActionListener() {
+			btnAgregarProducto = new JButton("Agregar Producto");
+			btnAgregarProducto.setEnabled(false);
+			btnAgregarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ListadoProductos listadoProductos = new ListadoProductos();
 					String codigo = listadoProductos.showDialog();
 					if(codigo!=null) {
-						System.out.printf(codigo);
 						Producto producto = Tienda.getInstance().buscarProducto(codigo);
 						producto.setCantidad(1);
 						carrito.add(producto);
@@ -138,10 +163,10 @@ public class RegistroCompra extends JDialog {
 					}
 				}
 			});
-			btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-			btnEliminarProducto.setHorizontalAlignment(SwingConstants.LEFT);
-			btnEliminarProducto.setBounds(614, 251, 70, 70);
-			contentPanel.add(btnEliminarProducto);
+			btnAgregarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+			btnAgregarProducto.setHorizontalAlignment(SwingConstants.LEFT);
+			btnAgregarProducto.setBounds(614, 251, 70, 70);
+			contentPanel.add(btnAgregarProducto);
 		}
 		
 		JPanel panel = new JPanel();
@@ -177,6 +202,16 @@ public class RegistroCompra extends JDialog {
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
 		tableProductos = new JTable();
+		tableProductos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableProductos.getSelectedRow();
+				productoSeleccionado = Tienda.getInstance().buscarProducto(tableProductos.getValueAt(seleccion,  0).toString());
+				btnEliminarProducto.setEnabled(true);
+				btnAgregarProducto.setEnabled(true);
+			}
+		});
 		
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modelProductos = new DefaultTableModel() {
@@ -202,14 +237,15 @@ public class RegistroCompra extends JDialog {
 		columModel.getColumn(4).setPreferredWidth(100);
 		scrollPane.setViewportView(tableProductos);
 		
-		JButton btnVerProducto = new JButton("Eliminar Producto");
-		btnVerProducto.setEnabled(false);
-		btnVerProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnVerProducto.setHorizontalAlignment(SwingConstants.LEFT);
-		btnVerProducto.setBounds(614, 332, 70, 70);
-		contentPanel.add(btnVerProducto);
+		btnEliminarProducto = new JButton("Eliminar Producto");
+		btnEliminarProducto.setEnabled(false);
+		btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEliminarProducto.setHorizontalAlignment(SwingConstants.LEFT);
+		btnEliminarProducto.setBounds(614, 332, 70, 70);
+		contentPanel.add(btnEliminarProducto);
 		
 		JButton btnCuentasPorCobrar = new JButton("Cuentas por Pagar");
+		btnCuentasPorCobrar.setEnabled(false);
 		btnCuentasPorCobrar.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCuentasPorCobrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCuentasPorCobrar.setBounds(614, 11, 70, 70);
@@ -233,25 +269,26 @@ public class RegistroCompra extends JDialog {
 		contentPanel.add(panel_2);
 		panel_2.setLayout(null);
 		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setHorizontalAlignment(SwingConstants.RIGHT);
-		textField_5.setForeground(Color.RED);
-		textField_5.setFont(new Font("Tahoma", Font.BOLD, 20));
-		textField_5.setText("$ 0.00     ");
-		textField_5.setBounds(10, 36, 302, 31);
-		panel_2.add(textField_5);
-		textField_5.setColumns(10);
+		txtMontoTotal = new JTextField();
+		txtMontoTotal.setEditable(false);
+		txtMontoTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtMontoTotal.setForeground(Color.RED);
+		txtMontoTotal.setFont(new Font("Tahoma", Font.BOLD, 20));
+		txtMontoTotal.setText("$ 0.00     ");
+		txtMontoTotal.setBounds(10, 36, 302, 31);
+		panel_2.add(txtMontoTotal);
+		txtMontoTotal.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("Monto a Pagar:");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblNewLabel_4.setBounds(10, 11, 240, 25);
 		panel_2.add(lblNewLabel_4);
 		
-		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/comprar.png")));
-		btnNewButton_2.setBounds(10, 413, 78, 78);
-		contentPanel.add(btnNewButton_2);
+		btnAccion = new JButton("");
+		btnAccion.setEnabled(false);
+		btnAccion.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/comprar.png")));
+		btnAccion.setBounds(10, 413, 78, 78);
+		contentPanel.add(btnAccion);
 		
 		JButton btnSalir = new JButton("");
 		btnSalir.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/salir.png")));
@@ -262,30 +299,28 @@ public class RegistroCompra extends JDialog {
 		});
 		btnSalir.setBounds(98, 413, 78, 78);
 		contentPanel.add(btnSalir);
-		
-		JButton btnNewButton_3 = new JButton("update");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cargarCarrito();
-			}
-		});
-		btnNewButton_3.setBounds(218, 413, 89, 23);
-		contentPanel.add(btnNewButton_3);
 	}
 	private void cargarCarrito() {
 		rowsProductos = new Object[modelProductos.getColumnCount()];
+		float montoTotal=(float) 0.00;
 		modelProductos.setRowCount(0);
-		for(Producto x: carrito) {
-			rowsProductos[0]= x.getCodigo();
-			if(x instanceof Componente) {
-				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
-			} else {
-				rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
-			}		
-			rowsProductos[2]=x.getCantidad();
-			rowsProductos[3]=x.getCosto();
-			rowsProductos[4]=x.getCantidad()*x.getCosto();
-			modelProductos.addRow(rowsProductos);
+		if(carrito.size()!=0) {
+			btnAccion.setEnabled(true);
+			for(Producto x: carrito) {
+				rowsProductos[0]= x.getCodigo();
+				if(x instanceof Componente) {
+					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+				} else {
+					rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+				}		
+				rowsProductos[2]=x.getCantidad();
+				rowsProductos[3]=x.getCosto();
+				rowsProductos[4]=x.getCantidad()*x.getCosto();
+				montoTotal+=x.getCantidad()*x.getCosto();
+				modelProductos.addRow(rowsProductos);
+			}
 		}
+		
+		txtMontoTotal.setText("$ "+montoTotal);
 	}
 }

@@ -1,169 +1,306 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-
-import logic.Empleado;
-
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.EmptyBorder;
+
+import logic.Administrador;
+import logic.Empleado;
+import logic.Tienda;
+
+import javax.swing.border.TitledBorder;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistroEmpleado extends JDialog {
 
+	private static Empleado empleado;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
 	private JTextField txtNombre;
 	private JTextField txtCedula;
 	private JTextField txtUsuario;
-	private JTextField txtContraseña;
+	private JButton btnAccion;
+	private JButton btnSalir;
+	private JPasswordField txtContraseña;
+	private JRadioButton rdbtnAdministrador;
+	private JLabel lblSueldoBase;
+	private JLabel lblComision;
+	private JSpinner spnSueldoBase;
+	private JSpinner spnComision;
+	private JTextField txtContraseñaM;
 
-	public RegistroEmpleado(Empleado aux, int accion) {
-		setTitle("Registro de Empledos");
-		setBounds(100, 100, 456, 552);
+	public RegistroEmpleado(Empleado aux, int funcion) {
+		
+		empleado=aux;
+		if(empleado == null) {
+			setTitle("Registro de Emokeadis");
+		} else {
+			if(funcion==0) {
+				setTitle("Modificador de empleado (Codigo:"+empleado.getCodigo()+")");
+			}  else {
+				if(funcion==1) {
+					setTitle("Ver Empleado (Codigo:"+empleado.getCodigo()+")");
+				} else {
+					setTitle("Eliminar empleado (Codigo:"+empleado.getCodigo()+")");
+				}
+			}
+		}
+		
+		setBounds(100, 100, 400, 375);
+		setModal(true);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "Datos del Empleado", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel.setBounds(5, 5, 430, 400);
-			contentPanel.add(panel);
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			{
 				JLabel label = new JLabel("Direcci\u00F3n:");
-				label.setBounds(22, 157, 108, 14);
+				label.setBounds(11, 117, 108, 14);
 				panel.add(label);
 			}
 			{
 				txtDireccion = new JTextField();
 				txtDireccion.setText("");
 				txtDireccion.setColumns(10);
-				txtDireccion.setBounds(140, 151, 262, 20);
+				txtDireccion.setBounds(90, 114, 262, 20);
 				panel.add(txtDireccion);
 			}
 			{
 				txtTelefono = new JTextField();
 				txtTelefono.setColumns(10);
-				txtTelefono.setBounds(140, 110, 262, 20);
+				txtTelefono.setBounds(90, 83, 262, 20);
 				panel.add(txtTelefono);
 			}
 			{
 				txtNombre = new JTextField();
 				txtNombre.setColumns(10);
-				txtNombre.setBounds(140, 69, 262, 20);
+				txtNombre.setBounds(90, 52, 262, 20);
 				panel.add(txtNombre);
 			}
 			{
 				txtCedula = new JTextField();
 				txtCedula.setColumns(10);
-				txtCedula.setBounds(140, 28, 262, 20);
+				txtCedula.setBounds(90, 21, 262, 20);
 				panel.add(txtCedula);
 			}
 			{
 				JLabel label = new JLabel("C\u00E9dula:");
-				label.setBounds(22, 34, 108, 14);
+				label.setBounds(11, 24, 108, 14);
 				panel.add(label);
 			}
 			{
 				JLabel label = new JLabel("Nombre:");
-				label.setBounds(22, 75, 108, 14);
+				label.setBounds(11, 55, 108, 14);
 				panel.add(label);
 			}
 			{
 				JLabel label = new JLabel("Tel\u00E9fono:");
-				label.setBounds(22, 116, 108, 14);
+				label.setBounds(11, 86, 108, 14);
 				panel.add(label);
 			}
 			{
-				JLabel lblSueldoBase = new JLabel("Sueldo base:");
-				lblSueldoBase.setBounds(22, 198, 108, 14);
+				lblSueldoBase = new JLabel("Sueldo base:");
+				lblSueldoBase.setBounds(11, 148, 108, 14);
 				panel.add(lblSueldoBase);
 			}
 			{
-				JSpinner spnSueldoBase = new JSpinner();
-				spnSueldoBase.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-				spnSueldoBase.setBounds(140, 192, 91, 20);
+				spnSueldoBase = new JSpinner();
+				spnSueldoBase.setModel(new SpinnerNumberModel(new Float(1), new Float(1), null, new Float(1)));
+				spnSueldoBase.setBounds(90, 145, 91, 20);
 				panel.add(spnSueldoBase);
 			}
 			{
 				JLabel lblUsuario = new JLabel("Usuario:");
-				lblUsuario.setBounds(22, 280, 108, 14);
+				lblUsuario.setBounds(11, 203, 108, 14);
 				panel.add(lblUsuario);
 			}
 			{
 				txtUsuario = new JTextField();
-				txtUsuario.setBounds(140, 274, 262, 20);
+				txtUsuario.setBounds(90, 200, 262, 20);
 				panel.add(txtUsuario);
 				txtUsuario.setColumns(10);
 			}
 			{
-				txtContraseña = new JTextField();
-				txtContraseña.setText("");
-				txtContraseña.setBounds(140, 315, 262, 20);
-				panel.add(txtContraseña);
-				txtContraseña.setColumns(10);
-			}
-			{
 				JLabel lblContraseña = new JLabel("Contrase\u00F1a:");
-				lblContraseña.setBounds(22, 321, 108, 14);
+				lblContraseña.setBounds(11, 234, 108, 14);
 				panel.add(lblContraseña);
 			}
 			{
-				JLabel lblComision = new JLabel("Comisi\u00F3n:");
-				lblComision.setBounds(22, 239, 108, 14);
+				lblComision = new JLabel("Comisi\u00F3n:");
+				lblComision.setBounds(196, 148, 101, 14);
 				panel.add(lblComision);
 			}
 			{
-				JSpinner spnComision = new JSpinner();
-				spnComision.setModel(new SpinnerNumberModel(1, 1, 10, 1));
-				spnComision.setBounds(140, 236, 91, 20);
+				spnComision = new JSpinner();
+				spnComision.setModel(new SpinnerNumberModel(new Float(1), new Float(0), new Float(10), new Float(1)));
+				spnComision.setBounds(258, 145, 91, 20);
 				panel.add(spnComision);
 			}
 			
-			JRadioButton rdbtnNewRadioButton = new JRadioButton("Administrador");
-			rdbtnNewRadioButton.setBounds(264, 194, 125, 23);
-			panel.add(rdbtnNewRadioButton);
+			rdbtnAdministrador = new JRadioButton("El Empleado es un Administrador");
+			rdbtnAdministrador.setBounds(11, 255, 250, 23);
+			panel.add(rdbtnAdministrador);
 			
-			JPanel panelAdmin = new JPanel();
-			panelAdmin.setBounds(241, 224, 161, 39);
-			panel.add(panelAdmin);
-			panelAdmin.setLayout(null);
+			txtContraseñaM = new JTextField();
+			txtContraseñaM.setEditable(false);
+			txtContraseñaM.setBounds(90, 231, 197, 20);
+			panel.add(txtContraseñaM);
+			txtContraseñaM.setColumns(10);
+			txtContraseñaM.setVisible(false);
 			
-			JLabel lblSueldoExtra = new JLabel("Sueldo extra:");
-			lblSueldoExtra.setBounds(10, 14, 75, 14);
-			panelAdmin.add(lblSueldoExtra);
+			txtContraseña = new JPasswordField();
+			txtContraseña.setBounds(90, 231, 197, 20);
+			panel.add(txtContraseña);
 			
-			JSpinner spinner = new JSpinner();
-			spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-			spinner.setBounds(93, 11, 68, 20);
-			panelAdmin.add(spinner);
+			JButton btnNewButton = new JButton("Ver");
+			btnNewButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					txtContraseñaM.setText(String.valueOf(txtContraseña.getPassword()));
+					txtContraseñaM.setVisible(true);
+					txtContraseña.setVisible(false);
+				}
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					txtContraseñaM.setText("");
+					txtContraseñaM.setVisible(false);
+					txtContraseña.setVisible(true);
+				}
+			});
+			btnNewButton.setBounds(297, 230, 55, 23);
+			panel.add(btnNewButton);
+			
+			
 		}
 		{
-			JPanel panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel.setBounds(5, 405, 430, 97);
-			contentPanel.add(panel);
-			panel.setLayout(null);
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnCancelar = new JButton("Cancelar");
-				btnCancelar.setBounds(350, 11, 70, 70);
-				panel.add(btnCancelar);
+				if(empleado == null) {
+					btnAccion = new JButton("Registrar");
+				} else {
+					if(funcion==0) {
+						btnAccion = new JButton("Modificar");
+						txtCedula.setEnabled(false);
+					}  else {
+						if(funcion==2) {
+							btnAccion = new JButton("Eliminar");
+						} else {
+							btnAccion = new JButton("Abrir");
+							btnAccion.setVisible(false);
+						}
+					}
+				}
+				
+				btnAccion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(empleado == null) { 
+							if(rdbtnAdministrador.isSelected()) {
+								Tienda.getInstance().generarAdministrador(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (float) spnSueldoBase.getValue(), (float )spnComision.getValue(), txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()));
+							} else {
+								Tienda.getInstance().generarVendedor(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (float) spnSueldoBase.getValue(), (float )spnComision.getValue(), txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()));
+							}
+							clean();
+						} else {
+							if(funcion==0) {
+								if(rdbtnAdministrador.isSelected()) {
+									Tienda.getInstance().modificarEmpleado(empleado.getCodigo(), txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (float) spnSueldoBase.getValue(), (float )spnComision.getValue(), txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()));
+								}
+								dispose();
+							}  else {
+								if(funcion==2) {
+									Tienda.getInstance().eliminarEmpleado(empleado.getCodigo());
+									dispose();
+								}
+							}
+						}
+					}
+				});
+				buttonPane.add(btnAccion);
 			}
 			{
-				JButton btnRegistrar = new JButton("Registrar");
-				btnRegistrar.setBounds(270, 11, 70, 70);
-				panel.add(btnRegistrar);
+				btnSalir = new JButton("Salir");
+				btnSalir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				buttonPane.add(btnSalir);
 			}
 		}
+		if(empleado!=null) {
+			if(funcion!=0) {
+				bloquearCampos();
+			}
+			cargarEmpleado();
+		}
+	}
+
+	private void clean() {
+		txtCedula.setText(""); 
+		txtNombre.setText(""); 
+		txtTelefono.setText(""); 
+		txtDireccion.setText(""); 
+		spnSueldoBase.setValue(1);
+		spnComision.setValue(1);
+		txtUsuario.setText(""); 
+		txtContraseña.setText("");
+		rdbtnAdministrador.setSelected(false);
+	}
+	
+	private void bloquearCampos() {
+		txtCedula.setEnabled(false); 
+		txtNombre.setEnabled(false);  
+		txtTelefono.setEnabled(false); 
+		txtDireccion.setEnabled(false); 
+		spnSueldoBase.setEnabled(false); 
+		spnComision.setEnabled(false); 
+		txtUsuario.setEnabled(false); 
+		txtContraseña.setEnabled(false);
+		rdbtnAdministrador.setEnabled(false);
+		
+	}
+	private void cargarEmpleado() {
+		txtCedula.setText(empleado.getCedula()); 
+		txtNombre.setText(empleado.getNombre()); 
+		txtTelefono.setText(empleado.getTelefono()); 
+		txtDireccion.setText(empleado.getDireccion()); 
+		spnSueldoBase.setValue(empleado.getSueldo());
+		spnComision.setValue(empleado.getComision());
+		txtUsuario.setText(empleado.getUsuario()); 
+		txtContraseña.setText(empleado.getContraseña());
+		
+		if(empleado instanceof Administrador) {
+			rdbtnAdministrador.setSelected(true);
+		} else {
+			rdbtnAdministrador.setSelected(false);
+		}
+		rdbtnAdministrador.setEnabled(false);
 	}
 }
+
+
+

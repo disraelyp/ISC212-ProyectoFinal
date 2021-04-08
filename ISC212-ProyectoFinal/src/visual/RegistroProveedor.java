@@ -157,10 +157,10 @@ public class RegistroProveedor extends JDialog {
 				btnAccion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if(aux == null) { 
-							if(Tienda.getInstance().verificarRnc(txtRNC.getText())) {
+							if(!(Tienda.getInstance().verificarRnc(txtRNC.getText()))) {
 								Tienda.getInstance().generarProveedor(txtRNC.getText(), txtNombreE.getText(), txtTelefonoE.getText(), txtDireccionE.getText(), txtNombreR.getText(), txtTelefonoR.getText());
 							} else {
-								JOptionPane.showMessageDialog(null, "Este RNC ya pertenece a un proveedor registrado");;
+								JOptionPane.showMessageDialog(null, "Este RNC ya pertenece a un proveedor registrado");
 							}
 							clean();
 						} else {

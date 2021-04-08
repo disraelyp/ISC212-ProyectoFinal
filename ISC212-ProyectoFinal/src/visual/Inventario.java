@@ -400,7 +400,7 @@ public class Inventario extends JDialog {
 				int seleccion = -1;
 				seleccion = tableProductos.getSelectedRow();
 				productoSeleccionado = Tienda.getInstance().buscarProducto(tableProductos.getValueAt(seleccion,  0).toString());
-				btnCrearProducto.setEnabled(true);
+				//btnCrearProducto.setEnabled(true);
 			}
 		});
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

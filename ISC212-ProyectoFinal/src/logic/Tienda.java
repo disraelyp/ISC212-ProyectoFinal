@@ -223,10 +223,10 @@ public class Tienda implements Serializable{
 	public boolean verificarEmpleado(String codigo) {
 		for(Empleado x: empleados) {
 			if(x.getCodigo().equalsIgnoreCase(codigo)) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	public Empleado buscarEmpleado(String codigo) {
 		for(Empleado x: empleados) {
@@ -345,10 +345,10 @@ public class Tienda implements Serializable{
 	public boolean verificarRnc(String rnc) {
 		for(Proveedor x: proveedores) {
 			if(x.getRnc().equals(rnc)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	public Proveedor buscarProveedor(String rnc) {
 		for(Proveedor x: proveedores) {
