@@ -3,6 +3,7 @@ package visual;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -58,6 +59,8 @@ public class RegistroCompra extends JDialog {
 	private JButton btnAgregarProducto;
 	private JButton btnEliminarProducto;
 	private JButton btnAccion;
+	private JButton btnAbrirProducto;
+	private JButton btnCuentasPorCobrar;
 	
 	public RegistroCompra() {
 		
@@ -65,6 +68,7 @@ public class RegistroCompra extends JDialog {
 		setResizable(false);
 		setTitle("Modulo de Compras");
 		setModal(true);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 710, 534);	
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
@@ -104,6 +108,7 @@ public class RegistroCompra extends JDialog {
 							txtNombreP.setText(proveedor.getNombre());
 							txtTelefonoP.setText(proveedor.getTelefono());
 							btnAgregarProducto.setEnabled(true);
+							
 						}
 					}					
 				}
@@ -124,7 +129,7 @@ public class RegistroCompra extends JDialog {
 			JLabel lblNewLabel_1 = new JLabel("Telefono:");
 			lblNewLabel_1.setBounds(10, 82, 67, 14);
 			panel.add(lblNewLabel_1);
-			// HOLAA
+			
 			txtTelefonoP = new JTextField();
 			txtTelefonoP.setEditable(false);
 			txtTelefonoP.setBounds(66, 79, 228, 20);
@@ -132,7 +137,7 @@ public class RegistroCompra extends JDialog {
 			txtTelefonoP.setColumns(10);
 		}
 		{
-			JButton btnAbrirProducto = new JButton("");
+			btnAbrirProducto = new JButton("");
 			btnAbrirProducto.setEnabled(false);
 			btnAbrirProducto.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/abrir.png")));
 			btnAbrirProducto.addActionListener(new ActionListener() {
@@ -153,11 +158,9 @@ public class RegistroCompra extends JDialog {
 			btnAgregarProducto.setEnabled(false);
 			btnAgregarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoProductos listadoProductos = new ListadoProductos();
-					String codigo = listadoProductos.showDialog();
-					if(codigo!=null) {
-						Producto producto = Tienda.getInstance().buscarProducto(codigo);
-						producto.setCantidad(1);
+					ListadoProductos listadoProductos = new ListadoProductos(false, false);
+					Producto producto = listadoProductos.showDialog();
+					if(producto!=null) {
 						carrito.add(producto);
 						cargarCarrito();
 					}
@@ -209,7 +212,7 @@ public class RegistroCompra extends JDialog {
 				seleccion = tableProductos.getSelectedRow();
 				productoSeleccionado = Tienda.getInstance().buscarProducto(tableProductos.getValueAt(seleccion,  0).toString());
 				btnEliminarProducto.setEnabled(true);
-				btnAgregarProducto.setEnabled(true);
+				btnAbrirProducto.setEnabled(true);
 			}
 		});
 		
@@ -238,13 +241,23 @@ public class RegistroCompra extends JDialog {
 		scrollPane.setViewportView(tableProductos);
 		
 		btnEliminarProducto = new JButton("Eliminar Producto");
+		btnEliminarProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				carrito.remove(productoSeleccionado);
+			}
+		});
 		btnEliminarProducto.setEnabled(false);
 		btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnEliminarProducto.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEliminarProducto.setBounds(614, 332, 70, 70);
 		contentPanel.add(btnEliminarProducto);
 		
-		JButton btnCuentasPorCobrar = new JButton("Cuentas por Pagar");
+		btnCuentasPorCobrar = new JButton("Cuentas por Pagar");
+		btnCuentasPorCobrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// CUENTAS POR PAGAR
+			}
+		});
 		btnCuentasPorCobrar.setEnabled(false);
 		btnCuentasPorCobrar.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCuentasPorCobrar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -311,7 +324,7 @@ public class RegistroCompra extends JDialog {
 				if(x instanceof Componente) {
 					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
 				} else {
-					rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+					rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
 				}		
 				rowsProductos[2]=x.getCantidad();
 				rowsProductos[3]=x.getCosto();

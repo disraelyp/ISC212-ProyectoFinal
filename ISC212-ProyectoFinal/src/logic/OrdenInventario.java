@@ -17,10 +17,10 @@ public class OrdenInventario implements Serializable{
 	protected int plazoPago;
 	protected ArrayList<Componente> componentes;
 	
-	public OrdenInventario(String codigo, Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago,
+	public OrdenInventario(Proveedor proveedor, Date fecha, Administrador administrador, int plazoPago,
 			ArrayList<Componente> componentes) {
 		super();
-		this.codigo=codigo;
+		this.codigo="I-"+Tienda.getInstance().getOrdenes().size();
 		this.proveedor = proveedor;
 		this.fecha = fecha;
 		this.administrador = administrador;

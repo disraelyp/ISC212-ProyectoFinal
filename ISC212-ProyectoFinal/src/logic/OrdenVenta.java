@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class OrdenVenta implements Serializable {
 	
 	private static final long serialVersionUID =1L;
-	private static int idFactura=1;
 	
 	private String codigo;
 	private Cliente cliente;
@@ -15,11 +14,10 @@ public class OrdenVenta implements Serializable {
 	
 	public OrdenVenta(Cliente cliente, Empleado empleado, ArrayList<Producto> productos) {
 		super();
-		this.codigo = "F-"+idFactura;
+		this.codigo = "F-"+Tienda.getInstance().getFacturas().size();
 		this.cliente = cliente;
 		this.empleado = empleado;
 		this.productos = productos;
-		idFactura++;
 	}
 	
 	public String getCodigo() {

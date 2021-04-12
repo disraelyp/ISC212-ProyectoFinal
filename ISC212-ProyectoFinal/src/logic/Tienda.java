@@ -100,27 +100,27 @@ public class Tienda implements Serializable{
 		}
 		return null;
 	}
+	public void eliminarProducto(String codigo) {
+		productos.remove(buscarProducto(codigo));
+		JOptionPane.showMessageDialog(null, "El producto (Codigo: "+codigo+") fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
 	
 	// FUNCIONES DE LOS COMPONENTES
-	public void generarTarjetaMadre(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
-		TarjetaMadre componente = new TarjetaMadre(modelo, marca, cantidad, cantidadMinima, precio, costo, tipoMicro, tipoRAM, tipoDisco);
-		productos.add(componente);
+	public void generarTarjetaMadre(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
+		productos.add(new TarjetaMadre(modelo, marca, cantidad, cantidadMinima, precio, costo, tipoMicro, tipoRAM, tipoDisco));
+		JOptionPane.showMessageDialog(null, "El componente fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public void generarMicro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			int conexion, float velocidad, int nucleos) {
-		Microprocesador componente = new Microprocesador(modelo, marca, cantidad, cantidadMinima, precio, costo, conexion, velocidad, nucleos);
-		productos.add(componente);
+	public void generarMicro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, int conexion, float velocidad, int nucleos) {
+		productos.add(new Microprocesador(modelo, marca, cantidad, cantidadMinima, precio, costo, conexion, velocidad, nucleos));
+		JOptionPane.showMessageDialog(null, "El componente fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public void generarDiscoDuro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			float capacidad, int tipo, int rpm) {
-		DiscoDuro componente = new DiscoDuro(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, rpm);
-		productos.add(componente);
+	public void generarDiscoDuro(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, float capacidad, int tipo, int rpm) {
+		productos.add(new DiscoDuro(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, rpm));
+		JOptionPane.showMessageDialog(null, "El componente fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public void generarMemoriaRAM(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			float capacidad, int tipo, int frecuencia) {
-		MemoriaRAM componente = new MemoriaRAM(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, frecuencia);
-		productos.add(componente);
+	public void generarMemoriaRAM(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, float capacidad, int tipo, int frecuencia) {
+		productos.add(new MemoriaRAM(modelo, marca, cantidad, cantidadMinima, precio, costo, capacidad, tipo, frecuencia));
+		JOptionPane.showMessageDialog(null, "El componente fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public boolean verificarComponente(String codigo) {
 		for(Producto x: productos) {
@@ -138,56 +138,59 @@ public class Tienda implements Serializable{
 		}
 		return null;
 	}
-	public void modificarTarjetaMadre(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
-		/*for(Producto x: productos) {
-			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
-				x.setCodigo(codigo);
-				x.setModelo(modelo);
-				x.setMarca(marca);
-				x.setCantidad(cantidad);
-				x.setCantidadMinima(cantidadMinima);
-				x.setPrecio(precio);
-				x.setCosto(costo);
-				x.setTipoMicro(tipoMicro);
-				x.setTipoRAM(tipoRAM);
-				x.setTipoDisco(tipoDisco);
-			}
-		}*/
-	}
-	public void modificarMicro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
-			int conexion, float velocidad, int nucleos) {
-		/*for(Producto x: productos) {
-			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
-				x.setCodigo(codigo);
-				x.setModelo(modelo);
-				x.setMarca(marca);
-				x.setCantidad(cantidad);
-				x.setCantidadMinima(cantidadMinima);
-				x.setPrecio(precio);
-				x.setCosto(costo);
-				x.setTipoMicro(conexion);
-				x.setTipoRAM(velocidad);
-				x.setTipoDisco(nucleos);
-			}
-		}*/
-	}
-	public void modificarDiscoDuro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
+	public void modificarDiscoDuro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
 			float capacidad, int tipo, int rpm) {
-		/*for(Producto x: productos) {
-			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
-				x.setCodigo(codigo);
-				x.setModelo(modelo);
-				x.setMarca(marca);
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof DiscoDuro) {
+				((Componente) x).setModelo(modelo);
+				((Componente) x).setMarca(marca);
 				x.setCantidad(cantidad);
-				x.setCantidadMinima(cantidadMinima);
-				x.setPrecio(precio);
-				x.setCosto(costo);
-				x.setTipoMicro(capacidad);
-				x.setTipoRAM(tipo);
-				x.setTipoDisco(rpm);
+				((Componente) x).setCantidadMinima(cantidadMinima);
+				((Componente) x).setPrecio(precio);
+				((Componente) x).setCosto(costo);
+				((DiscoDuro) x).setCapacidad(capacidad);
+				((DiscoDuro) x).setTipo(tipo);
+				((DiscoDuro) x).setRpm(rpm);
+				JOptionPane.showMessageDialog(null, "El componente (Codigo: "+x.getCodigo()+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
 			}
-		}*/
+		}
+	}
+	public void modificarMicro(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
+			int conexion, float velocidad, int nucleos) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof Microprocesador) {
+				((Componente) x).setModelo(modelo);
+				((Componente) x).setMarca(marca);
+				x.setCantidad(cantidad);
+				((Componente) x).setCantidadMinima(cantidadMinima);
+				((Componente) x).setPrecio(precio);
+				((Componente) x).setCosto(costo);
+				((Microprocesador) x).setConexion(conexion);
+				((Microprocesador) x).setVelocidad(velocidad);
+				((Microprocesador) x).setNucleos(nucleos);
+				JOptionPane.showMessageDialog(null, "El componente (Codigo: "+x.getCodigo()+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+		}
+	}
+	public void modificarTarjetaMadre(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo,
+			int tipoMicro, int tipoRAM, ArrayList<Integer> tipoDisco) {
+		for(Producto x: productos) {
+			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof TarjetaMadre) {
+				((Componente) x).setModelo(modelo);
+				((Componente) x).setMarca(marca);
+				x.setCantidad(cantidad);
+				((Componente) x).setCantidadMinima(cantidadMinima);
+				((Componente) x).setPrecio(precio);
+				((Componente) x).setCosto(costo);
+				((TarjetaMadre) x).setTipoDisco(tipoDisco);
+				((TarjetaMadre) x).setTipoRAM(tipoRAM);
+				((TarjetaMadre) x).setTipoMicro(tipoMicro);
+				JOptionPane.showMessageDialog(null, "El componente (Codigo: "+x.getCodigo()+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+		}
 	}
 	public void modificarMemoriaRAM(String codigo, String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo, 
 			float capacidad, int tipo, int frecuencia) {
@@ -195,19 +198,88 @@ public class Tienda implements Serializable{
 			if(x.getCodigo().equalsIgnoreCase(codigo) && x instanceof MemoriaRAM) {
 				((Componente) x).setModelo(modelo);
 				((Componente) x).setMarca(marca);
-				((Componente) x).setCantidad(cantidad);
+				x.setCantidad(cantidad);
 				((Componente) x).setCantidadMinima(cantidadMinima);
 				((Componente) x).setPrecio(precio);
 				((Componente) x).setCosto(costo);
 				((MemoriaRAM) x).setTipo(tipo);
 				((MemoriaRAM) x).setCapacidad(capacidad);
 				((MemoriaRAM) x).setFrecuencia(frecuencia);
+				JOptionPane.showMessageDialog(null, "El componente (Codigo: "+x.getCodigo()+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;
 			}
 		}
 	}
 	
 	// FUNCIONES DE LOS PAQUETES DE COMPONENTES
-	
+	public void retirarComponente(String codigo) {
+		PaqueteComponentes paqueteComponentes = buscarPaqueteComponentes(codigo);
+		for(Producto x: productos) {
+			if(x instanceof Componente) {
+				for(Componente y: paqueteComponentes.getProductos()) {
+					if(x.getCodigo().equalsIgnoreCase(y.getCodigo())) {
+						x.setCantidad(x.getCantidad()-y.getCantidad());
+					}
+				}
+			}	
+		}
+	}
+	public void cargarComponente(String codigo) {
+		PaqueteComponentes paqueteComponentes = buscarPaqueteComponentes(codigo);
+		for(Producto x: productos) {
+			if(x instanceof Componente) {
+				for(Componente y: paqueteComponentes.getProductos()) {
+					if(x.getCodigo().equalsIgnoreCase(y.getCodigo())) {
+						x.setCantidad(x.getCantidad()+y.getCantidad());
+					}
+				}
+			}	
+		}
+	}
+	public boolean verificarPaqueteComponentes(String codigo) {
+		for(Producto x: productos) {
+			if(x instanceof PaqueteComponentes) {
+				if(x.getCodigo().equalsIgnoreCase(codigo)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public PaqueteComponentes buscarPaqueteComponentes(String codigo) {
+		for(Producto x: productos) {
+			if(x instanceof PaqueteComponentes) {
+				if(x.getCodigo().equalsIgnoreCase(codigo)) {
+					return (PaqueteComponentes) x;
+				}
+			}
+		}
+		return null;
+	}
+	public void generarPaqueteComponentes(ArrayList<Componente> producto, float descuento, int cantidad) {
+		PaqueteComponentes paqueteComponente = new PaqueteComponentes((Administrador) Tienda.getLoginUser(), producto, descuento, cantidad);
+		productos.add(paqueteComponente);
+		retirarComponente(paqueteComponente.getCodigo());
+		JOptionPane.showMessageDialog(null, "El paquete de componentes fue registrado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public void modificarPaqueteComponentes(String codigo, ArrayList<Componente> producto, float descuento, int cantidad) {
+		cargarComponente(codigo);
+		for(Producto x: productos) {
+			if(x instanceof PaqueteComponentes) {
+				((PaqueteComponentes) x).setProductos(producto);
+				((PaqueteComponentes) x).setDescuento(descuento);
+				x.setCantidad(cantidad);
+				retirarComponente(codigo);
+				JOptionPane.showMessageDialog(null, "El componente (Codigo: "+x.getCodigo()+") fue modificado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+				break;				
+			}
+		}
+	}
+	public void eliminarPaqueteComponentes(String codigo) {
+		cargarComponente(codigo);
+		productos.remove(buscarPaqueteComponentes(codigo));
+		JOptionPane.showMessageDialog(null, "El paquete de componentes fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
 	
 	// FUNCIONES DE LOS EMPLEADOS
 	public boolean iniciarSesion(String usuario, String contrasena) {
@@ -223,10 +295,10 @@ public class Tienda implements Serializable{
 	public boolean verificarEmpleado(String codigo) {
 		for(Empleado x: empleados) {
 			if(x.getCodigo().equalsIgnoreCase(codigo)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	public Empleado buscarEmpleado(String codigo) {
 		for(Empleado x: empleados) {

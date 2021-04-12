@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
@@ -43,6 +44,7 @@ public class RegistroVenta extends JDialog {
 	public RegistroVenta() {
 		setResizable(false);
 		setTitle("Modulo de Facturacion");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setModal(true);
 		setBounds(100, 100, 710, 534);	
 		setLocationRelativeTo(null);
@@ -115,7 +117,7 @@ public class RegistroVenta extends JDialog {
 			JButton btnEliminarProducto = new JButton("Agregar Producto");
 			btnEliminarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoProductos listadoProductos = new ListadoProductos();
+					ListadoProductos listadoProductos = new ListadoProductos(true, false);
 					listadoProductos.setVisible(true);
 				}
 			});

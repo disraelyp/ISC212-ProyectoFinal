@@ -50,7 +50,7 @@ public class IniciarSesion extends JFrame {
 						tienda2 = new FileOutputStream("data.dat");
 						write = new ObjectOutputStream(tienda2);
 						Tienda.getInstance().generarAdministrador("0000", "Administrador", "0000", "0000", 0, 0, "admin", "1234");
-						Tienda.getInstance().generarVendedor("0000", "Vendedor", "0000", "0000", 0, 0, "vendedor", "1234");
+						Tienda.getInstance().generarVendedor("0000", "Vendedor", "0000", "0000", 0, 0, "vendedor", "1234");						
 						write.writeObject(Tienda.getInstance());
 						tienda2.close();
 						write.close();

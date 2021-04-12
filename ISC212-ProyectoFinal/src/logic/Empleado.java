@@ -2,8 +2,6 @@ package logic;
 
 public class Empleado extends Persona{
 	
-	protected static int idEmpleado=0;
-	
 	protected String codigo;
 	protected float sueldo;
 	protected float comision;
@@ -13,8 +11,7 @@ public class Empleado extends Persona{
 	public Empleado(String cedula, String nombre, String telefono, String direccion, float sueldo, 
 			float comision, String usuario, String contraseña) {
 		super(cedula, nombre, telefono, direccion);
-		this.codigo = "E-"+idEmpleado;
-		idEmpleado++;
+		this.codigo = "E-"+Tienda.getInstance().getEmpleados().size();
 		this.sueldo = sueldo;
 		this.comision = comision;
 		this.usuario = usuario;
@@ -23,9 +20,6 @@ public class Empleado extends Persona{
 	
 	public String getCodigo() {
 		return codigo;
-	}
-	public static int getIdEmpleado() {
-		return idEmpleado;
 	}
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;

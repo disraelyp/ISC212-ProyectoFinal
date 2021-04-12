@@ -1,6 +1,8 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -18,9 +20,13 @@ import logic.Componente;
 import logic.CompraInventario;
 import logic.CotizacionInventario;
 import logic.DevolucionInventario;
+import logic.DiscoDuro;
+import logic.MemoriaRAM;
+import logic.Microprocesador;
 import logic.OrdenInventario;
 import logic.PaqueteComponentes;
 import logic.Producto;
+import logic.TarjetaMadre;
 import logic.Tienda;
 
 import javax.swing.JScrollPane;
@@ -34,7 +40,7 @@ import java.awt.event.MouseEvent;
 
 public class Inventario extends JDialog {
 
-	private static Producto productoSeleccionado=null;
+	private static String productoSeleccionado=null;
 	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelOrddenes;
@@ -56,12 +62,17 @@ public class Inventario extends JDialog {
 	private JButton btnSalirOrden;
 	private JTable tableDevoluciones;
 	private JTable tableProductos;
+	private JButton btnAbrirProducto;
 	private JButton btnCrearProducto;
+	private JButton btnCrearPaquete;
+	private JButton btnModificarProducto;
+	private JButton btnEliminarProducto;
+	private JButton btnSalir;
 
 	public Inventario() {
 		
-		setTitle("Modulo de Inventario");
-		
+		setTitle("CECOMSA - Modulo de Inventario");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 784, 512);
@@ -348,50 +359,75 @@ public class Inventario extends JDialog {
 		comboBox_1.setBounds(90, 8, 150, 20);
 		panelProductos.add(comboBox_1);
 		
-		btnCrearProducto = new JButton("");
-		btnCrearProducto.addActionListener(new ActionListener() {
+		btnAbrirProducto = new JButton("");
+		btnAbrirProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(productoSeleccionado instanceof Componente) {
-					RegistroComponente registroComponente = new RegistroComponente((Componente) productoSeleccionado, 1);
-					registroComponente.setVisible(true);
+				if(productoSeleccionado!=null) {
+					if(Tienda.getInstance().buscarProducto(productoSeleccionado) instanceof Componente) {
+						Busqueda busqueda = new Busqueda(3, 2, productoSeleccionado);
+						busqueda.setVisible(true);
+					} else {
+						
+					}
 				}
+				cargarTablas();
 			}
 		});
-		btnCrearProducto.setEnabled(false);
-		btnCrearProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
-		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnCrearProducto.setBounds(170, 391, 70, 70);
-		panelProductos.add(btnCrearProducto);
+		btnAbrirProducto.setEnabled(false);
+		btnAbrirProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
+		btnAbrirProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnAbrirProducto.setBounds(170, 391, 70, 70);
+		panelProductos.add(btnAbrirProducto);
 		
-		JButton btnCrearProducto_1 = new JButton("CREAR PRODUCTO");
-		btnCrearProducto_1.addActionListener(new ActionListener() {
+		btnCrearProducto = new JButton("COMP.");
+		btnCrearProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegistroComponente registroComponente = new RegistroComponente(null, 0);
 				registroComponente.setVisible(true); //bien
+				cargarTablas();
 			}
 		});
-		btnCrearProducto_1.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnCrearProducto_1.setBounds(10, 391, 70, 70);
-		panelProductos.add(btnCrearProducto_1);
+		btnCrearProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCrearProducto.setBounds(10, 391, 70, 70);
+		panelProductos.add(btnCrearProducto);
 		
-		JButton btnModificarProducto = new JButton("");
+		btnModificarProducto = new JButton("");
+		btnModificarProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(productoSeleccionado!=null) {
+					if(Tienda.getInstance().buscarProducto(productoSeleccionado) instanceof Componente) {
+						Busqueda busqueda = new Busqueda(3, 0, productoSeleccionado);
+						busqueda.setVisible(true);
+					} else {
+						
+					}
+				}
+				cargarTablas();
+			}
+		});
+		btnModificarProducto.setEnabled(false);
 		btnModificarProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		btnModificarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnModificarProducto.setBounds(250, 391, 70, 70);
 		panelProductos.add(btnModificarProducto);
 		
-		JButton button_12 = new JButton("Salir");
-		button_12.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_12.setBounds(689, 391, 70, 70);
-		panelProductos.add(button_12);
+		btnSalir = new JButton("");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalir.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
+		btnSalir.setBounds(689, 391, 70, 70);
+		panelProductos.add(btnSalir);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 36, 749, 344);
-		panelProductos.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		JPanel panelTablaProductos = new JPanel();
+		panelTablaProductos.setBounds(10, 36, 749, 344);
+		panelProductos.add(panelTablaProductos);
+		panelTablaProductos.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPaneProductos = new JScrollPane();
-		panel_1.add(scrollPaneProductos, BorderLayout.CENTER);
+		panelTablaProductos.add(scrollPaneProductos, BorderLayout.CENTER);
 		
 		tableProductos = new JTable();
 		tableProductos.addMouseListener(new MouseAdapter() {
@@ -399,8 +435,10 @@ public class Inventario extends JDialog {
 			public void mouseClicked(MouseEvent e) {
 				int seleccion = -1;
 				seleccion = tableProductos.getSelectedRow();
-				productoSeleccionado = Tienda.getInstance().buscarProducto(tableProductos.getValueAt(seleccion,  0).toString());
-				//btnCrearProducto.setEnabled(true);
+				productoSeleccionado = tableProductos.getValueAt(seleccion,  0).toString();
+				btnAbrirProducto.setEnabled(true);
+				btnEliminarProducto.setEnabled(true);
+				btnModificarProducto.setEnabled(true);
 			}
 		});
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -408,35 +446,52 @@ public class Inventario extends JDialog {
 		tableProductos.setModel(modelProductos);
 		tableProductos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableProductos.getTableHeader().setReorderingAllowed(false);
-		
-		String[] headers4= {"Codigo", "Descripcion", "Cantidad", "Precio total", "Costo total"};
+		String[] headers4= {"Codigo", "Descripcion", "Tipo", "Cantidad", "Precio total", "Costo total"};
 		modelProductos.setColumnIdentifiers(headers4);
 		TableColumnModel columModel4 = tableProductos.getColumnModel();
 		columModel4.getColumn(0).setPreferredWidth(90);
 		columModel4.getColumn(1).setPreferredWidth(250);
-		columModel4.getColumn(2).setPreferredWidth(90);
-		columModel4.getColumn(2).setPreferredWidth(90);
-		columModel4.getColumn(3).setPreferredWidth(100);
-		columModel4.getColumn(4).setPreferredWidth(100);
+		columModel4.getColumn(2).setPreferredWidth(120);
+		columModel4.getColumn(3).setPreferredWidth(90);
+		columModel4.getColumn(4).setPreferredWidth(90);
+		columModel4.getColumn(5).setPreferredWidth(100);
 		scrollPaneProductos.setViewportView(tableProductos);		
 		
-		JButton btnEliminar = new JButton("");
-		btnEliminar.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
-		btnEliminar.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEliminar.setBounds(330, 391, 70, 70);
-		panelProductos.add(btnEliminar);
+		btnEliminarProducto = new JButton("");
+		btnEliminarProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(productoSeleccionado!=null) {
+					if(Tienda.getInstance().buscarProducto(productoSeleccionado) instanceof Componente) {
+						Busqueda busqueda = new Busqueda(3, 3, productoSeleccionado);
+						busqueda.setVisible(true);
+					} else {
+						
+					}
+				}
+				cargarTablas();
+			}
+		});
+		btnEliminarProducto.setEnabled(false);
+		btnEliminarProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
+		btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEliminarProducto.setBounds(330, 391, 70, 70);
+		panelProductos.add(btnEliminarProducto);
 		
-		JButton button_7 = new JButton("CREAR PRODUCTO");
-		button_7.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_7.setBounds(90, 391, 70, 70);
-		panelProductos.add(button_7);
+		btnCrearPaquete = new JButton("PAQ.");
+		btnCrearPaquete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroPaqueteComponentes registroPaqueteComponentes = new RegistroPaqueteComponentes(null, 0);
+				registroPaqueteComponentes.setVisible(true);
+			}
+		});
+		btnCrearPaquete.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCrearPaquete.setBounds(90, 391, 70, 70);
+		panelProductos.add(btnCrearPaquete);
 		
 		cargarTablas();
 	}
-	//"Codigo", "Fecha", "Proveedor", "Estado", "Monto Total"
+	
 	private void cargarTablas() {
-		
-		// ORDENES DE COMPRA
 		rowsOrdenes = new Object[modelOrddenes.getColumnCount()];
 		modelOrddenes.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
@@ -453,8 +508,6 @@ public class Inventario extends JDialog {
 				modelOrddenes.addRow(rowsOrdenes);
 			}
 		}
-		
-		// COTIZACIONES
 		rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
 		modelCotizaciones.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
@@ -466,8 +519,6 @@ public class Inventario extends JDialog {
 				modelCotizaciones.addRow(rowsCotizaciones);
 			}
 		}
-		
-		// DEVOLUCIONES 
 		rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
 		modelDevoluciones.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
@@ -484,9 +535,6 @@ public class Inventario extends JDialog {
 				modelDevoluciones.addRow(rowsDevoluciones);
 			}
 		}
-		
-		// LISTADO DE PRODUCTOS
-		//String[] headers3= {"Codigo", "Descripcion", "Cantidad", "Cantidad Minima", "Precio total"};
 		rowsProductos = new Object[modelProductos.getColumnCount()];
 		modelProductos.setRowCount(0);
 		for(Producto x: Tienda.getInstance().getProductos()) {
@@ -494,13 +542,31 @@ public class Inventario extends JDialog {
 			if(x instanceof Componente) {
 				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
 			} else {
-				rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+				rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
 			}		
-			rowsProductos[2]=x.getCantidad();
-			rowsProductos[3]=x.getPrecio();
-			rowsProductos[4]=x.getCosto();
+			if(x instanceof TarjetaMadre) {
+				rowsProductos[2]="Tarjeta Madre";
+			} else {
+				if(x instanceof Microprocesador) {
+					rowsProductos[2]="Microprocesador";
+				} else {
+					if(x instanceof DiscoDuro) {
+						rowsProductos[2]="Disco duro";
+					} else {
+						if(x instanceof MemoriaRAM) {
+							rowsProductos[2]="Memoria RAM";
+						} else {
+							if(x instanceof PaqueteComponentes) {
+								rowsProductos[2]="Paquete de compoenentes.";
+							}
+						}
+					}
+				}
+			}
+			rowsProductos[3]=x.getCantidad();
+			rowsProductos[4]=x.getPrecio();
+			rowsProductos[5]=x.getCosto();
 			modelProductos.addRow(rowsProductos);
 		}
-		
 	}
 }

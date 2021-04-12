@@ -1,7 +1,8 @@
 package logic;
 
-public class Componente extends Producto{
-	
+
+public class Componente extends Producto {
+		
 	protected String modelo;
 	protected String marca;
 	protected int cantidadMinima;
@@ -9,7 +10,7 @@ public class Componente extends Producto{
 	protected float costo;
 	
 	public Componente(String modelo, String marca, int cantidad, int cantidadMinima, float precio, float costo) {
-		super(new String("C-"), cantidad);
+		super(cantidad);
 		this.modelo = modelo;
 		this.marca = marca;
 		this.cantidadMinima = cantidadMinima;

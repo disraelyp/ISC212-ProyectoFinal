@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logic.Cliente;
+import logic.Componente;
 import logic.Empleado;
+import logic.PaqueteComponentes;
 import logic.Proveedor;
 import logic.Tienda;
 
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -110,6 +113,7 @@ public class Busqueda extends JDialog {
 		}
 		
 		setTitle("Busqueda para "+Funcion+" "+nombreDocumento);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 340, 250);
 		setLocationRelativeTo(null);
 		setModal(true);
@@ -190,10 +194,60 @@ public class Busqueda extends JDialog {
 						}
 						break;
 					case 3:
-						//nombreDocumento="Componente";
+						// COMPONENTES
+						if(Tienda.getInstance().verificarProducto(txtCodigo.getText())) {
+							Componente producto = Tienda.getInstance().buscarComponente(txtCodigo.getText());
+							switch(tipoFuncion) {
+							case 0:
+								// Modificar
+								RegistroComponente registroComponente = new RegistroComponente(producto, 0);
+								dispose();
+								registroComponente.setVisible(true);
+								break;
+							case 2:
+								// Abrir
+								RegistroComponente registroComponente1 = new RegistroComponente(producto, 1);
+								dispose();
+								registroComponente1.setVisible(true);
+								break;
+							case 3:
+								// Eliminar
+								RegistroComponente registroComponente2 = new RegistroComponente(producto, 2);
+								dispose();
+								registroComponente2.setVisible(true);
+								break;
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "El codigo ("+codigo+") ingresado no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						break;
 					case 4:
-						//nombreDocumento="Paquete de componentes";
+						// PAQUETES DE COMPONENTES
+						if(Tienda.getInstance().verificarProducto(txtCodigo.getText())) {
+							PaqueteComponentes producto = Tienda.getInstance().buscarPaqueteComponentes(txtCodigo.getText());
+							switch(tipoFuncion) {
+							case 0:
+								// Modificar
+								RegistroPaqueteComponentes registroPaqueteComponentes = new RegistroPaqueteComponentes(producto, 0);
+								dispose();
+								registroPaqueteComponentes.setVisible(true);
+								break;
+							case 2:
+								// Abrir
+								RegistroPaqueteComponentes registroPaqueteComponentes1 = new RegistroPaqueteComponentes(producto, 1);
+								dispose();
+								registroPaqueteComponentes1.setVisible(true);
+								break;
+							case 3:
+								// Eliminar
+								RegistroPaqueteComponentes registroPaqueteComponentes2 = new RegistroPaqueteComponentes(producto, 2);
+								dispose();
+								registroPaqueteComponentes2.setVisible(true);
+								break;
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "El codigo ("+codigo+") ingresado no fue encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						break;
 					case 5:
 						//nombreDocumento="Factura";
@@ -206,7 +260,7 @@ public class Busqueda extends JDialog {
 						break;
 					case 8:
 						// CLIENTES
-						if(!Tienda.getInstance().verificarCliente(codigo)) {
+						if(Tienda.getInstance().verificarCliente(codigo)) {
 							Cliente cliente = Tienda.getInstance().buscarCliente(codigo);
 							switch(tipoFuncion) {
 							case 0:
@@ -234,7 +288,7 @@ public class Busqueda extends JDialog {
 						break;
 					case 9:
 						// PROVEEDOR
-						if(!(Tienda.getInstance().verificarRnc(codigo))) {
+						if(Tienda.getInstance().verificarRnc(codigo)) {
 							Proveedor proveedor = Tienda.getInstance().buscarProveedor(codigo);
 							switch(tipoFuncion) {
 							case 0:
@@ -261,7 +315,7 @@ public class Busqueda extends JDialog {
 						}
 						break;
 					case 10:
-						if(!(Tienda.getInstance().verificarEmpleado(codigo))) {
+						if(Tienda.getInstance().verificarEmpleado(codigo)) {
 							Empleado empleado = Tienda.getInstance().buscarEmpleado(codigo);
 							switch(tipoFuncion) {
 							case 0:

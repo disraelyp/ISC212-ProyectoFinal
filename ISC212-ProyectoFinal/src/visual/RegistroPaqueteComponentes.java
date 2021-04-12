@@ -2,47 +2,79 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import logic.Componente;
+import logic.PaqueteComponentes;
+import logic.Producto;
+import logic.Tienda;
+
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JTable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class RegistroPaqueteComponentes extends JDialog {
 
+	private static ArrayList<Componente> componentes;
+	private static PaqueteComponentes paqueteComponentes=null;
+	private static String componenteSeleccionado;
+	
+	private static DefaultTableModel modelProductos;
+	private static Object[] rowsProductos;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtSerie;
-	private JTable tableComponentes;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField txtPrecio;
+	private JTextField txtCosto;
+	private JButton btnAccion;
+	private JTable table;
+	private JButton btnEliminar;
+	private JButton btnAbrir;
+	private JSpinner spnDescuento;
+	private JSpinner spnCantidad;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			RegistroPaqueteComponentes dialog = new RegistroPaqueteComponentes();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
+	public RegistroPaqueteComponentes(PaqueteComponentes aux, int funcion) {
+		
+		componentes=new ArrayList<Componente>();
+		paqueteComponentes=aux;
+		if(paqueteComponentes == null) {
+			setTitle("CECOMSA - Registro de paquete de componentes.");
+		} else {
+			if(funcion==0) {
+				setTitle("CECOMSA - Modificador de paquete componentes (Codigo:"+paqueteComponentes.getCodigo()+").");
+			}  else {
+				if(funcion==1) {
+					setTitle("CECOMSA - Ver paquete componente (Codigo:"+paqueteComponentes.getCodigo()+").");
+				} else {
+					setTitle("CECOMSA - Eliminar paquete componentes (Codigo:"+paqueteComponentes.getCodigo()+").");
+				}
+			}
 		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public RegistroPaqueteComponentes() {
-		setTitle("Registro de Paquetes de Componentes");
-		setBounds(100, 100, 497, 455);
+		
+		setBounds(100, 100, 460, 500);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -51,109 +83,260 @@ public class RegistroPaqueteComponentes extends JDialog {
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
-			{
-				JPanel panelBusqueda = new JPanel();
-				panelBusqueda.setBorder(new TitledBorder(null, "Buscar componentes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panelBusqueda.setBounds(0, 0, 471, 66);
-				panel.add(panelBusqueda);
-				panelBusqueda.setLayout(null);
-				{
-					JLabel lblCodigo = new JLabel("Serie:");
-					lblCodigo.setBounds(58, 30, 64, 14);
-					panelBusqueda.add(lblCodigo);
-				}
-				{
-					txtSerie = new JTextField();
-					txtSerie.setBounds(103, 27, 130, 20);
-					panelBusqueda.add(txtSerie);
-					txtSerie.setColumns(10);
-				}
-				
-				JButton btnBuscar = new JButton("Buscar");
-				btnBuscar.setBounds(297, 26, 89, 23);
-				panelBusqueda.add(btnBuscar);
-			}
 			
-			JPanel panel_1 = new JPanel();
-			panel_1.setBounds(0, 69, 471, 193);
-			panel.add(panel_1);
-			panel_1.setLayout(new BorderLayout(0, 0));
+			JPanel panelComponentes = new JPanel();
+			panelComponentes.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelComponentes.setBounds(10, 11, 414, 300);
+			panel.add(panelComponentes);
+			panelComponentes.setLayout(null);
+			
+			JLabel lblTabla = new JLabel("Componentes del paquete:");
+			lblTabla.setBounds(10, 11, 394, 14);
+			panelComponentes.add(lblTabla);
+			
+			JPanel panelTabla = new JPanel();
+			panelTabla.setBounds(10, 36, 344, 253);
+			panelComponentes.add(panelTabla);
+			panelTabla.setLayout(new BorderLayout(0, 0));
 			
 			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			panel_1.add(scrollPane, BorderLayout.CENTER);
+			panelTabla.add(scrollPane, BorderLayout.CENTER);
 			
-			tableComponentes = new JTable();
-			tableComponentes.setBorder(new TitledBorder(null, "Paquete de Componentes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			scrollPane.setViewportView(tableComponentes);
+			table = new JTable();
+			table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int seleccion = -1;
+					seleccion = table.getSelectedRow();
+					componenteSeleccionado = table.getValueAt(seleccion,  0).toString();
+					btnEliminar.setEnabled(true);
+					btnAbrir.setEnabled(true);
+				}
+			});
 			
-			JPanel panelDatoPaquete = new JPanel();
-			panelDatoPaquete.setBorder(new TitledBorder(null, "Datos del Paquete", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDatoPaquete.setBounds(0, 297, 471, 80);
-			panel.add(panelDatoPaquete);
-			panelDatoPaquete.setLayout(null);
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			modelProductos = new DefaultTableModel();
+			table.setModel(modelProductos);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			table.getTableHeader().setReorderingAllowed(false);
 			
-			JLabel lblCodigo = new JLabel("C\u00F3digo:");
-			lblCodigo.setBounds(10, 26, 95, 14);
-			panelDatoPaquete.add(lblCodigo);
+			String[] headers= {"Codigo", "Descripcion", "Cantidad"};
+			modelProductos.setColumnIdentifiers(headers);
+			TableColumnModel columModel = table.getColumnModel();
+			columModel.getColumn(0).setPreferredWidth(90);
+			columModel.getColumn(1).setPreferredWidth(90);
+			columModel.getColumn(2).setPreferredWidth(90);
 			
-			JLabel lblPrecio = new JLabel("Descuento aplicado:");
-			lblPrecio.setBounds(10, 51, 112, 14);
-			panelDatoPaquete.add(lblPrecio);
+			scrollPane.setViewportView(table);
 			
-			JLabel lblPrecioReal = new JLabel("Precio real:");
-			lblPrecioReal.setBounds(227, 26, 77, 14);
-			panelDatoPaquete.add(lblPrecioReal);
+			JButton btnAgregar = new JButton("+");
+			btnAgregar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListadoProductos listadoProductos = new ListadoProductos(true, true);
+					Producto producto = listadoProductos.showDialog();
+					
+					if(producto!=null) {
+						componentes.add((Componente) producto);
+						cargarComponentes();
+					}
+				}				
+			});
+			btnAgregar.setBounds(364, 36, 40, 40);
+			panelComponentes.add(btnAgregar);
 			
-			JLabel lblPrecioDescuento = new JLabel("Precio con descuento:");
-			lblPrecioDescuento.setBounds(227, 51, 120, 14);
-			panelDatoPaquete.add(lblPrecioDescuento);
+			btnEliminar = new JButton("-");
+			btnEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					componentes.remove(Tienda.getInstance().buscarComponente(componenteSeleccionado));
+				}
+			});
+			btnEliminar.setEnabled(false);
+			btnEliminar.setBounds(364, 87, 40, 40);
+			panelComponentes.add(btnEliminar);
 			
-			textField = new JTextField();
-			textField.setBounds(357, 23, 104, 20);
-			panelDatoPaquete.add(textField);
-			textField.setColumns(10);
+			btnAbrir = new JButton("V");
+			btnAbrir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					RegistroComponente registroComponente1 = new RegistroComponente(Tienda.getInstance().buscarComponente(componenteSeleccionado), 1);
+					registroComponente1.setVisible(true);
+				}
+			});
+			btnAbrir.setEnabled(false);
+			btnAbrir.setBounds(364, 138, 40, 40);
+			panelComponentes.add(btnAbrir);
 			
-			textField_1 = new JTextField();
-			textField_1.setBounds(357, 48, 102, 20);
-			panelDatoPaquete.add(textField_1);
-			textField_1.setColumns(10);
+			JPanel panelInformacion = new JPanel();
+			panelInformacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelInformacion.setBounds(10, 328, 414, 80);
+			panel.add(panelInformacion);
+			panelInformacion.setLayout(null);
 			
-			textField_2 = new JTextField();
-			textField_2.setBounds(122, 48, 95, 20);
-			panelDatoPaquete.add(textField_2);
-			textField_2.setColumns(10);
+			txtPrecio = new JTextField();
+			txtPrecio.setEditable(false);
+			txtPrecio.setBounds(90, 11, 110, 20);
+			panelInformacion.add(txtPrecio);
+			txtPrecio.setColumns(10);
 			
-			textField_3 = new JTextField();
-			textField_3.setBounds(122, 20, 95, 20);
-			panelDatoPaquete.add(textField_3);
-			textField_3.setColumns(10);
+			JLabel lblNewLabel_1 = new JLabel("Precio total:");
+			lblNewLabel_1.setBounds(10, 14, 102, 14);
+			panelInformacion.add(lblNewLabel_1);
 			
-			JPanel panelEliminar = new JPanel();
-			panelEliminar.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelEliminar.setBounds(0, 262, 471, 33);
-			panel.add(panelEliminar);
-			panelEliminar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			txtCosto = new JTextField();
+			txtCosto.setEditable(false);
+			txtCosto.setColumns(10);
+			txtCosto.setBounds(90, 42, 110, 20);
+			panelInformacion.add(txtCosto);
 			
-			JButton btnEliminar = new JButton("Eliminar");
-			btnEliminar.setActionCommand("Cancel");
-			panelEliminar.add(btnEliminar);
+			spnDescuento = new JSpinner();
+			spnDescuento.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					cargarComponentes();
+				}
+			});
+			spnDescuento.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					cargarComponentes();
+				}
+			});
+			spnDescuento.setModel(new SpinnerNumberModel(new Float(0), new Float(0), new Float(100), new Float(0.5)));
+			spnDescuento.setBounds(284, 11, 110, 20);
+			panelInformacion.add(spnDescuento);
+			
+			spnCantidad = new JSpinner();
+			spnCantidad.setModel(new SpinnerNumberModel(0, 0, 0, 1));
+			spnCantidad.setBounds(284, 42, 110, 20);
+			panelInformacion.add(spnCantidad);
+			
+			JLabel lblCosto = new JLabel("Costo total:");
+			lblCosto.setBounds(10, 45, 102, 14);
+			panelInformacion.add(lblCosto);
+			
+			JLabel lblCantidad = new JLabel("Cantidad D.:");
+			lblCantidad.setBounds(210, 45, 102, 14);
+			panelInformacion.add(lblCantidad);
+			
+			JLabel lblDescuento = new JLabel("Descuento:");
+			lblDescuento.setBounds(210, 14, 102, 14);
+			panelInformacion.add(lblDescuento);
 		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnCrear = new JButton("Crear");
-				btnCrear.setActionCommand("OK");
-				buttonPane.add(btnCrear);
-				getRootPane().setDefaultButton(btnCrear);
+				if(paqueteComponentes == null) {
+					btnAccion = new JButton("Registrar");
+				} else {
+					if(funcion==0) {
+						btnAccion = new JButton("Modificar");
+					}  else {
+						if(funcion==2) {
+							btnAccion = new JButton("Eliminar");
+						} else {
+							btnAccion = new JButton("Abrir");
+							btnAccion.setVisible(false);
+						}
+					}
+				}
+				btnAccion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(aux == null) { 
+							if(componentes.isEmpty() || componentes.size()<=1) {
+								JOptionPane.showMessageDialog(null, "Se necesita almenos dos productos para crear un paquete.", "Error", JOptionPane.WARNING_MESSAGE);
+							} else {
+								Tienda.getInstance().generarPaqueteComponentes(componentes, (float) spnDescuento.getValue(), (int) spnCantidad.getValue());
+								clean();
+							}
+						} else {
+							if(funcion==0) {
+								Tienda.getInstance().modificarPaqueteComponentes(paqueteComponentes.getCodigo(), componentes, (float) spnDescuento.getValue(), (int) spnCantidad.getValue());
+								dispose();
+							}  else {
+								if(funcion==2) {
+									Tienda.getInstance().eliminarPaqueteComponentes(paqueteComponentes.getCodigo());
+									dispose();
+								}
+							}
+						}
+					}
+				});
+				buttonPane.add(btnAccion);
 			}
 			{
-				JButton btnCancelar = new JButton("Cancelar");
-				btnCancelar.setActionCommand("Cancel");
-				buttonPane.add(btnCancelar);
+				JButton btnSalir = new JButton("Salir");
+				btnSalir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				buttonPane.add(btnSalir);
 			}
+		}
+		if(paqueteComponentes != null) {
+			if(funcion!=0) {
+				bloquearCampos();
+			}
+			cargarCompra();
+		}
+	}
+
+	private void bloquearCampos() {
+		txtCosto.setEnabled(false);
+		txtPrecio.setEnabled(false);
+		spnCantidad.setValue(1);
+		spnDescuento.setValue(0);
+		btnAbrir.setEnabled(false);
+		btnAccion.setEnabled(false);
+		btnEliminar.setEnabled(false);
+		
+		cargarComponentes();
+	}
+	
+	private void clean() {
+		componentes=new ArrayList<Componente>();
+		spnCantidad.setValue(1);
+		spnDescuento.setValue(0);
+		cargarComponentes();
+	}
+	
+	private void cargarCompra() {
+		componentes=paqueteComponentes.getProductos();
+		spnCantidad.setValue(paqueteComponentes.getCantidad());
+		spnDescuento.setValue(paqueteComponentes.getDescuento());
+		cargarComponentes();
+	}
+	
+	private int cantidad() {
+		if (componentes.isEmpty()) {
+			return 10;
+		}
+		int cantidad=0;
+		for(Componente x: componentes) {
+			if(x.getCantidad()>cantidad) {
+				cantidad=x.getCantidad();
+			}
+		}
+		return cantidad;
+	}
+	private void cargarComponentes() {
+		rowsProductos = new Object[modelProductos.getColumnCount()];
+		float montoTotal=(float) 0.00;
+		float costoTotal=(float) 0.00;
+		modelProductos.setRowCount(0);
+		if(componentes.size()!=0) {
+			btnAccion.setEnabled(true);
+			for(Componente x: componentes) {
+				rowsProductos[0]= x.getCodigo();
+				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+				rowsProductos[2]=x.getCantidad();
+				montoTotal+=x.getCantidad()*x.getPrecio();
+				costoTotal+=x.getCantidad()*x.getCosto();
+				modelProductos.addRow(rowsProductos);
+			}
+			txtPrecio.setText("$ "+((montoTotal)-(montoTotal*(((float) spnDescuento.getValue())/100))));
+			txtCosto.setText("$ "+costoTotal);
+			spnCantidad.setModel(new SpinnerNumberModel(1, 1, cantidad(), 1));
 		}
 	}
 }

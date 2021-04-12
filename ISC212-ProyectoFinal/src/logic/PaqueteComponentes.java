@@ -2,27 +2,19 @@ package logic;
 
 import java.util.ArrayList;
 
-public class PaqueteComponentes extends Producto{
-	
-	private static int idPaqueteComponentes=1;
+public class PaqueteComponentes extends Producto {
 	
 	private Administrador administrador;
-	private int contador;
 	private ArrayList<Componente> productos;
 	private float descuento;
 	
 	public PaqueteComponentes(Administrador administrador, ArrayList<Componente> productos, float descuento, int cantidad) {
-		super(new String("P-"), cantidad);
+		super(cantidad);
 		this.administrador = administrador;
 		this.productos = productos;
 		this.descuento = descuento;
-		this.setContador(idPaqueteComponentes);
-		idPaqueteComponentes++;
 	}
 
-	public static int getIdPaqueteComponentes() {
-		return idPaqueteComponentes;
-	}
 	public String getCodigo() {
 		return codigo;
 	}
@@ -46,20 +38,13 @@ public class PaqueteComponentes extends Producto{
 	}
 	public void setDescuento(float descuento) {
 		this.descuento = descuento;
-	}
-	public int getContador() {
-		return contador;
-	}
-	public void setContador(int contador) {
-		this.contador = contador;
-	}
-	
+	}	
 	
 	@Override
 	public float getPrecio() {
 		float precio=0;
 		for(Componente x: productos) {
-			precio+=(x.getPrecio()*(descuento/100));
+			precio+=(x.getPrecio()-(x.getPrecio()*(descuento/100)));
 		}
 		return precio;
 	}

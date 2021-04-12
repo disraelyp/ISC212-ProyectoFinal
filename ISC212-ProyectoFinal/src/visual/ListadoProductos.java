@@ -1,6 +1,7 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,10 +23,14 @@ import logic.Producto;
 import logic.Tienda;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class ListadoProductos extends JDialog {
 
 	private static String codigo=null;
+	private static boolean limitado=false;
+	private static boolean soloProductos=false;
 	
 	private final JPanel contentPanel = new JPanel();
 	private static DefaultTableModel modelProductos;
@@ -35,16 +40,28 @@ public class ListadoProductos extends JDialog {
 	private JButton btnSeleccionar;
 	private JTable tableProductos;
 	private JButton btnMostrarTodos;
+	private JSpinner spnCantidad;
 
-	String showDialog() {
+	Producto showDialog() {
 	    setVisible(true);
-	    return codigo;
+	    if(codigo!=null) {
+	    	Producto producto = Tienda.getInstance().buscarProducto(codigo);
+		    producto.setCantidad((int) spnCantidad.getValue());
+		    return producto;
+	    } else {
+	    	return null;
+	    }
+	    
 	}
 	
-	public ListadoProductos() {
+	public ListadoProductos(boolean condicion, boolean condicionA) {
+		limitado=condicion;
+		soloProductos=condicionA;
+		
 		setResizable(false);
 		setModal(true);
 		setTitle("Listado de Productos");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 360, 500);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
@@ -104,7 +121,7 @@ public class ListadoProductos extends JDialog {
 		panel.add(btnSalir);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 79, 324, 338);
+		panel_1.setBounds(10, 79, 324, 307);
 		panel.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
@@ -119,6 +136,7 @@ public class ListadoProductos extends JDialog {
 				seleccion = tableProductos.getSelectedRow();
 				codigo = tableProductos.getValueAt(seleccion,  0).toString();
 				btnSeleccionar.setEnabled(true);
+				Seleccion();
 			}
 		});
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -134,7 +152,24 @@ public class ListadoProductos extends JDialog {
 		columModel.getColumn(1).setPreferredWidth(229);
 		scrollPane.setViewportView(tableProductos);
 		
+		spnCantidad = new JSpinner();
+		spnCantidad.setEnabled(false);
+		spnCantidad.setBounds(10, 397, 324, 20);
+		panel.add(spnCantidad);
+		
 		cargarTabla(false);
+	}
+	
+	private void Seleccion() {
+		if (codigo!=null) {
+			spnCantidad.setEnabled(true);
+			if(limitado) {
+				spnCantidad.setModel(new SpinnerNumberModel(1, 1, Tienda.getInstance().buscarProducto(codigo).getCantidad(), 1));
+				System.out.printf(""+Tienda.getInstance().buscarProducto(codigo).getCantidad());
+			} else {
+				spnCantidad.setModel(new SpinnerNumberModel(1, 1, null, 1));
+			}
+		}
 	}
 
 	private void cargarTabla(boolean busqueda) {
@@ -147,9 +182,15 @@ public class ListadoProductos extends JDialog {
 					if(x instanceof Componente) {
 						rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
 					} else {
-						rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+						rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
 					}		
-					modelProductos.addRow(rowsProductos);
+					if(soloProductos) {
+						if(x instanceof Componente) {
+							modelProductos.addRow(rowsProductos);
+						}
+					} else {
+						modelProductos.addRow(rowsProductos);
+					}
 				}
 			}
 		} else {
@@ -158,9 +199,15 @@ public class ListadoProductos extends JDialog {
 				if(x instanceof Componente) {
 					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
 				} else {
-					rowsProductos[1]="Paquete #"+((PaqueteComponentes) x).getContador();
+					rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
 				}		
-				modelProductos.addRow(rowsProductos);
+				if(soloProductos) {
+					if(x instanceof Componente) {
+						modelProductos.addRow(rowsProductos);
+					}
+				} else {
+					modelProductos.addRow(rowsProductos);
+				}
 			}
 		}
 		
