@@ -1,6 +1,7 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -74,8 +75,10 @@ public class Facturacion extends JDialog {
 	public Facturacion() {
 		setResizable(false);
 		setTitle("Modulo de Facturacion");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setModal(true);
 		setBounds(100, 100, 750, 550);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 744, 522);
 		setLocationRelativeTo(null);
@@ -522,7 +525,7 @@ public class Facturacion extends JDialog {
 				rowsFacturas[1]=new SimpleDateFormat("dd-MM-yyyy").format(x.getFecha());
 				rowsFacturas[2]=x.getCliente().getNombre();
 				rowsFacturas[3]=x.getEmpleado().getNombre();
-				rowsFacturas[4]=x.getMontoTotal();
+				rowsFacturas[4]="$ "+x.getMontoTotal();
 				modelFacturas.addRow(rowsFacturas);
 			}
 		}
@@ -534,7 +537,7 @@ public class Facturacion extends JDialog {
 				rowsCotizaciones[1]=new SimpleDateFormat("dd-MM-yyyy").format(x.getFecha());
 				rowsCotizaciones[2]=x.getCliente().getNombre();
 				rowsCotizaciones[3]=x.getEmpleado().getNombre();
-				rowsCotizaciones[4]=x.getMontoTotal();
+				rowsCotizaciones[4]="$ "+x.getMontoTotal();
 				modelCotizaciones.addRow(rowsCotizaciones);
 			}
 		}
@@ -554,7 +557,7 @@ public class Facturacion extends JDialog {
 					rowsDevoluciones[4]="PENDIENTE";
 				}
 				
-				rowsDevoluciones[5]=x.getMontoTotal();
+				rowsDevoluciones[5]="$ "+x.getMontoTotal();
 				modelDevoluciones.addRow(rowsDevoluciones);
 			}
 		}

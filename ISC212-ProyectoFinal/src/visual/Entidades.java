@@ -1,6 +1,7 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -68,7 +69,7 @@ public class Entidades extends JDialog {
 			setTitle("CECOMSA - Listado de proveedores");
 			break;
 		}
-		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 600, 450);
 		setLocationRelativeTo(null);
 		setModal(true);

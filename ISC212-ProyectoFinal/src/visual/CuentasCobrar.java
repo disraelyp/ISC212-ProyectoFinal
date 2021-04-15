@@ -68,7 +68,7 @@ public class CuentasCobrar extends JDialog {
 		panel.add(btnAbrir);
 		
 		btnPagar = new JButton("");
-		btnPagar.setIcon(new ImageIcon(CuentasCobrar.class.getResource("/resources/cuentasporcobrar.png")));
+		btnPagar.setIcon(new ImageIcon(CuentasCobrar.class.getResource("/resources/cobrar.png")));
 		btnPagar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Busqueda busqueda = new Busqueda(5, 6, compraSeleccionada);

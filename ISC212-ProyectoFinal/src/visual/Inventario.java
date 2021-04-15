@@ -16,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import logic.Administrador;
 import logic.Componente;
 import logic.CompraInventario;
 import logic.CotizacionInventario;
@@ -755,85 +756,90 @@ public class Inventario extends JDialog {
 		
 		cargarTablas();
 	}
+	private void bloqueoUsuario() {
+		if(!(Tienda.getLoginUser() instanceof Administrador)) {
+			btnProcesarDevolucion.setEnabled(true);
+		}
+	}
 	
 	private void cargarTablas() {
+		bloqueoUsuario();
 		rowsOrdenes = new Object[modelOrddenes.getColumnCount()];
 		modelOrddenes.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-				if(x instanceof CompraInventario) {
-					rowsOrdenes[0]= ((CompraInventario) x).getCodigo();
-					rowsOrdenes[1]=x.getFechaTexto();
-					rowsOrdenes[2]=x.getProveedor().getNombre();
-					if(((CompraInventario) x).isRecibida()) {
-						rowsOrdenes[3]="RECIBIDA";
-					} else {
-						rowsOrdenes[3]="SIN RECIBIR";
-					}
-					rowsOrdenes[4]=x.getCostoTotal();
-					modelOrddenes.addRow(rowsOrdenes);
-				}
-			}
-		
-		
-			rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
-			modelCotizaciones.setRowCount(0);
-			for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-				if(x instanceof CotizacionInventario) {
-					rowsCotizaciones[0]=((CotizacionInventario) x).getCodigo();
-					rowsCotizaciones[1]=x.getFechaTexto();
-					rowsCotizaciones[2]=x.getProveedor().getNombre();
-					rowsCotizaciones[3]=x.getCostoTotal();
-					modelCotizaciones.addRow(rowsCotizaciones);
-				}
-			}
-			rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
-			modelDevoluciones.setRowCount(0);
-			for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-				if(x instanceof DevolucionInventario) {
-					rowsDevoluciones[0]= ((DevolucionInventario) x).getCodigo();
-					rowsDevoluciones[1]=x.getFechaTexto();
-					rowsDevoluciones[2]=x.getProveedor().getNombre();
-					if(((DevolucionInventario) x).isRetirada()) {
-						rowsDevoluciones[3]="RETIRADA";
-					} else {
-						rowsDevoluciones[3]="SIN RETIRAR";
-					}
-					rowsDevoluciones[4]=x.getCostoTotal();
-					modelDevoluciones.addRow(rowsDevoluciones);
-				}
-			}
-			rowsProductos = new Object[modelProductos.getColumnCount()];
-			modelProductos.setRowCount(0);
-			for(Producto x: Tienda.getInstance().getProductos()) {
-				rowsProductos[0]= x.getCodigo();
-				if(x instanceof Componente) {
-					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+			if(x instanceof CompraInventario) {
+				rowsOrdenes[0]= ((CompraInventario) x).getCodigo();
+				rowsOrdenes[1]=x.getFechaTexto();
+				rowsOrdenes[2]=x.getProveedor().getNombre();
+				if(((CompraInventario) x).isRecibida()) {
+					rowsOrdenes[3]="RECIBIDA";
 				} else {
-					rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
-				}		
-				if(x instanceof TarjetaMadre) {
-					rowsProductos[2]="Tarjeta Madre";
+					rowsOrdenes[3]="SIN RECIBIR";
+				}
+				rowsOrdenes[4]="$ "+x.getCostoTotal();
+				modelOrddenes.addRow(rowsOrdenes);
+			}
+		}
+
+		rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
+		modelCotizaciones.setRowCount(0);
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof CotizacionInventario) {
+				rowsCotizaciones[0]=((CotizacionInventario) x).getCodigo();
+				rowsCotizaciones[1]=x.getFechaTexto();
+				rowsCotizaciones[2]=x.getProveedor().getNombre();
+				rowsCotizaciones[3]="$ "+x.getCostoTotal();
+				modelCotizaciones.addRow(rowsCotizaciones);
+			}
+		}
+		rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
+		modelDevoluciones.setRowCount(0);
+		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+			if(x instanceof DevolucionInventario) {
+				rowsDevoluciones[0]= ((DevolucionInventario) x).getCodigo();
+				rowsDevoluciones[1]=x.getFechaTexto();
+				rowsDevoluciones[2]=x.getProveedor().getNombre();
+				if(((DevolucionInventario) x).isRetirada()) {
+					rowsDevoluciones[3]="RETIRADA";
 				} else {
-					if(x instanceof Microprocesador) {
-						rowsProductos[2]="Microprocesador";
+					rowsDevoluciones[3]="SIN RETIRAR";
+				}
+				rowsDevoluciones[4]="$ "+x.getCostoTotal();
+				modelDevoluciones.addRow(rowsDevoluciones);
+			}
+		}
+		rowsProductos = new Object[modelProductos.getColumnCount()];
+		modelProductos.setRowCount(0);
+		for(Producto x: Tienda.getInstance().getProductos()) {
+			rowsProductos[0]= x.getCodigo();
+			if(x instanceof Componente) {
+				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+			} else {
+				rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
+			}		
+			if(x instanceof TarjetaMadre) {
+				rowsProductos[2]="Tarjeta Madre";
+			} else {
+				if(x instanceof Microprocesador) {
+					rowsProductos[2]="Microprocesador";
+				} else {
+					if(x instanceof DiscoDuro) {
+						rowsProductos[2]="Disco duro";
 					} else {
-						if(x instanceof DiscoDuro) {
-							rowsProductos[2]="Disco duro";
+						if(x instanceof MemoriaRAM) {
+							rowsProductos[2]="Memoria RAM";
 						} else {
-							if(x instanceof MemoriaRAM) {
-								rowsProductos[2]="Memoria RAM";
-							} else {
-								if(x instanceof PaqueteComponentes) {
-									rowsProductos[2]="Paquete de compoenentes.";
-								}
+							if(x instanceof PaqueteComponentes) {
+								rowsProductos[2]="Paquete de compoenentes.";
 							}
 						}
 					}
 				}
-				rowsProductos[3]=x.getCantidad();
-				rowsProductos[4]=x.getPrecio();
-				rowsProductos[5]=x.getCosto();
-				modelProductos.addRow(rowsProductos);
 			}
+			rowsProductos[3]=x.getCantidad();
+			rowsProductos[4]="$ "+x.getPrecio();
+			rowsProductos[5]="$ "+x.getCosto();
+			modelProductos.addRow(rowsProductos);
 		}
+	}
 }

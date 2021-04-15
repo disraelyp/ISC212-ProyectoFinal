@@ -76,12 +76,24 @@ public class Principal extends JFrame {
 		mnNewMenu_1.add(separator_4);
 		
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Reportes");
+		if(!(Tienda.getLoginUser() instanceof Administrador)) {
+			mntmNewMenuItem_6.setEnabled(false);
+		}
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReporteFacturacion reporteFacturacion = new ReporteFacturacion();
+				reporteFacturacion.setVisible(true);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_6);
 		
 		JSeparator separator_5 = new JSeparator();
 		mnNewMenu_1.add(separator_5);
 		
 		JMenu mnNewMenu_3 = new JMenu("Clientes");
+		if(!(Tienda.getLoginUser() instanceof Administrador)) {
+			mnNewMenu_3.setEnabled(false);
+		}
 		mnNewMenu_1.add(mnNewMenu_3);
 		
 		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Ver/Modificar/Crear Clientes");
@@ -124,6 +136,12 @@ public class Principal extends JFrame {
 		mnNewMenu.add(separator_2);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Reportes");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReporteCompras reporteCompras = new ReporteCompras();
+				reporteCompras.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		JSeparator separator_3 = new JSeparator();
@@ -168,16 +186,16 @@ public class Principal extends JFrame {
 			}
 		});
 		
-		JSeparator separator_10 = new JSeparator();
-		mnNewMenu_4.add(separator_10);
-		
-		JMenuItem mntmNewMenuItem_12 = new JMenuItem("Nominas");
-		mnNewMenu_4.add(mntmNewMenuItem_12);
-		
 		JSeparator separator_9 = new JSeparator();
 		mnNewMenu_4.add(separator_9);
 		
-		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Reportes de pago");
+		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Crear Empleado");
+		mntmNewMenuItem_13.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroEmpleado registroEmpleado = new RegistroEmpleado(null, 0);
+				registroEmpleado.setVisible(true);
+			}
+		});
 		mnNewMenu_4.add(mntmNewMenuItem_13);
 
 	}

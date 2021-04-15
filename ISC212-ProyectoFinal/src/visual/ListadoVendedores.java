@@ -1,6 +1,7 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,6 +28,7 @@ public class ListadoVendedores extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setTitle("Listado de Vendedores.");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 360, 516);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());

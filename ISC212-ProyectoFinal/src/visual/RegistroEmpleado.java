@@ -2,6 +2,7 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -48,7 +49,7 @@ public class RegistroEmpleado extends JDialog {
 		
 		empleado=aux;
 		if(empleado == null) {
-			setTitle("Registro de Emokeadis");
+			setTitle("Registro de Empleados");
 		} else {
 			if(funcion==0) {
 				setTitle("Modificador de empleado (Codigo:"+empleado.getCodigo()+")");
@@ -62,6 +63,7 @@ public class RegistroEmpleado extends JDialog {
 		}
 		
 		setBounds(100, 100, 400, 375);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setModal(true);
 		setLocationRelativeTo(null);
 		setResizable(false);

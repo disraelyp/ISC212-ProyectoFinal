@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.ImageIcon;
 
 public class RegistroPaqueteComponentes extends JDialog {
 
@@ -124,12 +125,13 @@ public class RegistroPaqueteComponentes extends JDialog {
 			modelProductos.setColumnIdentifiers(headers);
 			TableColumnModel columModel = table.getColumnModel();
 			columModel.getColumn(0).setPreferredWidth(90);
-			columModel.getColumn(1).setPreferredWidth(90);
+			columModel.getColumn(1).setPreferredWidth(160);
 			columModel.getColumn(2).setPreferredWidth(90);
 			
 			scrollPane.setViewportView(table);
 			
-			JButton btnAgregar = new JButton("+");
+			JButton btnAgregar = new JButton("");
+			btnAgregar.setIcon(new ImageIcon(RegistroPaqueteComponentes.class.getResource("/resources/mas.png")));
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ListadoProductos listadoProductos = new ListadoProductos(true, true);
@@ -144,7 +146,8 @@ public class RegistroPaqueteComponentes extends JDialog {
 			btnAgregar.setBounds(364, 36, 40, 40);
 			panelComponentes.add(btnAgregar);
 			
-			btnEliminar = new JButton("-");
+			btnEliminar = new JButton("");
+			btnEliminar.setIcon(new ImageIcon(RegistroPaqueteComponentes.class.getResource("/resources/x.png")));
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					componentes.remove(Tienda.getInstance().buscarComponente(componenteSeleccionado));

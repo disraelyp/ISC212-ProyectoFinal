@@ -269,7 +269,7 @@ public class RegistroVenta extends JDialog {
 		panel.setLayout(null);
 		
 		JLabel label = new JLabel("Metodo de pago:");
-		label.setBounds(10, 51, 90, 14);
+		label.setBounds(10, 51, 167, 14);
 		panel.add(label);
 		
 		cbxPlazoPago = new JComboBox<String>();
@@ -569,7 +569,7 @@ public class RegistroVenta extends JDialog {
 				}		
 				rowsProductos[2]=x.getCantidad();
 				rowsProductos[3]=x.getPrecio();
-				rowsProductos[4]=x.getCantidad()*x.getPrecio();
+				rowsProductos[4]="$ "+x.getCantidad()*x.getPrecio();
 				montoTotal+=x.getCantidad()*x.getPrecio();
 				modelProductos.addRow(rowsProductos);
 			}
