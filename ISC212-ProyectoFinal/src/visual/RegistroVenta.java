@@ -333,16 +333,16 @@ public class RegistroVenta extends JDialog {
 		btnEliminarProducto.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/eliminarproducto.png")));
 		btnEliminarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!carrito.isEmpty()) {
-					if(productoSeleccionado!=null) {
-						for(Producto x: carrito) {
-							if(x.getCodigo().equalsIgnoreCase(productoSeleccionado.getCodigo())) {
-								carrito.remove(x);
-							}
-						}	
+				Producto a=null;
+				if(productoSeleccionado!=null) {
+					for(Producto x: carrito) {
+						if(x.getCodigo().equals(productoSeleccionado.getCodigo())) {
+							a=x;
+						}
 					}
+					carrito.remove(a);
+					cargarCarrito();
 				}
-				cargarCarrito();
 			}
 		});
 		btnEliminarProducto.setEnabled(false);
@@ -424,16 +424,28 @@ public class RegistroVenta extends JDialog {
 					if(!carrito.isEmpty()) {
 						switch(tipo) {
 						case 0:
-							Tienda.getInstance().generarFacturaVenta(cliente,  Tienda.getLoginUser(), (Date) spnFecha.getValue(), cbxPlazoPago.getSelectedIndex(), carrito);
+							float montoTotal=0;
+							for(Producto x: carrito) {
+								montoTotal+=x.getPrecio()*x.getCantidad();
+							}
+							if(Tienda.getInstance().puedeComprar(montoTotal, cliente.getCedula())){
+								System.out.printf("a");
+								Tienda.getInstance().generarFacturaVenta(cliente,  Tienda.getLoginUser(), (Date) spnFecha.getValue(), cbxPlazoPago.getSelectedIndex(), carrito);
+								clear();
+							} else {
+								JOptionPane.showMessageDialog(null, "El cliente debe saldar su cuenta antes de realizar una compra de esta magnitud.admij", "Error: Limite de credito", JOptionPane.ERROR_MESSAGE);
+							}
 							break;
 						case 1:
 							Tienda.getInstance().generarDevolucionVenta(cliente,  Tienda.getLoginUser(), (Date) spnFecha.getValue(), cbxPlazoPago.getSelectedIndex(), carrito);
+							clear();
 							break;
 						case 2:
 							Tienda.getInstance().generarCotizacionVenta(cliente,  Tienda.getLoginUser(), (Date) spnFecha.getValue(), cbxPlazoPago.getSelectedIndex(), carrito);
+							clear();
 							break;
 						}
-						clear();
+						
 					} else {
 						JOptionPane.showMessageDialog(null, "No hay productos ingresado ingresados en el carrito, ingrese alguno e intentelo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
 					}

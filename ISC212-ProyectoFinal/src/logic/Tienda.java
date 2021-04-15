@@ -83,6 +83,33 @@ public class Tienda implements Serializable{
 		this.ordenes = ordenes;
 	}
 
+	
+	public boolean puedeComprar(float montoComprar, String codigoCliente) {
+		Cliente cliente = buscarCliente(codigoCliente);
+		float LimiteCredito = cliente.getCreditoLimite();
+		
+		if(montoComprar>LimiteCredito) {
+			return false;
+		} else {
+			for(OrdenVenta x: facturas) {
+				if(x.getCodigo().equalsIgnoreCase(codigoCliente)) {
+					if(!((FacturaVenta) x).isPagada() || x.getPlazoPago()!=0) {
+						montoComprar+=x.getMontoTotal();
+					}
+				}
+			}
+			System.out.printf(""+montoComprar);
+			if(montoComprar>LimiteCredito) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	
+	
 	// FUNCIONES DE LOS PRODUCTOS
 	public boolean verificarProducto(String codigo) {
 		for(Producto x: productos) {

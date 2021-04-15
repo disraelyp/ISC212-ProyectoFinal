@@ -341,16 +341,16 @@ public class RegistroCompra extends JDialog {
 		btnEliminarProducto.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/eliminarproducto.png")));
 		btnEliminarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!carrito.isEmpty()) {
-					if(productoSeleccionado!=null) {
-						for(Componente x: carrito) {
-							if(x.getCodigo().equalsIgnoreCase(productoSeleccionado.getCodigo())) {
-								carrito.remove(x);
-							}
-						}	
+				Producto a=null;
+				if(productoSeleccionado!=null) {
+					for(Producto x: carrito) {
+						if(x.getCodigo().equals(productoSeleccionado.getCodigo())) {
+							a=x;
+						}
 					}
+					carrito.remove(a);
+					cargarCarrito();
 				}
-				cargarCarrito();
 			}
 		});
 		btnEliminarProducto.setEnabled(false);

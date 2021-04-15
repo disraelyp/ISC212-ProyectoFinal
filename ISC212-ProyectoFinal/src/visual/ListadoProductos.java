@@ -133,7 +133,12 @@ public class ListadoProductos extends JDialog {
 				int seleccion = -1;
 				seleccion = tableProductos.getSelectedRow();
 				codigo = tableProductos.getValueAt(seleccion,  0).toString();
-				btnSeleccionar.setEnabled(true);
+				
+				if(Tienda.getInstance().buscarProducto(codigo).getCantidad()==0 && limitado==true) {
+					btnSeleccionar.setEnabled(false);
+				} else {
+					btnSeleccionar.setEnabled(true);
+				}
 				Seleccion();
 			}
 		});
@@ -162,7 +167,11 @@ public class ListadoProductos extends JDialog {
 		if (codigo!=null) {
 			spnCantidad.setEnabled(true);
 			if(limitado) {
-				spnCantidad.setModel(new SpinnerNumberModel(1, 1, Tienda.getInstance().buscarProducto(codigo).getCantidad(), 1));
+				if(Tienda.getInstance().buscarProducto(codigo).getCantidad()>0) {
+					spnCantidad.setModel(new SpinnerNumberModel(1, 1, Tienda.getInstance().buscarProducto(codigo).getCantidad(), 1));
+				} else {
+					spnCantidad.setModel(new SpinnerNumberModel(0, 0, 0, 1));
+				}
 			} else {
 				spnCantidad.setModel(new SpinnerNumberModel(1, 1, null, 1));
 			}
