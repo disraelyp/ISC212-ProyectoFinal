@@ -43,5 +43,4 @@ public class Persona implements Serializable {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-	
 }

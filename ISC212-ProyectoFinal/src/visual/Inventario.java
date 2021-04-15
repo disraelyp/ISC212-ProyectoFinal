@@ -24,6 +24,13 @@ import logic.DiscoDuro;
 import logic.MemoriaRAM;
 import logic.Microprocesador;
 import logic.OrdenInventario;
+import logic.OrdenarCantidadProducto;
+import logic.OrdenarCodigoOrdenInventario;
+import logic.OrdenarCodigoProducto;
+import logic.OrdenarFechaOrdenInventario;
+import logic.OrdenarMontoOrdenInventario;
+import logic.OrdenarPrecioProducto;
+import logic.OrdenarProveedorOrdenInventario;
 import logic.PaqueteComponentes;
 import logic.Producto;
 import logic.TarjetaMadre;
@@ -85,6 +92,7 @@ public class Inventario extends JDialog {
 	private JButton btnAbrirDevolucion;
 	private JButton btnGenerarDevolucion;
 	private JButton btnSalirDevolucion;
+	private JComboBox<String> cbxOrdenDevoluciones;
 
 	public Inventario() {
 		
@@ -161,6 +169,25 @@ public class Inventario extends JDialog {
 		panelOrdenes.add(lblOrdenar);
 		
 		cmbOrden = new JComboBox<String>();
+		cmbOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cmbOrden.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarCodigoOrdenInventario());
+					break;
+				case 1:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarProveedorOrdenInventario());
+					break;
+				case 2:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarMontoOrdenInventario());
+					break;
+				case 3:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarFechaOrdenInventario());
+					break;
+				}
+				cargarTablas();
+			}
+		});
 		cmbOrden.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
 		cmbOrden.setBounds(90, 8, 150, 20);
 		panelOrdenes.add(cmbOrden);
@@ -325,6 +352,25 @@ public class Inventario extends JDialog {
 		panelCotizaciones.add(lblOrdenarCotizacion);
 		
 		cmbOrdenCotizacion = new JComboBox<String>();
+		cmbOrdenCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cmbOrdenCotizacion.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarCodigoOrdenInventario());
+					break;
+				case 1:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarProveedorOrdenInventario());
+					break;
+				case 2:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarMontoOrdenInventario());
+					break;
+				case 3:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarFechaOrdenInventario());
+					break;
+				}
+				cargarTablas();
+			}
+		});
 		cmbOrdenCotizacion.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
 		cmbOrdenCotizacion.setBounds(90, 8, 150, 20);
 		panelCotizaciones.add(cmbOrdenCotizacion);
@@ -394,10 +440,29 @@ public class Inventario extends JDialog {
 		label.setBounds(10, 11, 78, 14);
 		panelDevoluciones.add(label);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
-		comboBox.setBounds(90, 8, 150, 20);
-		panelDevoluciones.add(comboBox);
+		cbxOrdenDevoluciones = new JComboBox<String>();
+		cbxOrdenDevoluciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cbxOrdenDevoluciones.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarCodigoOrdenInventario());
+					break;
+				case 1:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarProveedorOrdenInventario());
+					break;
+				case 2:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarMontoOrdenInventario());
+					break;
+				case 3:
+					Tienda.getInstance().getOrdenes().sort(new OrdenarFechaOrdenInventario());
+					break;
+				}
+				cargarTablas();
+			}
+		});
+		cbxOrdenDevoluciones.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "PROVEEDOR", "MONTO", "FECHA"}));
+		cbxOrdenDevoluciones.setBounds(90, 8, 150, 20);
+		panelDevoluciones.add(cbxOrdenDevoluciones);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 36, 749, 344);
@@ -475,6 +540,12 @@ public class Inventario extends JDialog {
 		panelDevoluciones.add(btnAbrirDevolucion);
 		
 		btnGenerarDevolucion = new JButton("");
+		btnGenerarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroCompra registroCompra = new RegistroCompra(null, 1, 0);
+				registroCompra.setVisible(true);
+			}
+		});
 		btnGenerarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
 		btnGenerarDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnGenerarDevolucion.setBounds(10, 391, 70, 70);
@@ -528,7 +599,23 @@ public class Inventario extends JDialog {
 		panelProductos.add(label_1);
 		
 		JComboBox<String> comboBox_1 = new JComboBox<String>();
-		comboBox_1.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "DESCRIPCION", "CANTIDAD", "PRECIO", "PROVEEDOR"}));
+		comboBox_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(comboBox_1.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getProductos().sort(new OrdenarCodigoProducto());
+					break;
+				case 1:
+					Tienda.getInstance().getProductos().sort(new OrdenarCantidadProducto());
+					break;
+				case 2:
+					Tienda.getInstance().getProductos().sort(new OrdenarPrecioProducto());
+					break;
+				}
+				cargarTablas();
+			}
+		});
+		comboBox_1.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "CANTIDAD", "PRECIO"}));
 		comboBox_1.setBounds(90, 8, 150, 20);
 		panelProductos.add(comboBox_1);
 		
@@ -553,7 +640,8 @@ public class Inventario extends JDialog {
 		btnAbrirProducto.setBounds(170, 391, 70, 70);
 		panelProductos.add(btnAbrirProducto);
 		
-		btnCrearProducto = new JButton("COMP.");
+		btnCrearProducto = new JButton("");
+		btnCrearProducto.setIcon(new ImageIcon(Inventario.class.getResource("/resources/producto.png")));
 		btnCrearProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegistroComponente registroComponente = new RegistroComponente(null, 0);
@@ -653,7 +741,8 @@ public class Inventario extends JDialog {
 		btnEliminarProducto.setBounds(330, 391, 70, 70);
 		panelProductos.add(btnEliminarProducto);
 		
-		btnCrearPaquete = new JButton("PAQ.");
+		btnCrearPaquete = new JButton("");
+		btnCrearPaquete.setIcon(new ImageIcon(Inventario.class.getResource("/resources/paquete.png")));
 		btnCrearPaquete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegistroPaqueteComponentes registroPaqueteComponentes = new RegistroPaqueteComponentes(null, 0);
@@ -671,78 +760,80 @@ public class Inventario extends JDialog {
 		rowsOrdenes = new Object[modelOrddenes.getColumnCount()];
 		modelOrddenes.setRowCount(0);
 		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-			if(x instanceof CompraInventario) {
-				rowsOrdenes[0]= ((CompraInventario) x).getCodigo();
-				rowsOrdenes[1]=x.getFechaTexto();
-				rowsOrdenes[2]=x.getProveedor().getNombre();
-				if(((CompraInventario) x).isRecibida()) {
-					rowsOrdenes[3]="RECIBIDA";
-				} else {
-					rowsOrdenes[3]="SIN RECIBIR";
-				}
-				rowsOrdenes[4]=x.getCostoTotal();
-				modelOrddenes.addRow(rowsOrdenes);
-			}
-		}
-		rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
-		modelCotizaciones.setRowCount(0);
-		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-			if(x instanceof CotizacionInventario) {
-				rowsCotizaciones[0]= ((CotizacionInventario) x).getCodigo();
-				rowsCotizaciones[1]=x.getFechaTexto();
-				rowsCotizaciones[2]=x.getProveedor().getNombre();
-				rowsCotizaciones[3]=x.getCostoTotal();
-				modelCotizaciones.addRow(rowsCotizaciones);
-			}
-		}
-		rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
-		modelDevoluciones.setRowCount(0);
-		for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
-			if(x instanceof DevolucionInventario) {
-				rowsDevoluciones[0]= ((DevolucionInventario) x).getCodigo();
-				rowsDevoluciones[1]=x.getFechaTexto();
-				rowsDevoluciones[2]=x.getProveedor().getNombre();
-				if(((DevolucionInventario) x).isRetirada()) {
-					rowsDevoluciones[3]="RETIRADA";
-				} else {
-					rowsDevoluciones[3]="SIN RETIRAR";
-				}
-				rowsDevoluciones[4]=x.getCostoTotal();
-				modelDevoluciones.addRow(rowsDevoluciones);
-			}
-		}
-		rowsProductos = new Object[modelProductos.getColumnCount()];
-		modelProductos.setRowCount(0);
-		for(Producto x: Tienda.getInstance().getProductos()) {
-			rowsProductos[0]= x.getCodigo();
-			if(x instanceof Componente) {
-				rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
-			} else {
-				rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
-			}		
-			if(x instanceof TarjetaMadre) {
-				rowsProductos[2]="Tarjeta Madre";
-			} else {
-				if(x instanceof Microprocesador) {
-					rowsProductos[2]="Microprocesador";
-				} else {
-					if(x instanceof DiscoDuro) {
-						rowsProductos[2]="Disco duro";
+				if(x instanceof CompraInventario) {
+					rowsOrdenes[0]= ((CompraInventario) x).getCodigo();
+					rowsOrdenes[1]=x.getFechaTexto();
+					rowsOrdenes[2]=x.getProveedor().getNombre();
+					if(((CompraInventario) x).isRecibida()) {
+						rowsOrdenes[3]="RECIBIDA";
 					} else {
-						if(x instanceof MemoriaRAM) {
-							rowsProductos[2]="Memoria RAM";
+						rowsOrdenes[3]="SIN RECIBIR";
+					}
+					rowsOrdenes[4]=x.getCostoTotal();
+					modelOrddenes.addRow(rowsOrdenes);
+				}
+			}
+		
+		
+			rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
+			modelCotizaciones.setRowCount(0);
+			for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+				if(x instanceof CotizacionInventario) {
+					rowsCotizaciones[0]=((CotizacionInventario) x).getCodigo();
+					rowsCotizaciones[1]=x.getFechaTexto();
+					rowsCotizaciones[2]=x.getProveedor().getNombre();
+					rowsCotizaciones[3]=x.getCostoTotal();
+					modelCotizaciones.addRow(rowsCotizaciones);
+				}
+			}
+			rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
+			modelDevoluciones.setRowCount(0);
+			for(OrdenInventario x: Tienda.getInstance().getOrdenes()) {
+				if(x instanceof DevolucionInventario) {
+					rowsDevoluciones[0]= ((DevolucionInventario) x).getCodigo();
+					rowsDevoluciones[1]=x.getFechaTexto();
+					rowsDevoluciones[2]=x.getProveedor().getNombre();
+					if(((DevolucionInventario) x).isRetirada()) {
+						rowsDevoluciones[3]="RETIRADA";
+					} else {
+						rowsDevoluciones[3]="SIN RETIRAR";
+					}
+					rowsDevoluciones[4]=x.getCostoTotal();
+					modelDevoluciones.addRow(rowsDevoluciones);
+				}
+			}
+			rowsProductos = new Object[modelProductos.getColumnCount()];
+			modelProductos.setRowCount(0);
+			for(Producto x: Tienda.getInstance().getProductos()) {
+				rowsProductos[0]= x.getCodigo();
+				if(x instanceof Componente) {
+					rowsProductos[1]= ((Componente) x).getMarca()+"-"+((Componente) x).getModelo();
+				} else {
+					rowsProductos[1]="Paquete #(Codigo: "+((PaqueteComponentes) x).getCodigo()+")";
+				}		
+				if(x instanceof TarjetaMadre) {
+					rowsProductos[2]="Tarjeta Madre";
+				} else {
+					if(x instanceof Microprocesador) {
+						rowsProductos[2]="Microprocesador";
+					} else {
+						if(x instanceof DiscoDuro) {
+							rowsProductos[2]="Disco duro";
 						} else {
-							if(x instanceof PaqueteComponentes) {
-								rowsProductos[2]="Paquete de compoenentes.";
+							if(x instanceof MemoriaRAM) {
+								rowsProductos[2]="Memoria RAM";
+							} else {
+								if(x instanceof PaqueteComponentes) {
+									rowsProductos[2]="Paquete de compoenentes.";
+								}
 							}
 						}
 					}
 				}
+				rowsProductos[3]=x.getCantidad();
+				rowsProductos[4]=x.getPrecio();
+				rowsProductos[5]=x.getCosto();
+				modelProductos.addRow(rowsProductos);
 			}
-			rowsProductos[3]=x.getCantidad();
-			rowsProductos[4]=x.getPrecio();
-			rowsProductos[5]=x.getCosto();
-			modelProductos.addRow(rowsProductos);
 		}
-	}
 }

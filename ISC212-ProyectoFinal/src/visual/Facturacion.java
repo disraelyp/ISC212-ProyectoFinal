@@ -21,7 +21,11 @@ import javax.swing.table.TableColumnModel;
 import logic.CotizacionVenta;
 import logic.DevolucionVenta;
 import logic.FacturaVenta;
+import logic.OrdenFechaOrdenVenta;
 import logic.OrdenVenta;
+import logic.OrdenarClienteOrdenVenta;
+import logic.OrdenarCodigoOrdenVenta;
+import logic.OrdenarMontoOrdenVenta;
 import logic.Tienda;
 
 import javax.swing.ImageIcon;
@@ -65,6 +69,7 @@ public class Facturacion extends JDialog {
 	private JButton btnEliminarDevolucion;
 	private JButton btnSalirDevolucion;
 	private JButton btnAbrirDevolucion;
+	private JComboBox<String> comboBox;
 
 	public Facturacion() {
 		setResizable(false);
@@ -130,7 +135,26 @@ public class Facturacion extends JDialog {
 		panelFacturas.add(lblOrdenar);
 		
 		cmbOrden = new JComboBox<String>();
-		cmbOrden.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "VENDEDOR", "MONTO", "FECHA", "CLIENTE"}));
+		cmbOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cmbOrden.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getFacturas().sort(new OrdenarCodigoOrdenVenta());
+					break;
+				case 1:
+					Tienda.getInstance().getFacturas().sort(new OrdenarClienteOrdenVenta());
+					break;
+				case 2:
+					Tienda.getInstance().getFacturas().sort(new OrdenarMontoOrdenVenta());
+					break;
+				case 3:
+					Tienda.getInstance().getFacturas().sort(new OrdenFechaOrdenVenta());
+					break;
+				}
+				cargarTablas();
+			}
+		});
+		cmbOrden.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "CLIENTE", "MONTO", "FECHA"}));
 		cmbOrden.setBounds(90, 8, 150, 20);
 		panelFacturas.add(cmbOrden);
 		
@@ -254,7 +278,26 @@ public class Facturacion extends JDialog {
 		panelCotizaciones.add(lblOrdenarCotizacion);
 		
 		cmbOrdenCotizacion = new JComboBox<String>();
-		cmbOrdenCotizacion.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "VENDEDOR", "MONTO", "FECHA", "CLIENTE"}));
+		cmbOrdenCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cmbOrdenCotizacion.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getFacturas().sort(new OrdenarCodigoOrdenVenta());
+					break;
+				case 1:
+					Tienda.getInstance().getFacturas().sort(new OrdenarClienteOrdenVenta());
+					break;
+				case 2:
+					Tienda.getInstance().getFacturas().sort(new OrdenarMontoOrdenVenta());
+					break;
+				case 3:
+					Tienda.getInstance().getFacturas().sort(new OrdenFechaOrdenVenta());
+					break;
+				}
+				cargarTablas();
+			}
+		});
+		cmbOrdenCotizacion.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "CLIENTE", "MONTO", "FECHA"}));
 		cmbOrdenCotizacion.setBounds(90, 8, 150, 20);
 		panelCotizaciones.add(cmbOrdenCotizacion);
 		
@@ -323,8 +366,27 @@ public class Facturacion extends JDialog {
 		label.setBounds(10, 11, 78, 14);
 		panelDevoluciones.add(label);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "VENDEDOR", "MONTO", "FECHA", "CLIENTE"}));
+		comboBox = new JComboBox<String>();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(cmbOrdenCotizacion.getSelectedIndex()) {
+				case 0:
+					Tienda.getInstance().getFacturas().sort(new OrdenarCodigoOrdenVenta());
+					break;
+				case 1:
+					Tienda.getInstance().getFacturas().sort(new OrdenarClienteOrdenVenta());
+					break;
+				case 2:
+					Tienda.getInstance().getFacturas().sort(new OrdenarMontoOrdenVenta());
+					break;
+				case 3:
+					Tienda.getInstance().getFacturas().sort(new OrdenFechaOrdenVenta());
+					break;
+				}
+				cargarTablas();
+			}
+		});
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CODIGO", "CLIENTE", "MONTO", "FECHA"}));
 		comboBox.setBounds(90, 8, 150, 20);
 		panelDevoluciones.add(comboBox);
 		

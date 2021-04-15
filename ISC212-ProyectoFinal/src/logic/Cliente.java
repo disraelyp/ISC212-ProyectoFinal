@@ -14,5 +14,4 @@ public class Cliente extends Persona{
 	public void setCreditoLimite(float creditoLimite) {
 		this.creditoLimite = creditoLimite;
 	}
-		
 }

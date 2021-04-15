@@ -104,7 +104,7 @@ public class RegistroCliente extends JDialog {
 			panel.add(lblDireccion);
 			
 			spnCredito = new JSpinner();
-			spnCredito.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
+			spnCredito.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 			spnCredito.setBounds(125, 140, 211, 20);
 			panel.add(spnCredito);
 			
@@ -139,14 +139,14 @@ public class RegistroCliente extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						if(cliente == null) { 
 							if(!Tienda.getInstance().verificarCliente(txtCedula.getText())) {
-								Tienda.getInstance().generarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());
+								Tienda.getInstance().generarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (int)spnCredito.getValue());
 								clean();
 							} else {
 								JOptionPane.showMessageDialog(null, "Esta cédula ya pertenece a un cliente", "Error", JOptionPane.ERROR_MESSAGE);
 							}
 						} else {
 							if(funcion==0) {
-								Tienda.getInstance().modificarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (Float)spnCredito.getValue());								
+								Tienda.getInstance().modificarCliente(txtCedula.getText(), txtNombre.getText(), txtTelefono.getText(), txtDireccion.getText(), (int) spnCredito.getValue());								
 								dispose();
 							}  else {
 								if(funcion==2) {

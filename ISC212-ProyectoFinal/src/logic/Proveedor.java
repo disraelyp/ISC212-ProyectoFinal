@@ -1,6 +1,7 @@
 package logic;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class Proveedor implements Serializable {
 	
@@ -57,6 +58,20 @@ public class Proveedor implements Serializable {
 	}
 	public void setTelefonoRepre(String telefonoRepre) {
 		this.telefonoRepre = telefonoRepre;
+	}
+	
+	
+	public class ordenarNombre implements Comparator<Proveedor> {
+	    @Override
+	    public int compare(Proveedor o1, Proveedor o2) {
+	        return o2.getNombre().compareToIgnoreCase(o1.getNombre());
+	    }
+	}
+	public class ordenarRnc implements Comparator<Proveedor> {
+	    @Override
+	    public int compare(Proveedor o1, Proveedor o2) {
+	        return o2.getRnc().compareToIgnoreCase(o1.getRnc());
+	    }
 	}
 	
 	

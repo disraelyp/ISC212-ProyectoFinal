@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Comparator;
+
 public class Empleado extends Persona{
 	
 	protected String codigo;
@@ -48,4 +50,13 @@ public class Empleado extends Persona{
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
 	}
+	
+	public class ordenarCodigo implements Comparator<Empleado> {
+	    @Override
+	    public int compare(Empleado o1, Empleado o2) {
+	        return o2.getCodigo().compareToIgnoreCase(o1.getCodigo());
+	    }
+	}
+	
+	
 }

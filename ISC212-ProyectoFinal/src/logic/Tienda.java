@@ -731,9 +731,6 @@ public class Tienda implements Serializable{
 		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	
-	
-	
-	
 	// FUNCIONES DE FACTURAS DE VENTAS
 	public void generarFacturaVenta(Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
 		FacturaVenta venta = new FacturaVenta(cliente, empleado, fecha, plazoPago, productos);
@@ -779,7 +776,6 @@ public class Tienda implements Serializable{
 			}
 		}
 	}
-	
 	
 	// FUNCIONES DE DEVOLUCION DE VENTA
 	public void generarDevolucionVenta(Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
@@ -874,7 +870,6 @@ public class Tienda implements Serializable{
 		buscarCotizacionVenta(codigo).setPlazoPago(plazoPago);
 		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	
 	public Boolean isCotizacioVentaToCompraVenta(String codigo) {
 		CotizacionVenta cotizacion = buscarCotizacionVenta(codigo);
 		for(Producto x: productos) {

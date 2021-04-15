@@ -234,7 +234,8 @@ public class RegistroVenta extends JDialog {
 			contentPanel.add(btnAbrirProducto);
 		}
 		{
-			btnAgregarProducto = new JButton("Agregar Producto");
+			btnAgregarProducto = new JButton("");
+			btnAgregarProducto.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/agregarproducto.png")));
 			btnAgregarProducto.setEnabled(false);
 			btnAgregarProducto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -257,8 +258,6 @@ public class RegistroVenta extends JDialog {
 					}
 				}
 			});
-			btnAgregarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-			btnAgregarProducto.setHorizontalAlignment(SwingConstants.LEFT);
 			btnAgregarProducto.setBounds(614, 170, 70, 70);
 			contentPanel.add(btnAgregarProducto);
 		}
@@ -330,7 +329,8 @@ public class RegistroVenta extends JDialog {
 		columModel.getColumn(4).setPreferredWidth(100);
 		scrollPane.setViewportView(tableProductos);
 		
-		btnEliminarProducto = new JButton("Eliminar Producto");
+		btnEliminarProducto = new JButton("");
+		btnEliminarProducto.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/eliminarproducto.png")));
 		btnEliminarProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!carrito.isEmpty()) {
@@ -346,20 +346,18 @@ public class RegistroVenta extends JDialog {
 			}
 		});
 		btnEliminarProducto.setEnabled(false);
-		btnEliminarProducto.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEliminarProducto.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEliminarProducto.setBounds(614, 251, 70, 70);
 		contentPanel.add(btnEliminarProducto);
 		
-		btnCuentasPorCobrar = new JButton("Cuentas por Pagar");
+		btnCuentasPorCobrar = new JButton("");
+		btnCuentasPorCobrar.setIcon(new ImageIcon(RegistroVenta.class.getResource("/resources/cuentasporcobrar.png")));
 		btnCuentasPorCobrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// CUENTAS POR PAGAR
+				CuentasCobrar cuentasCobrar = new CuentasCobrar();
+				cuentasCobrar.setVisible(true);
 			}
 		});
 		btnCuentasPorCobrar.setEnabled(false);
-		btnCuentasPorCobrar.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnCuentasPorCobrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCuentasPorCobrar.setBounds(614, 11, 70, 70);
 		contentPanel.add(btnCuentasPorCobrar);
 		
@@ -413,7 +411,8 @@ public class RegistroVenta extends JDialog {
 				btnAccion.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/eliminar.png")));
 				break;
 			case 3:
-				btnAccion = new JButton("Generar");
+				btnAccion = new JButton("");
+				btnAccion.setIcon(new ImageIcon(RegistroCompra.class.getResource("/resources/generar.png")));
 				break;
 			}
 		}

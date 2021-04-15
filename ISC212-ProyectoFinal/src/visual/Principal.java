@@ -105,12 +105,6 @@ public class Principal extends JFrame {
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
 		
-		JSeparator separator_7 = new JSeparator();
-		mnNewMenu_3.add(separator_7);
-		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Reportes");
-		mnNewMenu_3.add(mntmNewMenuItem_9);
-		
 		JMenu mnNewMenu = new JMenu("Inventario");
 		if(!(Tienda.getLoginUser() instanceof Administrador)) {
 			mnNewMenu.setEnabled(false);
@@ -159,35 +153,20 @@ public class Principal extends JFrame {
 		});
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 		
-		JSeparator separator_1 = new JSeparator();
-		mnNewMenu_2.add(separator_1);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Reportes");
-		mnNewMenu_2.add(mntmNewMenuItem_3);
-		
 		JMenu mnNewMenu_4 = new JMenu("Empleados");
 		if(!(Tienda.getLoginUser() instanceof Administrador)) {
 			mnNewMenu_4.setEnabled(false);
 		}
 		menuBar.add(mnNewMenu_4);
 		
-		JMenu mnNewMenu_5 = new JMenu("Empleados");
-		mnNewMenu_4.add(mnNewMenu_5);
-		
 		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Ver/Modificar/Crear Empleados");
+		mnNewMenu_4.add(mntmNewMenuItem_11);
 		mntmNewMenuItem_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Entidades entidades = new Entidades(1);
 				entidades.setVisible(true);
 			}
 		});
-		mnNewMenu_5.add(mntmNewMenuItem_11);
-		
-		JSeparator separator_11 = new JSeparator();
-		mnNewMenu_5.add(separator_11);
-		
-		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Reportes");
-		mnNewMenu_5.add(mntmNewMenuItem_14);
 		
 		JSeparator separator_10 = new JSeparator();
 		mnNewMenu_4.add(separator_10);

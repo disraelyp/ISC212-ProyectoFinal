@@ -12,6 +12,12 @@ import javax.swing.table.TableColumnModel;
 import logic.Administrador;
 import logic.Cliente;
 import logic.Empleado;
+import logic.OrdenarCedulaCliente;
+import logic.OrdenarCodigoEmpleado;
+import logic.OrdenarNombreCliente;
+import logic.OrdenarNombreEmpleado;
+import logic.OrdenarNombreProveedor;
+import logic.OrdenarRNCProveedor;
 import logic.Proveedor;
 import logic.Tienda;
 
@@ -85,7 +91,8 @@ public class Entidades extends JDialog {
 		btnNewButton.setBounds(494, 321, 70, 70);
 		panel.add(btnNewButton);
 		
-		btnCrear = new JButton("crear");
+		btnCrear = new JButton("");
+		btnCrear.setIcon(new ImageIcon(Entidades.class.getResource("/resources/crear.png")));
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switch (tipoFuncion) {
@@ -261,6 +268,36 @@ public class Entidades extends JDialog {
 		panel.add(lblOrdenar);
 		
 		cbxOrdenar = new JComboBox<String>();
+		cbxOrdenar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch (tipoFuncion) {
+				case 0:
+					if(cbxOrdenar.getSelectedIndex()!=0) {
+						Tienda.getInstance().getClientes().sort(new OrdenarNombreCliente());
+					} else {
+						Tienda.getInstance().getClientes().sort(new OrdenarCedulaCliente());
+					}
+					break;
+				case 1:
+					if(cbxOrdenar.getSelectedIndex()!=0) {
+						Tienda.getInstance().getEmpleados().sort(new OrdenarNombreEmpleado());
+					} else {
+						Tienda.getInstance().getEmpleados().sort(new OrdenarCodigoEmpleado());
+					}
+					break;
+				case 2:
+					if(cbxOrdenar.getSelectedIndex()!=0) {
+						Tienda.getInstance().getProveedores().sort(new OrdenarRNCProveedor());
+					} else {
+						Tienda.getInstance().getProveedores().sort(new OrdenarNombreProveedor());
+					}
+					cbxOrdenar.setModel(new DefaultComboBoxModel<String>(new String[] {"RNC", "NOMBRE"}));
+					break;
+				}
+				
+				cargarTablas();
+			}
+		});
 		switch (tipoFuncion) {
 		case 0:
 			cbxOrdenar.setModel(new DefaultComboBoxModel<String>(new String[] {"CEDULA", "NOMBRE"}));
@@ -272,6 +309,7 @@ public class Entidades extends JDialog {
 			cbxOrdenar.setModel(new DefaultComboBoxModel<String>(new String[] {"RNC", "NOMBRE"}));
 			break;
 		}
+		cbxOrdenar.setSelectedIndex(0);
 		cbxOrdenar.setBounds(90, 8, 150, 20);
 		panel.add(cbxOrdenar);
 		

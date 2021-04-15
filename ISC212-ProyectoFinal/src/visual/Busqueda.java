@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class Busqueda extends JDialog {
 
@@ -138,7 +139,8 @@ public class Busqueda extends JDialog {
 			panel.add(txtCodigo);
 			txtCodigo.setColumns(10);
 			
-			JButton btnNewButton = new JButton("Cancelar");
+			JButton btnNewButton = new JButton("");
+			btnNewButton.setIcon(new ImageIcon(Busqueda.class.getResource("/resources/cancelar.png")));
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
@@ -147,7 +149,8 @@ public class Busqueda extends JDialog {
 			btnNewButton.setBounds(154, 121, 70, 70);
 			panel.add(btnNewButton);
 			
-			JButton btnAceptar = new JButton("Aceptar");
+			JButton btnAceptar = new JButton("");
+			btnAceptar.setIcon(new ImageIcon(Busqueda.class.getResource("/resources/aceptar.png")));
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					switch(tipoDocumento) {
