@@ -3,7 +3,6 @@ package logic;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class OrdenInventario implements Serializable{
@@ -68,15 +67,6 @@ public class OrdenInventario implements Serializable{
 	public String getFechaTexto() {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyy");
 		String fechat = formato.format(fecha);
-		return fechat;
-	}
-	public String getFechaPago() {
-		if (plazoPago==0) return getFechaTexto();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fecha); 
-		calendar.add(Calendar.DAY_OF_YEAR, plazoPago);  
-		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyy");
-		String fechat = formato.format(calendar.getTime());
 		return fechat;
 	}
 	public float getCostoTotal() {

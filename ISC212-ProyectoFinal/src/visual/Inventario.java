@@ -494,6 +494,7 @@ public class Inventario extends JDialog {
 					btnModificarDevolucion.setEnabled(false);
 					btnProcesarDevolucion.setEnabled(false);
 				}
+				
 			}
 		});
 		tableDevoluciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -545,6 +546,7 @@ public class Inventario extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				RegistroCompra registroCompra = new RegistroCompra(null, 1, 0);
 				registroCompra.setVisible(true);
+				cargarTablas();
 			}
 		});
 		btnGenerarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
@@ -703,6 +705,7 @@ public class Inventario extends JDialog {
 				btnAbrirProducto.setEnabled(true);
 				btnEliminarProducto.setEnabled(true);
 				btnModificarProducto.setEnabled(true);
+				cargarTablas();
 			}
 		});
 		tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -748,6 +751,7 @@ public class Inventario extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				RegistroPaqueteComponentes registroPaqueteComponentes = new RegistroPaqueteComponentes(null, 0);
 				registroPaqueteComponentes.setVisible(true);
+				cargarTablas();
 			}
 		});
 		btnCrearPaquete.setVerticalAlignment(SwingConstants.BOTTOM);

@@ -52,6 +52,7 @@ public class RegistroPaqueteComponentes extends JDialog {
 	private JButton btnEliminar;
 	private JSpinner spnDescuento;
 	private JSpinner spnCantidad;
+	private JButton btnAgregar;
 
 	public RegistroPaqueteComponentes(PaqueteComponentes aux, int aux2) {
 		
@@ -108,10 +109,14 @@ public class RegistroPaqueteComponentes extends JDialog {
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int seleccion = -1;
-					seleccion = table.getSelectedRow();
-					componenteSeleccionado = table.getValueAt(seleccion,  0).toString();
-					btnEliminar.setEnabled(true);
+					if(table.isEnabled()) {
+						int seleccion = -1;
+						seleccion = table.getSelectedRow();
+						componenteSeleccionado = table.getValueAt(seleccion,  0).toString();
+						btnEliminar.setEnabled(true);
+					} else {
+						btnEliminar.setEnabled(false);
+					}
 				}
 			});
 			
@@ -130,7 +135,7 @@ public class RegistroPaqueteComponentes extends JDialog {
 			
 			scrollPane.setViewportView(table);
 			
-			JButton btnAgregar = new JButton("");
+			btnAgregar = new JButton("");
 			btnAgregar.setIcon(new ImageIcon(RegistroPaqueteComponentes.class.getResource("/resources/mas.png")));
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -276,7 +281,8 @@ public class RegistroPaqueteComponentes extends JDialog {
 		spnCantidad.setEnabled(false);
 		btnAccion.setEnabled(false);
 		btnEliminar.setEnabled(false);
-		
+		btnAgregar.setEnabled(false);
+		table.setEnabled(false);
 		
 		cargarComponentes();
 	}
@@ -289,6 +295,7 @@ public class RegistroPaqueteComponentes extends JDialog {
 	}
 	
 	private void cargarCompra() {
+		
 		componentes=paqueteComponentes.getProductos();
 		spnCantidad.setValue(paqueteComponentes.getCantidad());
 		spnDescuento.setValue(paqueteComponentes.getDescuento());
@@ -315,7 +322,12 @@ public class RegistroPaqueteComponentes extends JDialog {
 				}
 			}
 		}
-		return cantidad;
+		if(cantidad!=0) {
+			return cantidad;
+		} else {
+			return 10;
+		}
+		
 	}
 	
 	private void cargarComponentes() {
@@ -335,6 +347,7 @@ public class RegistroPaqueteComponentes extends JDialog {
 			}
 			txtPrecio.setText("$ "+((montoTotal)-(montoTotal*(((float) spnDescuento.getValue())/100))));
 			txtCosto.setText("$ "+costoTotal);
+
 			spnCantidad.setModel(new SpinnerNumberModel(1, 1, cantidad(), 1));
 		}		
 	}

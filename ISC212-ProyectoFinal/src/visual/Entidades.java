@@ -72,6 +72,7 @@ public class Entidades extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
 		setBounds(100, 100, 600, 450);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

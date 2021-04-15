@@ -82,7 +82,7 @@ public class RegistroCliente extends JDialog {
 			txtNombre.setColumns(10);
 			
 			JLabel lblNombre = new JLabel("Nombre:");
-			lblNombre.setBounds(10, 42, 46, 14);
+			lblNombre.setBounds(10, 42, 127, 14);
 			panel.add(lblNombre);
 			
 			JLabel lblTelefono = new JLabel("Telefono");
