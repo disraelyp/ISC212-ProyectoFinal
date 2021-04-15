@@ -441,7 +441,7 @@ public class RegistroComponente extends JDialog {
 										Tienda.getInstance().modificarMemoriaRAM(componente.getCodigo(), txtModelo.getText(), txtMarca.getText(), (int) spnCantidad.getValue(), (int) spnCantMin.getValue(), (float) spnPrecio.getValue(), (float) spnCosto.getValue(), (float) spnCapacidadRAM.getValue(), cbxTipoMemoriaRamRM.getSelectedIndex(), (int) spnFrecuenciaRM.getValue());
 									} else {
 										if(rdbtnMicro.isSelected()) {
-											Tienda.getInstance().modificarMicro(componente.getCodigo(), txtModelo.getText(), txtMarca.getText(), (int) spnCantidad.getValue(), (int) spnCantMin.getValue(), (float) spnPrecio.getValue(), (float) spnCosto.getValue(), cbxConexionMP.getSelectedIndex(), (int) spnVelocidadMP.getValue(), (int) spnNucleosMP.getValue());
+											Tienda.getInstance().modificarMicro(componente.getCodigo(), txtModelo.getText(), txtMarca.getText(), (int) spnCantidad.getValue(), (int) spnCantMin.getValue(), (float) spnPrecio.getValue(), (float) spnCosto.getValue(), cbxConexionMP.getSelectedIndex(), (float) spnVelocidadMP.getValue(), (int) spnNucleosMP.getValue());
 										} else {
 											if(rdbtnTarjetaMadre.isSelected()) {
 												ArrayList<Integer> conexiones  = new ArrayList<Integer>();

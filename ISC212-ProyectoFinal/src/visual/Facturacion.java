@@ -15,28 +15,56 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import logic.CotizacionVenta;
+import logic.DevolucionVenta;
+import logic.FacturaVenta;
+import logic.OrdenVenta;
+import logic.Tienda;
+
 import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 
 public class Facturacion extends JDialog {
 
+	private static String facturaSeleccionada=null;
+	private static String cotizacionSeleccionada=null;
+	private static String devolucionSeleccionada=null;
 
 	private final JPanel contentPanel = new JPanel();
-	private static DefaultTableModel model1;
-	private static DefaultTableModel model2;
-	private static DefaultTableModel model4;
+	private static DefaultTableModel modelFacturas;
+	private static DefaultTableModel modelCotizaciones;
+	private static DefaultTableModel modelDevoluciones;
+
+	private static Object[] rowsFacturas;
+	private static Object[] rowsCotizaciones;
+	private static Object[] rowsDevoluciones;
+	
 	private JTable tableFactura;
 	private JTable tableCotizacion;
 	private JButton btnCrearFactura;
-	private JButton btnModificarFactura;
-	private JButton btnDuplicarFactura;
 	private JComboBox<String> cmbOrden;
 	private JComboBox<String> cmbOrdenCotizacion;
 	private JButton btnSalirCotizacion;
 	private JButton btnSalirFactura;
 	private JTable tableDevoluciones;
+	private JButton btnVerFactura;
+	private JButton btnDevolucionFactura;
+	private JButton btnVerCotizacion;
+	private JButton btnCrearCotizacion;
+	private JButton btnModificarCotizacion;
+	private JButton btnConvertirCotizacion;
+	private JButton btnEliminarCotizacion;
+	private JButton btnDevolucion;
+	private JButton btnRecibirDevolucion;
+	private JButton btnEditarDevolucion;
+	private JButton btnEliminarDevolucion;
+	private JButton btnSalirDevolucion;
+	private JButton btnAbrirDevolucion;
 
 	public Facturacion() {
 		setResizable(false);
@@ -54,7 +82,6 @@ public class Facturacion extends JDialog {
 		contentPanel.add(panelT, BorderLayout.CENTER);
 		panelT.setLayout(null);
 		
-		// EMPIEZA AQUI
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(5, 5, 719, 496);
 		panelT.add(tabbedPane);
@@ -67,22 +94,13 @@ public class Facturacion extends JDialog {
 		btnCrearFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
 		btnCrearFactura.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroVenta registroVenta = new RegistroVenta();
+				RegistroVenta registroVenta = new RegistroVenta(null, 0, 0);
 				registroVenta.setVisible(true);
+				cargarTablas();
 			}
 		});
-		btnCrearFactura.setBounds(90, 391, 70, 70);
+		btnCrearFactura.setBounds(10, 391, 70, 70);
 		panelFacturas.add(btnCrearFactura);
-		
-		btnModificarFactura = new JButton("");
-		btnModificarFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
-		btnModificarFactura.setBounds(170, 391, 70, 70);
-		panelFacturas.add(btnModificarFactura);
-		
-		btnDuplicarFactura = new JButton("");
-		btnDuplicarFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
-		btnDuplicarFactura.setBounds(250, 391, 70, 70);
-		panelFacturas.add(btnDuplicarFactura);
 		
 		btnSalirFactura = new JButton("");
 		btnSalirFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
@@ -94,9 +112,17 @@ public class Facturacion extends JDialog {
 		btnSalirFactura.setBounds(634, 391, 70, 70);
 		panelFacturas.add(btnSalirFactura);
 		
-		JButton btnDevolucionFactura = new JButton("");
+		btnDevolucionFactura = new JButton("");
+		btnDevolucionFactura.setEnabled(false);
+		btnDevolucionFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(5, 4, facturaSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnDevolucionFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/devolver.png")));
-		btnDevolucionFactura.setBounds(330, 391, 70, 70);
+		btnDevolucionFactura.setBounds(170, 391, 70, 70);
 		panelFacturas.add(btnDevolucionFactura);
 		
 		JLabel lblOrdenar = new JLabel("Ordenar por:");
@@ -109,7 +135,6 @@ public class Facturacion extends JDialog {
 		panelFacturas.add(cmbOrden);
 		
 		JPanel panelTablaFactura = new JPanel();
-		panelTablaFactura.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelTablaFactura.setBounds(10, 36, 694, 349);
 		panelFacturas.add(panelTablaFactura);
 		panelTablaFactura.setLayout(new BorderLayout(0, 0));
@@ -118,45 +143,75 @@ public class Facturacion extends JDialog {
 		panelTablaFactura.add(scrollPaneFactura, BorderLayout.CENTER);
 		
 		tableFactura = new JTable();
+		tableFactura.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableFactura.getSelectedRow();
+				facturaSeleccionada = tableFactura.getValueAt(seleccion,  0).toString();
+				if(facturaSeleccionada!=null) {
+					btnVerFactura.setEnabled(true);
+					btnDevolucionFactura.setEnabled(true);
+				}
+			}
+		});
 		tableFactura.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model1 = new DefaultTableModel();
-		tableFactura.setModel(model1);
+		modelFacturas = new DefaultTableModel();
+		tableFactura.setModel(modelFacturas);
 		tableFactura.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableFactura.getTableHeader().setReorderingAllowed(false);
 		
 		String[] headers1= {"Codigo", "Fecha", "Cliente", "Vendedor", "Monto Total"};
-		model1.setColumnIdentifiers(headers1);
+		modelFacturas.setColumnIdentifiers(headers1);
 		TableColumnModel columModel1 = tableFactura.getColumnModel();
 		columModel1.getColumn(0).setPreferredWidth(90);
 		columModel1.getColumn(1).setPreferredWidth(90);
-		columModel1.getColumn(2).setPreferredWidth(300);
-		columModel1.getColumn(3).setPreferredWidth(100);
-		columModel1.getColumn(4).setPreferredWidth(114);
+		columModel1.getColumn(2).setPreferredWidth(200);
+		columModel1.getColumn(3).setPreferredWidth(200);
+		columModel1.getColumn(4).setPreferredWidth(110);
 		scrollPaneFactura.setViewportView(tableFactura);
 		
-		JButton btnVerFactura = new JButton("");
+		btnVerFactura = new JButton("");
+		btnVerFactura.setEnabled(false);
+		btnVerFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(5, 2, facturaSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnVerFactura.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
-		btnVerFactura.setBounds(10, 391, 70, 70);
+		btnVerFactura.setBounds(90, 391, 70, 70);
 		panelFacturas.add(btnVerFactura);
 		
 		JPanel panelCotizaciones = new JPanel();
 		tabbedPane.addTab("Cotizaciones", null, panelCotizaciones, null);
 		panelCotizaciones.setLayout(null);
 		
-		JButton btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroVenta registroVenta = new RegistroVenta(null, 0, 2);
+				registroVenta.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnCrearCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/cotizar.png")));
-		btnCrearCotizacion.setBounds(170, 391, 70, 70);
+		btnCrearCotizacion.setBounds(10, 391, 70, 70);
 		panelCotizaciones.add(btnCrearCotizacion);
 		
-		JButton btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(6, 0, cotizacionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnModificarCotizacion.setEnabled(false);
 		btnModificarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
-		btnModificarCotizacion.setBounds(250, 391, 70, 70);
+		btnModificarCotizacion.setBounds(170, 391, 70, 70);
 		panelCotizaciones.add(btnModificarCotizacion);
-		
-		JButton btnDuplicarCotizacion = new JButton("");
-		btnDuplicarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
-		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
-		panelCotizaciones.add(btnDuplicarCotizacion);
 		
 		btnSalirCotizacion = new JButton("");
 		btnSalirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
@@ -168,15 +223,31 @@ public class Facturacion extends JDialog {
 		btnSalirCotizacion.setBounds(634, 391, 70, 70);
 		panelCotizaciones.add(btnSalirCotizacion);
 		
-		JButton btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(6, 3, cotizacionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnEliminarCotizacion.setEnabled(false);
 		btnEliminarCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/eliminar.png")));
-		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
+		btnEliminarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnEliminarCotizacion);
 		
-		JButton btnRecibirCotizacion = new JButton("");
-		btnRecibirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
-		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
-		panelCotizaciones.add(btnRecibirCotizacion);
+		btnConvertirCotizacion = new JButton("");
+		btnConvertirCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(6, 4, cotizacionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnConvertirCotizacion.setEnabled(false);
+		btnConvertirCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/facturar.png")));
+		btnConvertirCotizacion.setBounds(250, 391, 70, 70);
+		panelCotizaciones.add(btnConvertirCotizacion);
 		
 		JLabel lblOrdenarCotizacion = new JLabel("Ordenar por:");
 		lblOrdenarCotizacion.setBounds(10, 11, 78, 14);
@@ -188,7 +259,6 @@ public class Facturacion extends JDialog {
 		panelCotizaciones.add(cmbOrdenCotizacion);
 		
 		JPanel panelTablaCotizacion = new JPanel();
-		panelTablaCotizacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelTablaCotizacion.setBounds(10, 36, 694, 349);
 		panelCotizaciones.add(panelTablaCotizacion);
 		panelTablaCotizacion.setLayout(new BorderLayout(0, 0));
@@ -197,23 +267,50 @@ public class Facturacion extends JDialog {
 		panelTablaCotizacion.add(scrollPaneCotizacion, BorderLayout.CENTER);
 		
 		tableCotizacion = new JTable();
+		tableCotizacion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableCotizacion.getSelectedRow();
+				cotizacionSeleccionada = tableCotizacion.getValueAt(seleccion,  0).toString();
+				if(cotizacionSeleccionada!=null) {
+					btnEliminarCotizacion.setEnabled(true);
+					btnModificarCotizacion.setEnabled(true);
+					btnConvertirCotizacion.setEnabled(true);
+					btnVerCotizacion.setEnabled(true);
+				} else {
+					btnEliminarCotizacion.setEnabled(false);
+					btnModificarCotizacion.setEnabled(false);
+					btnConvertirCotizacion.setEnabled(false);
+					btnVerCotizacion.setEnabled(false);
+				}
+			}
+		});
 		tableCotizacion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model2 = new DefaultTableModel();
-		tableCotizacion.setModel(model2);
+		modelCotizaciones = new DefaultTableModel();
+		tableCotizacion.setModel(modelCotizaciones);
 		tableCotizacion.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableCotizacion.getTableHeader().setReorderingAllowed(false);
 		
 		String[] headers2= {"Codigo", "Fecha", "Cliente", "Vendedor", "Monto Total"};
-		model2.setColumnIdentifiers(headers2);
+		modelCotizaciones.setColumnIdentifiers(headers2);
 		TableColumnModel columModel2 = tableCotizacion.getColumnModel();
 		columModel2.getColumn(0).setPreferredWidth(90);
 		columModel2.getColumn(1).setPreferredWidth(90);
-		columModel2.getColumn(2).setPreferredWidth(300);
-		columModel2.getColumn(3).setPreferredWidth(100);
-		columModel2.getColumn(4).setPreferredWidth(114);
+		columModel2.getColumn(2).setPreferredWidth(200);
+		columModel2.getColumn(3).setPreferredWidth(200);
+		columModel2.getColumn(4).setPreferredWidth(110);
 		scrollPaneCotizacion.setViewportView(tableCotizacion);
 		
-		JButton btnVerCotizacion = new JButton("");
+		btnVerCotizacion = new JButton("");
+		btnVerCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(6, 2, cotizacionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnVerCotizacion.setEnabled(false);
 		btnVerCotizacion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
 		btnVerCotizacion.setBounds(90, 391, 70, 70);
 		panelCotizaciones.add(btnVerCotizacion);
@@ -240,58 +337,164 @@ public class Facturacion extends JDialog {
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		tableDevoluciones = new JTable();
+		tableDevoluciones.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableDevoluciones.getSelectedRow();
+				devolucionSeleccionada = tableDevoluciones.getValueAt(seleccion,  0).toString();
+				btnAbrirDevolucion.setEnabled(true);
+				if(!Tienda.getInstance().buscarDevolucionVenta(devolucionSeleccionada).isRecibida()) {
+					btnEliminarDevolucion.setEnabled(true);
+					btnEditarDevolucion.setEnabled(true);
+					btnRecibirDevolucion.setEnabled(true);
+				} else {
+					btnEliminarDevolucion.setEnabled(false);
+					btnEditarDevolucion.setEnabled(false);
+					btnRecibirDevolucion.setEnabled(false);
+				}
+				
+			}
+		});
 		tableDevoluciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		model4 = new DefaultTableModel();
-		tableDevoluciones.setModel(model4);
+		modelDevoluciones = new DefaultTableModel();
+		tableDevoluciones.setModel(modelDevoluciones);
 		tableDevoluciones.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tableDevoluciones.getTableHeader().setReorderingAllowed(false);
 		
-		String[] headers4= {"Codigo", "Fecha", "Cliente", "Vendedor", "Monto Total"};
-		model4.setColumnIdentifiers(headers4);
+		String[] headers4= {"Codigo", "Fecha", "Cliente", "Vendedor", "Estado", "Monto Total"};
+		modelDevoluciones.setColumnIdentifiers(headers4);
 		TableColumnModel columModel4 = tableDevoluciones.getColumnModel();
 		columModel4.getColumn(0).setPreferredWidth(90);
 		columModel4.getColumn(1).setPreferredWidth(90);
-		columModel4.getColumn(2).setPreferredWidth(300);
-		columModel4.getColumn(3).setPreferredWidth(100);
-		columModel4.getColumn(4).setPreferredWidth(114);
+		columModel4.getColumn(2).setPreferredWidth(155);
+		columModel4.getColumn(3).setPreferredWidth(155);
+		columModel4.getColumn(4).setPreferredWidth(90);
+		columModel4.getColumn(5).setPreferredWidth(108);
 		scrollPane.setViewportView(tableDevoluciones);
 		
-		JButton btnProcesar = new JButton("");
-		btnProcesar.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/retirar.png")));
-		btnProcesar.setBounds(10, 391, 70, 70);
-		panelDevoluciones.add(btnProcesar);
+		btnRecibirDevolucion = new JButton("");
+		btnRecibirDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(7, 5, devolucionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnRecibirDevolucion.setEnabled(false);
+		btnRecibirDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/recibir.png")));
+		btnRecibirDevolucion.setBounds(170, 391, 70, 70);
+		panelDevoluciones.add(btnRecibirDevolucion);
 		
-		JButton button_1 = new JButton("");
-		button_1.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
-		button_1.setBounds(90, 391, 70, 70);
-		panelDevoluciones.add(button_1);
+		btnAbrirDevolucion = new JButton("");
+		btnAbrirDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(7, 2, devolucionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnAbrirDevolucion.setEnabled(false);
+		btnAbrirDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/abrir.png")));
+		btnAbrirDevolucion.setBounds(90, 391, 70, 70);
+		panelDevoluciones.add(btnAbrirDevolucion);
 		
-		JButton button_2 = new JButton("");
-		button_2.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/devolver.png")));
-		button_2.setBounds(170, 391, 70, 70);
-		panelDevoluciones.add(button_2);
+		btnDevolucion = new JButton("");
+		btnDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroVenta registroVenta = new RegistroVenta(null, 0, 1);
+				registroVenta.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/devolver.png")));
+		btnDevolucion.setBounds(10, 391, 70, 70);
+		panelDevoluciones.add(btnDevolucion);
 		
-		JButton button_3 = new JButton("");
-		button_3.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
-		button_3.setBounds(250, 391, 70, 70);
-		panelDevoluciones.add(button_3);
+		btnEditarDevolucion = new JButton("");
+		btnEditarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(7, 0, devolucionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnEditarDevolucion.setEnabled(false);
+		btnEditarDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/modificar.png")));
+		btnEditarDevolucion.setBounds(250, 391, 70, 70);
+		panelDevoluciones.add(btnEditarDevolucion);
 		
-		JButton button_4 = new JButton("");
-		button_4.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/duplicar.png")));
-		button_4.setBounds(330, 391, 70, 70);
-		panelDevoluciones.add(button_4);
+		btnEliminarDevolucion = new JButton("");
+		btnEliminarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(7, 3, devolucionSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnEliminarDevolucion.setEnabled(false);
+		btnEliminarDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/eliminar.png")));
+		btnEliminarDevolucion.setBounds(330, 391, 70, 70);
+		panelDevoluciones.add(btnEliminarDevolucion);
 		
-		JButton button_5 = new JButton("");
-		button_5.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/eliminar.png")));
-		button_5.setBounds(410, 391, 70, 70);
-		panelDevoluciones.add(button_5);
-		
-		JButton button_6 = new JButton("");
-		button_6.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
-		button_6.setBounds(634, 391, 70, 70);
-		panelDevoluciones.add(button_6);
+		btnSalirDevolucion = new JButton("");
+		btnSalirDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalirDevolucion.setIcon(new ImageIcon(Facturacion.class.getResource("/resources/salir.png")));
+		btnSalirDevolucion.setBounds(634, 391, 70, 70);
+		panelDevoluciones.add(btnSalirDevolucion);
 		// TERMINA AQUI
 		
+		cargarTablas();
+	}
+
+	private void cargarTablas() {
+		rowsFacturas = new Object[modelFacturas.getColumnCount()];
+		modelFacturas.setRowCount(0);
+		for(OrdenVenta x: Tienda.getInstance().getFacturas()) {
+			if(x instanceof FacturaVenta) {
+				rowsFacturas[0]= x.getCodigo();
+				rowsFacturas[1]=new SimpleDateFormat("dd-MM-yyyy").format(x.getFecha());
+				rowsFacturas[2]=x.getCliente().getNombre();
+				rowsFacturas[3]=x.getEmpleado().getNombre();
+				rowsFacturas[4]=x.getMontoTotal();
+				modelFacturas.addRow(rowsFacturas);
+			}
+		}
+		rowsCotizaciones = new Object[modelCotizaciones.getColumnCount()];
+		modelCotizaciones.setRowCount(0);
+		for(OrdenVenta x: Tienda.getInstance().getFacturas()) {
+			if(x instanceof CotizacionVenta) {
+				rowsCotizaciones[0]= x.getCodigo();
+				rowsCotizaciones[1]=new SimpleDateFormat("dd-MM-yyyy").format(x.getFecha());
+				rowsCotizaciones[2]=x.getCliente().getNombre();
+				rowsCotizaciones[3]=x.getEmpleado().getNombre();
+				rowsCotizaciones[4]=x.getMontoTotal();
+				modelCotizaciones.addRow(rowsCotizaciones);
+			}
+		}
 		
+		rowsDevoluciones = new Object[modelDevoluciones.getColumnCount()];
+		modelDevoluciones.setRowCount(0);
+		for(OrdenVenta x: Tienda.getInstance().getFacturas()) {
+			if(x instanceof DevolucionVenta) {
+				rowsDevoluciones[0]= x.getCodigo();
+				rowsDevoluciones[1]=new SimpleDateFormat("dd-MM-yyyy").format(x.getFecha());
+				rowsDevoluciones[2]=x.getCliente().getNombre();
+				rowsDevoluciones[3]=x.getEmpleado().getNombre();
+				
+				if(((DevolucionVenta) x).isRecibida()) {
+					rowsDevoluciones[4]="APROBADA";
+				} else {
+					rowsDevoluciones[4]="PENDIENTE";
+				}
+				
+				rowsDevoluciones[5]=x.getMontoTotal();
+				modelDevoluciones.addRow(rowsDevoluciones);
+			}
+		}
 	}
 }

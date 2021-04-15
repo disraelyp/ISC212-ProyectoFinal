@@ -44,14 +44,12 @@ public class ListadoProductos extends JDialog {
 
 	Producto showDialog() {
 	    setVisible(true);
+	    Producto producto=null;
 	    if(codigo!=null) {
-	    	Producto producto = Tienda.getInstance().buscarProducto(codigo);
-		    producto.setCantidad((int) spnCantidad.getValue());
-		    return producto;
-	    } else {
-	    	return null;
+	    	producto=Tienda.getInstance().clonarProducto(codigo);
+	    	producto.setCantidad((int) spnCantidad.getValue());
 	    }
-	    
+	    return producto;	    
 	}
 	
 	public ListadoProductos(boolean condicion, boolean condicionA) {
@@ -165,7 +163,6 @@ public class ListadoProductos extends JDialog {
 			spnCantidad.setEnabled(true);
 			if(limitado) {
 				spnCantidad.setModel(new SpinnerNumberModel(1, 1, Tienda.getInstance().buscarProducto(codigo).getCantidad(), 1));
-				System.out.printf(""+Tienda.getInstance().buscarProducto(codigo).getCantidad());
 			} else {
 				spnCantidad.setModel(new SpinnerNumberModel(1, 1, null, 1));
 			}

@@ -40,6 +40,9 @@ import java.awt.event.MouseEvent;
 
 public class Inventario extends JDialog {
 
+	private static String ordenInventarioSeleccionada=null;
+	private static String cotizacionInventarioSeleccionada=null;
+	private static String devolucionInventarioSeleccionada=null;
 	private static String productoSeleccionado=null;
 	
 	private final JPanel contentPanel = new JPanel();
@@ -55,7 +58,6 @@ public class Inventario extends JDialog {
 	private JTable tableCotizacion;
 	private JButton btnCrearOrden;
 	private JButton btnModificarOrden;
-	private JButton btnDuplicarOrden;
 	private JComboBox<String> cmbOrden;
 	private JComboBox<String> cmbOrdenCotizacion;
 	private JButton btnSalirCotizacion;
@@ -68,6 +70,21 @@ public class Inventario extends JDialog {
 	private JButton btnModificarProducto;
 	private JButton btnEliminarProducto;
 	private JButton btnSalir;
+	private JButton btnVerOrden;
+	private JButton btnDevolucionOrden;
+	private JButton btnEliminarOrden;
+	private JButton btnRecibirOrden;
+	private JButton btnEliminarCotizacion;
+	private JButton btnConvertirCotizacion;
+	private JButton btnModificarCotizacion;
+	private JButton btnVerCotizacion;
+	private JButton btnCrearCotizacion;
+	private JButton btnEliminarDevolucion;
+	private JButton btnModificarDevolucion;
+	private JButton btnProcesarDevolucion;
+	private JButton btnAbrirDevolucion;
+	private JButton btnGenerarDevolucion;
+	private JButton btnSalirDevolucion;
 
 	public Inventario() {
 		
@@ -95,22 +112,26 @@ public class Inventario extends JDialog {
 		btnCrearOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
 		btnCrearOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistroCompra registroCompra = new RegistroCompra();
+				RegistroCompra registroCompra = new RegistroCompra(null, 0, 0);
 				registroCompra.setVisible(true);
+				cargarTablas();
 			}
 		});
-		btnCrearOrden.setBounds(90, 391, 70, 70);
+		btnCrearOrden.setBounds(10, 391, 70, 70);
 		panelOrdenes.add(btnCrearOrden);
 		
 		btnModificarOrden = new JButton("");
+		btnModificarOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(0, 0 ,ordenInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnModificarOrden.setEnabled(false);
 		btnModificarOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
-		btnModificarOrden.setBounds(170, 391, 70, 70);
+		btnModificarOrden.setBounds(250, 391, 70, 70);
 		panelOrdenes.add(btnModificarOrden);
-		
-		btnDuplicarOrden = new JButton("");
-		btnDuplicarOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
-		btnDuplicarOrden.setBounds(250, 391, 70, 70);
-		panelOrdenes.add(btnDuplicarOrden);
 		
 		btnSalirOrden = new JButton("");
 		btnSalirOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
@@ -122,7 +143,15 @@ public class Inventario extends JDialog {
 		btnSalirOrden.setBounds(689, 391, 70, 70);
 		panelOrdenes.add(btnSalirOrden);
 		
-		JButton btnDevolucionOrden = new JButton("");
+		btnDevolucionOrden = new JButton("");
+		btnDevolucionOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(0, 4,ordenInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnDevolucionOrden.setEnabled(false);
 		btnDevolucionOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
 		btnDevolucionOrden.setBounds(330, 391, 70, 70);
 		panelOrdenes.add(btnDevolucionOrden);
@@ -145,6 +174,26 @@ public class Inventario extends JDialog {
 		panelTablaOrden.add(scrollPaneOrden, BorderLayout.CENTER);
 		
 		tableOrden = new JTable();
+		tableOrden.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableOrden.getSelectedRow();
+				ordenInventarioSeleccionada = tableOrden.getValueAt(seleccion,  0).toString();
+				btnVerOrden.setEnabled(true);
+				if(Tienda.getInstance().buscarCompraInventario(ordenInventarioSeleccionada).isRecibida()) {
+					btnDevolucionOrden.setEnabled(true);
+					btnModificarOrden.setEnabled(false);
+					btnEliminarOrden.setEnabled(false);
+					btnRecibirOrden.setEnabled(false);
+				} else {
+					btnModificarOrden.setEnabled(true);
+					btnEliminarOrden.setEnabled(true);
+					btnDevolucionOrden.setEnabled(false);
+					btnRecibirOrden.setEnabled(true);
+				}
+			}
+		});
 		tableOrden.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modelOrddenes = new DefaultTableModel();
 		tableOrden.setModel(modelOrddenes);
@@ -161,43 +210,76 @@ public class Inventario extends JDialog {
 		columModel1.getColumn(4).setPreferredWidth(114);
 		scrollPaneOrden.setViewportView(tableOrden);
 		
-		JButton btnVerOrden = new JButton("");
+		btnVerOrden = new JButton("");
+		btnVerOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(0, 2,ordenInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnVerOrden.setEnabled(false);
 		btnVerOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnVerOrden.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnVerOrden.setBounds(10, 391, 70, 70);
+		btnVerOrden.setBounds(90, 391, 70, 70);
 		panelOrdenes.add(btnVerOrden);
 		
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
-		button.setBounds(410, 391, 70, 70);
-		panelOrdenes.add(button);
+		btnEliminarOrden = new JButton("");
+		btnEliminarOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(0, 3,ordenInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnEliminarOrden.setEnabled(false);
+		btnEliminarOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
+		btnEliminarOrden.setBounds(410, 391, 70, 70);
+		panelOrdenes.add(btnEliminarOrden);
 		
-		JButton btnRecibir = new JButton("");
-		btnRecibir.setIcon(new ImageIcon(Inventario.class.getResource("/resources/recibir.png")));
-		btnRecibir.setBounds(490, 391, 70, 70);
-		panelOrdenes.add(btnRecibir);
+		btnRecibirOrden = new JButton("");
+		btnRecibirOrden.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(0, 5, ordenInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnRecibirOrden.setEnabled(false);
+		btnRecibirOrden.setIcon(new ImageIcon(Inventario.class.getResource("/resources/recibir.png")));
+		btnRecibirOrden.setBounds(170, 391, 70, 70);
+		panelOrdenes.add(btnRecibirOrden);
 		
 		JPanel panelCotizaciones = new JPanel();
 		tabbedPane.addTab("Cotizaciones", null, panelCotizaciones, null);
 		panelCotizaciones.setLayout(null);
 		
-		JButton btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion = new JButton("");
+		btnCrearCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroCompra registroCompra = new RegistroCompra(null, 0, 2);
+				registroCompra.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnCrearCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/cotizar.png")));
 		btnCrearCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnCrearCotizacion.setBounds(170, 391, 70, 70);
+		btnCrearCotizacion.setBounds(10, 391, 70, 70);
 		panelCotizaciones.add(btnCrearCotizacion);
 		
-		JButton btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion = new JButton("");
+		btnModificarCotizacion.setEnabled(false);
+		btnModificarCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(1, 0, cotizacionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnModificarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
 		btnModificarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnModificarCotizacion.setBounds(250, 391, 70, 70);
+		btnModificarCotizacion.setBounds(170, 391, 70, 70);
 		panelCotizaciones.add(btnModificarCotizacion);
-		
-		JButton btnDuplicarCotizacion = new JButton("");
-		btnDuplicarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
-		btnDuplicarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnDuplicarCotizacion.setBounds(330, 391, 70, 70);
-		panelCotizaciones.add(btnDuplicarCotizacion);
 		
 		btnSalirCotizacion = new JButton("");
 		btnSalirCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
@@ -210,17 +292,33 @@ public class Inventario extends JDialog {
 		btnSalirCotizacion.setBounds(689, 391, 70, 70);
 		panelCotizaciones.add(btnSalirCotizacion);
 		
-		JButton btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion = new JButton("");
+		btnEliminarCotizacion.setEnabled(false);
+		btnEliminarCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(1, 3, cotizacionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnEliminarCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
 		btnEliminarCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnEliminarCotizacion.setBounds(410, 391, 70, 70);
+		btnEliminarCotizacion.setBounds(330, 391, 70, 70);
 		panelCotizaciones.add(btnEliminarCotizacion);
 		
-		JButton btnRecibirCotizacion = new JButton("");
-		btnRecibirCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
-		btnRecibirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnRecibirCotizacion.setBounds(10, 391, 70, 70);
-		panelCotizaciones.add(btnRecibirCotizacion);
+		btnConvertirCotizacion = new JButton("");
+		btnConvertirCotizacion.setEnabled(false);
+		btnConvertirCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(1, 4, cotizacionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnConvertirCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/comprar.png")));
+		btnConvertirCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnConvertirCotizacion.setBounds(250, 391, 70, 70);
+		panelCotizaciones.add(btnConvertirCotizacion);
 		
 		JLabel lblOrdenarCotizacion = new JLabel("Ordenar por:");
 		lblOrdenarCotizacion.setBounds(10, 11, 78, 14);
@@ -240,6 +338,25 @@ public class Inventario extends JDialog {
 		panelTablaCotizacion.add(scrollPaneCotizacion, BorderLayout.CENTER);
 		
 		tableCotizacion = new JTable();
+		tableCotizacion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableCotizacion.getSelectedRow();
+				cotizacionInventarioSeleccionada = tableCotizacion.getValueAt(seleccion,  0).toString();
+				if(cotizacionInventarioSeleccionada!=null) {
+					btnVerCotizacion.setEnabled(true);
+					btnModificarCotizacion.setEnabled(true);
+					btnConvertirCotizacion.setEnabled(true);
+					btnEliminarCotizacion.setEnabled(true);
+				} else {
+					btnVerCotizacion.setEnabled(false);
+					btnModificarCotizacion.setEnabled(false);
+					btnConvertirCotizacion.setEnabled(false);
+					btnEliminarCotizacion.setEnabled(false);
+				}
+			}
+		});
 		tableCotizacion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modelCotizaciones = new DefaultTableModel();
 		tableCotizacion.setModel(modelCotizaciones);
@@ -255,17 +372,20 @@ public class Inventario extends JDialog {
 		columModel2.getColumn(3).setPreferredWidth(114);
 		scrollPaneCotizacion.setViewportView(tableCotizacion);
 		
-		JButton btnVerCotizacion = new JButton("");
+		btnVerCotizacion = new JButton("");
+		btnVerCotizacion.setEnabled(false);
+		btnVerCotizacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(1, 2, cotizacionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
 		btnVerCotizacion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
 		btnVerCotizacion.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnVerCotizacion.setBounds(90, 391, 70, 70);
 		panelCotizaciones.add(btnVerCotizacion);
 		
-		// EMPEZO AQUI
-		
-		
-		
-		// TERMINO AQUI
 		JPanel panelDevoluciones = new JPanel();
 		tabbedPane.addTab("Devoluciones", null, panelDevoluciones, null);
 		panelDevoluciones.setLayout(null);
@@ -288,6 +408,28 @@ public class Inventario extends JDialog {
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		tableDevoluciones = new JTable();
+		tableDevoluciones.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int seleccion = -1;
+				seleccion = tableDevoluciones.getSelectedRow();
+				devolucionInventarioSeleccionada = tableDevoluciones.getValueAt(seleccion,  0).toString();
+				
+				if(devolucionInventarioSeleccionada!=null) {
+					btnAbrirDevolucion.setEnabled(true);
+					if(!Tienda.getInstance().buscarDevolucionInventario(devolucionInventarioSeleccionada).isRetirada()) {
+						btnEliminarDevolucion.setEnabled(true);
+						btnModificarDevolucion.setEnabled(true);
+						btnProcesarDevolucion.setEnabled(true);
+					}
+				} else {
+					btnAbrirDevolucion.setEnabled(false);
+					btnEliminarDevolucion.setEnabled(false);
+					btnModificarDevolucion.setEnabled(false);
+					btnProcesarDevolucion.setEnabled(false);
+				}
+			}
+		});
 		tableDevoluciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modelDevoluciones = new DefaultTableModel();
 		tableDevoluciones.setModel(modelDevoluciones);
@@ -304,47 +446,78 @@ public class Inventario extends JDialog {
 		columModel3.getColumn(4).setPreferredWidth(114);
 		scrollPane.setViewportView(tableDevoluciones);
 		
-		JButton btnProcesar = new JButton("");
-		btnProcesar.setIcon(new ImageIcon(Inventario.class.getResource("/resources/retirar.png")));
-		btnProcesar.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnProcesar.setBounds(10, 391, 70, 70);
-		panelDevoluciones.add(btnProcesar);
+		btnProcesarDevolucion = new JButton("");
+		btnProcesarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(2, 5,devolucionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnProcesarDevolucion.setEnabled(false);
+		btnProcesarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/retirar.png")));
+		btnProcesarDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnProcesarDevolucion.setBounds(170, 391, 70, 70);
+		panelDevoluciones.add(btnProcesarDevolucion);
 		
-		JButton button_1 = new JButton("");
-		button_1.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
-		button_1.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_1.setBounds(90, 391, 70, 70);
-		panelDevoluciones.add(button_1);
+		btnAbrirDevolucion = new JButton("");
+		btnAbrirDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(2, 2, devolucionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnAbrirDevolucion.setEnabled(false);
+		btnAbrirDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/abrir.png")));
+		btnAbrirDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnAbrirDevolucion.setBounds(90, 391, 70, 70);
+		panelDevoluciones.add(btnAbrirDevolucion);
 		
-		JButton button_2 = new JButton("");
-		button_2.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
-		button_2.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_2.setBounds(170, 391, 70, 70);
-		panelDevoluciones.add(button_2);
+		btnGenerarDevolucion = new JButton("");
+		btnGenerarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/devolver.png")));
+		btnGenerarDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnGenerarDevolucion.setBounds(10, 391, 70, 70);
+		panelDevoluciones.add(btnGenerarDevolucion);
 		
-		JButton button_3 = new JButton("");
-		button_3.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
-		button_3.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_3.setBounds(250, 391, 70, 70);
-		panelDevoluciones.add(button_3);
+		btnModificarDevolucion = new JButton("");
+		btnModificarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(2, 0,devolucionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnModificarDevolucion.setEnabled(false);
+		btnModificarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/modificar.png")));
+		btnModificarDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnModificarDevolucion.setBounds(250, 391, 70, 70);
+		panelDevoluciones.add(btnModificarDevolucion);
 		
-		JButton button_4 = new JButton("");
-		button_4.setIcon(new ImageIcon(Inventario.class.getResource("/resources/duplicar.png")));
-		button_4.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_4.setBounds(330, 391, 70, 70);
-		panelDevoluciones.add(button_4);
+		btnEliminarDevolucion = new JButton("");
+		btnEliminarDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Busqueda busqueda = new Busqueda(2, 3,devolucionInventarioSeleccionada);
+				busqueda.setVisible(true);
+				cargarTablas();
+			}
+		});
+		btnEliminarDevolucion.setEnabled(false);
+		btnEliminarDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
+		btnEliminarDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnEliminarDevolucion.setBounds(330, 391, 70, 70);
+		panelDevoluciones.add(btnEliminarDevolucion);
 		
-		JButton button_5 = new JButton("");
-		button_5.setIcon(new ImageIcon(Inventario.class.getResource("/resources/eliminar.png")));
-		button_5.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_5.setBounds(410, 391, 70, 70);
-		panelDevoluciones.add(button_5);
-		
-		JButton button_6 = new JButton("");
-		button_6.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
-		button_6.setVerticalAlignment(SwingConstants.BOTTOM);
-		button_6.setBounds(689, 391, 70, 70);
-		panelDevoluciones.add(button_6);
+		btnSalirDevolucion = new JButton("");
+		btnSalirDevolucion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalirDevolucion.setIcon(new ImageIcon(Inventario.class.getResource("/resources/salir.png")));
+		btnSalirDevolucion.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnSalirDevolucion.setBounds(689, 391, 70, 70);
+		panelDevoluciones.add(btnSalirDevolucion);
 		
 		JPanel panelProductos = new JPanel();
 		tabbedPane.addTab("Listado de Productos", null, panelProductos, null);
@@ -367,7 +540,8 @@ public class Inventario extends JDialog {
 						Busqueda busqueda = new Busqueda(3, 2, productoSeleccionado);
 						busqueda.setVisible(true);
 					} else {
-						
+						Busqueda busqueda = new Busqueda(4, 2, productoSeleccionado);
+						busqueda.setVisible(true);
 					}
 				}
 				cargarTablas();
@@ -399,7 +573,8 @@ public class Inventario extends JDialog {
 						Busqueda busqueda = new Busqueda(3, 0, productoSeleccionado);
 						busqueda.setVisible(true);
 					} else {
-						
+						Busqueda busqueda = new Busqueda(4, 0, productoSeleccionado);
+						busqueda.setVisible(true);
 					}
 				}
 				cargarTablas();
@@ -465,7 +640,8 @@ public class Inventario extends JDialog {
 						Busqueda busqueda = new Busqueda(3, 3, productoSeleccionado);
 						busqueda.setVisible(true);
 					} else {
-						
+						Busqueda busqueda = new Busqueda(4, 3, productoSeleccionado);
+						busqueda.setVisible(true);
 					}
 				}
 				cargarTablas();

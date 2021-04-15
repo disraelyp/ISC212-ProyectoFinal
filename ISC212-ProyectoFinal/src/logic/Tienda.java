@@ -93,16 +93,103 @@ public class Tienda implements Serializable{
 		return false;
 	}
 	public Producto buscarProducto(String codigo) {
-		for(Producto x: productos) {
+		Producto aux=null;
+		for(Producto x: Tienda.getInstance().getProductos()) {
 			if(x.getCodigo().equalsIgnoreCase(codigo)) {
-				return x;
+				aux=x;
 			}
 		}
-		return null;
+		return aux;
 	}
 	public void eliminarProducto(String codigo) {
 		productos.remove(buscarProducto(codigo));
 		JOptionPane.showMessageDialog(null, "El producto (Codigo: "+codigo+") fue eliminado exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public Producto clonarProducto(String codigo) {
+		Producto producto = buscarProducto(codigo);
+		Producto copia=null;
+		
+		if(producto instanceof PaqueteComponentes) {
+    		PaqueteComponentes paqueteComponentes = new PaqueteComponentes(null, null, 0, 0);
+    		
+    		paqueteComponentes.setAdministrador(((PaqueteComponentes) producto).getAdministrador());
+    		paqueteComponentes.setCantidad(producto.getCantidad());
+    		paqueteComponentes.setCodigo(producto.getCodigo());
+    		paqueteComponentes.setDescuento(((PaqueteComponentes) producto).getDescuento());
+    		paqueteComponentes.setProductos(((PaqueteComponentes) producto).getProductos());
+    		
+    		copia=paqueteComponentes;
+    	} else {
+    		if(producto instanceof TarjetaMadre) {
+    			TarjetaMadre tarjetaMadre = new TarjetaMadre(null, null, 0, 0, 0, 0, 0, 0, null);
+    			
+    			tarjetaMadre.setCantidad(producto.getCantidad());
+    			tarjetaMadre.setCantidadMinima(((TarjetaMadre) producto).getCantidadMinima());
+    			tarjetaMadre.setCodigo(producto.getCodigo());
+    			tarjetaMadre.setCosto(producto.getCosto());
+    			tarjetaMadre.setMarca(((TarjetaMadre) producto).getMarca());
+    			tarjetaMadre.setModelo(((TarjetaMadre) producto).getModelo());
+    			tarjetaMadre.setPrecio(producto.getPrecio());
+    			tarjetaMadre.setTipoDisco(((TarjetaMadre) producto).getTipoDisco());
+    			tarjetaMadre.setTipoMicro(((TarjetaMadre) producto).getTipoMicro());
+    			tarjetaMadre.setTipoRAM(((TarjetaMadre) producto).getTipoRAM());
+    			
+    			copia=tarjetaMadre;
+    		} else {
+    			if(producto instanceof DiscoDuro) {
+    				DiscoDuro discoDuro = new DiscoDuro(null, null, 0, 0, 0, 0, 0, 0, 0);
+    				
+    				discoDuro.setCantidad(producto.getCantidad());
+    				discoDuro.setCantidadMinima(((DiscoDuro) producto).getCantidadMinima());
+    				discoDuro.setCapacidad(((DiscoDuro) producto).getCapacidad());
+    				discoDuro.setCodigo(producto.getCodigo());
+    				discoDuro.setCosto(producto.getCosto());
+    				discoDuro.setMarca(((DiscoDuro) producto).getMarca());
+    				discoDuro.setModelo(((DiscoDuro) producto).getModelo());
+    				discoDuro.setPrecio(producto.getPrecio());
+    				discoDuro.setRpm(((DiscoDuro) producto).getRpm());
+    				discoDuro.setTipo(((DiscoDuro) producto).getTipo());
+    				
+    				copia=discoDuro;
+    			} else {
+    				if(producto instanceof Microprocesador) {
+    					Microprocesador microprocesador = new Microprocesador(null, null, 0, 0, 0, 0, 0, 0, 0);
+ 
+    					microprocesador.setCantidad(producto.getCantidad());
+    					microprocesador.setCantidadMinima(producto.getCantidad());
+    					microprocesador.setCodigo(producto.getCodigo());
+    					microprocesador.setConexion(((Microprocesador) producto).getConexion());
+    					microprocesador.setCosto(producto.getCosto());
+    					microprocesador.setMarca(((Microprocesador) producto).getMarca());
+    					microprocesador.setModelo(((Microprocesador) producto).getModelo());
+    					microprocesador.setNucleos(((Microprocesador) producto).getNucleos());
+    					microprocesador.setPrecio(producto.getPrecio());
+    					microprocesador.setVelocidad(((Microprocesador) producto).getVelocidad());
+    					
+    					copia = microprocesador;
+    				} else {
+    					if(producto instanceof MemoriaRAM) {
+    						MemoriaRAM memoriaRAM = new MemoriaRAM(null, null, 0, 0, 0, 0, 0, 0, 0);
+    						
+    						memoriaRAM.setCantidad(producto.getCantidad());
+    						memoriaRAM.setCantidadMinima(((MemoriaRAM) producto).getCantidadMinima());
+    						memoriaRAM.setCapacidad(((MemoriaRAM) producto).getCapacidad());
+    						memoriaRAM.setCodigo(producto.getCodigo());
+    						memoriaRAM.setCosto(producto.getCosto());
+    						memoriaRAM.setFrecuencia(((MemoriaRAM) producto).getFrecuencia());
+    						memoriaRAM.setMarca(((MemoriaRAM) producto).getMarca());
+    						memoriaRAM.setModelo(((MemoriaRAM) producto).getModelo());
+    						memoriaRAM.setPrecio(producto.getPrecio());
+    						memoriaRAM.setTipo(((MemoriaRAM) producto).getTipo());
+    						
+    						copia = memoriaRAM;
+    					}
+    				}
+    			}
+    		}
+    	}
+		
+		return copia;
 	}
 	
 	// FUNCIONES DE LOS COMPONENTES
@@ -214,14 +301,18 @@ public class Tienda implements Serializable{
 	// FUNCIONES DE LOS PAQUETES DE COMPONENTES
 	public void retirarComponente(String codigo) {
 		PaqueteComponentes paqueteComponentes = buscarPaqueteComponentes(codigo);
-		for(Producto x: productos) {
-			if(x instanceof Componente) {
-				for(Componente y: paqueteComponentes.getProductos()) {
-					if(x.getCodigo().equalsIgnoreCase(y.getCodigo())) {
-						x.setCantidad(x.getCantidad()-y.getCantidad());
+		for(int i=0; i<paqueteComponentes.getCantidad(); i++) {
+			for(Producto x: productos) {
+				if(x instanceof Componente) {
+					for(Componente y: paqueteComponentes.getProductos()) {
+						if(x.getCodigo().equalsIgnoreCase(y.getCodigo())) {	
+							x.setCantidad(x.getCantidad()-y.getCantidad());
+							break;
+						}
 					}
-				}
-			}	
+				}	
+				
+			}
 		}
 	}
 	public void cargarComponente(String codigo) {
@@ -452,12 +543,13 @@ public class Tienda implements Serializable{
 	public void generarCompraInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
 		CompraInventario compraInventario = new CompraInventario(proveedor, fecha, administrador, plazoPago, componentes);
 		ordenes.add(compraInventario);
+		JOptionPane.showMessageDialog(null, "La compra fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public OrdenInventario buscarCompraInventario(String codigo) {
+	public CompraInventario buscarCompraInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof CompraInventario) {
-				if(((CompraInventario) x).getCodigo().equalsIgnoreCase(codigo)) {
-					return x;
+				if((x.getCodigo().equalsIgnoreCase(codigo))) {
+					return (CompraInventario) x;
 				}
 			}
 		}
@@ -467,7 +559,7 @@ public class Tienda implements Serializable{
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof CompraInventario) {
 				if(((CompraInventario) x).getCodigo().equalsIgnoreCase(codigo)) {
-					return false;
+					return true;
 				}
 			}
 		}
@@ -475,28 +567,32 @@ public class Tienda implements Serializable{
 	}
 	public void compraInventarioToDevolucionInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		retirarCompraInventario(codigo);
-		ordenes.remove(compraInventario);
-		DevolucionInventario devolucionInventario = new DevolucionInventario(compraInventario.getProveedor(), compraInventario.getFecha(), compraInventario.getAdministrador(), compraInventario.getPlazoPago(), compraInventario.getComponentes());
-		devolucionInventario.setRetirada(true);
-		ordenes.add(devolucionInventario);
+		if(compraInventario.isRecibida()) {
+			DevolucionInventario devolucionInventario = new DevolucionInventario(compraInventario.getProveedor(), compraInventario.getFecha(), compraInventario.getAdministrador(), compraInventario.getPlazoPago(), compraInventario.getComponentes());
+			ordenes.add(devolucionInventario);
+			JOptionPane.showMessageDialog(null, "La compra (codigo: "+codigo+") emitio una devolucion", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "La compra (codigo: "+codigo+") no puede emitir una devolucion sin ser recibida", "Error", JOptionPane.WARNING_MESSAGE);
+		}
+		
 	}
 	public void recibirCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		for(Producto x: productos) {
-			for(Componente y: compraInventario.getComponentes()) {
-				if(x.getCodigo().equals(y.getCodigo())) {
-					((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
+		if(!compraInventario.isRecibida()) {
+			for(Producto x: productos) {
+				for(Componente y: compraInventario.getComponentes()) {
+					if(x.getCodigo().equals(y.getCodigo())) {
+						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
+					}
 				}
 			}
+			buscarCompraInventario(codigo).setRecibida(true);
+			JOptionPane.showMessageDialog(null, "La orden ("+codigo+") fue recibida exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "La orden ("+codigo+") no puede ser recibida multiples veces.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CompraInventario) {
-				if(((CompraInventario) x).getCodigo().equals(codigo)) {
-					((CompraInventario) x).setRecibida(true);
-				}
-			}
-		}
+		
+		
 	}
 	public void retirarCompraInventario(String codigo) {
 		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
@@ -509,64 +605,33 @@ public class Tienda implements Serializable{
 				}
 			}
 		}
-		modificarCompraInventario(codigo, compraInventario.getProveedor(), compraInventario.getAdministrador(), compraInventario.getComponentes());
 	}
-	public Boolean isRetirableCompraInventario(String codigo) {
-		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		if(compraInventario.isRecibida()) {
-			for(Producto x: productos) {
-				for(Componente y: compraInventario.getComponentes()) {
-					if(x.getCodigo().equals(y.getCodigo())) {
-						if(((Componente) (x)).getCantidad()<y.getCantidad()) {
-							return false;
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-	public void modificarCompraInventario(String codigo, Proveedor proveedor, Administrador administrador, ArrayList<Componente> componentes) {
-		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CompraInventario) {
-				if(x==compraInventario) {
-					retirarCompraInventario(((CompraInventario) x).getCodigo());
-					x.setAdministrador(administrador);
-					x.setProveedor(proveedor);
-					x.setComponentes(componentes);
-					((CompraInventario) x).setPagada(false);
-					((CompraInventario) x).setRecibida(false);
-				}
-			}
-		}
+	public void modificarCompraInventario(String codigo, Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
+		buscarCompraInventario(codigo).setAdministrador(administrador);
+		buscarCompraInventario(codigo).setProveedor(proveedor);
+		buscarCompraInventario(codigo).setComponentes(componentes);
+		buscarCompraInventario(codigo).setPlazoPago(plazoPago);
+		buscarCompraInventario(codigo).setPagada(false);
+		buscarCompraInventario(codigo).setFecha(fecha);
+		buscarCompraInventario(codigo).setRecibida(false);
+		JOptionPane.showMessageDialog(null, "La compra (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public void eliminarCompraInventario(String codigo) {
-		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CompraInventario) {
-				if(x==compraInventario) {
-					ordenes.remove(x);
-					break;
-				}
-			}
-		}
-	}
-	public void duplicarCompraInventario(String codigo) {
-		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		generarDevolucionInventario(compraInventario.getProveedor(), compraInventario.getAdministrador(), compraInventario.getPlazoPago(), compraInventario.getFecha(), compraInventario.getComponentes());
+		ordenes.remove((OrdenInventario) buscarCompraInventario(codigo));
+		JOptionPane.showMessageDialog(null, "La compra (codigo: "+codigo+") fue eliminada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 
 	// FUNCIONES DE DEVOLUCION DE INVENTARIO
 	public void generarDevolucionInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
 		DevolucionInventario devolucionInventario = new DevolucionInventario(proveedor, fecha, administrador, plazoPago, componentes);
 		ordenes.add(devolucionInventario);
+		JOptionPane.showMessageDialog(null, "La devolucion fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public OrdenInventario buscarDevolucionInventario(String codigo) {
+	public DevolucionInventario buscarDevolucionInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof DevolucionInventario) {
 				if(((DevolucionInventario) x).getCodigo().equalsIgnoreCase(codigo)) {
-					return x;
+					return (DevolucionInventario) x;
 				}
 			}
 		}
@@ -576,30 +641,11 @@ public class Tienda implements Serializable{
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof DevolucionInventario) {
 				if(((DevolucionInventario) x).getCodigo().equalsIgnoreCase(codigo)) {
-					return false;
+					return true;
 				}
 			}
 		}
-		return true;
-	}
-	public void recibirDevolucionInventario(String codigo) {
-		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
-		if(devolucionInventario.isRetirada()) {
-			for(Producto x: productos) {
-				for(Componente y: devolucionInventario.getComponentes()) {
-					if(x.getCodigo().equals(y.getCodigo())) {
-						((Componente) (x)).setCantidad(((Componente) (x)).getCantidad()+y.getCantidad());
-					}
-				}
-			}
-		}
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof DevolucionInventario) {
-				if(((DevolucionInventario) x).getCodigo().equals(codigo)) {
-					((DevolucionInventario) x).setRetirada(false);
-				}
-			}
-		}
+		return false;
 	}
 	public void retirarDevolucionInventario(String codigo) {
 		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
@@ -612,7 +658,7 @@ public class Tienda implements Serializable{
 				}
 			}
 		}
-		modificarDevolucionInventario(codigo, devolucionInventario.getProveedor(), devolucionInventario.getAdministrador(), devolucionInventario.getComponentes());
+		buscarDevolucionInventario(codigo).setRetirada(true);
 	}
 	public Boolean isRetirableDevolucionInventario(String codigo) {
 		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
@@ -629,44 +675,24 @@ public class Tienda implements Serializable{
 		}
 		return true;
 	}
-	public void modificarDevolucionInventario(String codigo, Proveedor proveedor, Administrador administrador, ArrayList<Componente> componentes) {
-		CompraInventario compraInventario = (CompraInventario) buscarCompraInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CompraInventario) {
-				if(x==compraInventario) {
-					retirarCompraInventario(((CompraInventario) x).getCodigo());
-					x.setAdministrador(administrador);
-					x.setProveedor(proveedor);
-					x.setComponentes(componentes);
-					((CompraInventario) x).setPagada(false);
-					((CompraInventario) x).setRecibida(false);
-				}
-			}
-		}
+	public void modificarDevolucionInventario(String codigo, Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
+		buscarDevolucionInventario(codigo).setAdministrador(administrador);
+		buscarDevolucionInventario(codigo).setComponentes(componentes);
+		buscarDevolucionInventario(codigo).setFecha(fecha);
+		buscarDevolucionInventario(codigo).setPlazoPago(plazoPago);
+		buscarDevolucionInventario(codigo).setProveedor(proveedor);
+		buscarDevolucionInventario(codigo).setRetirada(false);
+		JOptionPane.showMessageDialog(null, "La devolucion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public void eliminarDevolucionInventario(String codigo) {
-		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof DevolucionInventario) {
-				if(x==devolucionInventario) {
-					if(((DevolucionInventario) x).isRetirada()) {
-						recibirDevolucionInventario(codigo);
-					}
-					ordenes.remove(x);
-					break;
-				}
-			}
-		}
-	}
-	public void duplicarDevolucionInventario(String codigo) {
-		DevolucionInventario devolucionInventario = (DevolucionInventario) buscarDevolucionInventario(codigo);
-		generarDevolucionInventario(devolucionInventario.getProveedor(), devolucionInventario.getAdministrador(), devolucionInventario.getPlazoPago(), devolucionInventario.getFecha(), devolucionInventario.getComponentes());
+		ordenes.remove( buscarDevolucionInventario(codigo));
+		JOptionPane.showMessageDialog(null, "La devolucion (codigo: "+codigo+") fue eliminada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	// FUNCIONES DE COTIZACION DE INVENTARIO
 	public void generarCotizacionInventario(Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
-		CotizacionInventario devolucionInventario = new CotizacionInventario(proveedor, fecha, administrador, plazoPago, componentes);
-		ordenes.add(devolucionInventario);
+		ordenes.add(new CotizacionInventario(proveedor, fecha, administrador, plazoPago, componentes));
+		JOptionPane.showMessageDialog(null, "La cotizacion fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	public OrdenInventario buscarCotizacionInventario(String codigo) {
 		for(OrdenInventario x: ordenes) {
@@ -682,7 +708,7 @@ public class Tienda implements Serializable{
 		for(OrdenInventario x: ordenes) {
 			if(x instanceof CotizacionInventario) {
 				if(((CotizacionInventario) x).getCodigo().equalsIgnoreCase(codigo)) {
-					return false;
+					return true;
 				}
 			}
 		}
@@ -690,96 +716,178 @@ public class Tienda implements Serializable{
 	}
 	public void cotizacionInventarioToCompraInventario(String codigo) {
 		CotizacionInventario cotizacionInventario = (CotizacionInventario) buscarCotizacionInventario(codigo);
-		ordenes.remove(cotizacionInventario);
 		generarCompraInventario(cotizacionInventario.getProveedor(), cotizacionInventario.getAdministrador(), cotizacionInventario.getPlazoPago(), cotizacionInventario.getFecha(), cotizacionInventario.getComponentes());
 	}
 	public void eliminarCotizacionInventario(String codigo) {
-		CotizacionInventario cotizacionInventario = (CotizacionInventario) buscarCotizacionInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CotizacionInventario) {
-				if(x==cotizacionInventario) {
-					ordenes.remove(x);
-					break;
-				}
-			}
-		}
+		ordenes.remove(buscarCotizacionInventario(codigo));
+		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue eliminada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public void duplicarCotizacionInventario(String codigo) {
-		CotizacionInventario cotizacionInventario = (CotizacionInventario) buscarDevolucionInventario(codigo);
-		generarDevolucionInventario(cotizacionInventario.getProveedor(), cotizacionInventario.getAdministrador(), cotizacionInventario.getPlazoPago(), cotizacionInventario.getFecha(), cotizacionInventario.getComponentes());
-	}
-	public void modificarCotizacionInventario(String codigo, Proveedor proveedor, Administrador administrador, ArrayList<Componente> componentes) {
-		CotizacionInventario cotizacionInventario = (CotizacionInventario) buscarCotizacionInventario(codigo);
-		for(OrdenInventario x: ordenes) {
-			if(x instanceof CotizacionInventario) {
-				if(x==cotizacionInventario) {
-					x.setAdministrador(administrador);
-					x.setProveedor(proveedor);
-					x.setComponentes(componentes);
-				}
-			}
-		}
+	public void modificarCotizacionInventario(String codigo, Proveedor proveedor, Administrador administrador, int plazoPago, Date fecha, ArrayList<Componente> componentes) {
+		buscarCotizacionInventario(codigo).setAdministrador(administrador);
+		buscarCotizacionInventario(codigo).setProveedor(proveedor);
+		buscarCotizacionInventario(codigo).setComponentes(componentes);
+		buscarCotizacionInventario(codigo).setPlazoPago(plazoPago);
+		buscarCotizacionInventario(codigo).setFecha(fecha);
+		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
 	
-	// FUNCIONES DE FACTURACION
-	public void generarFactura(Cliente cliente, Empleado empleado, ArrayList<Producto> carrito) {
-		OrdenVenta factura = new OrdenVenta(cliente, empleado, carrito);
-		retirarFactura(carrito);
-		facturas.add(factura);
+	
+	
+	
+	// FUNCIONES DE FACTURAS DE VENTAS
+	public void generarFacturaVenta(Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
+		FacturaVenta venta = new FacturaVenta(cliente, empleado, fecha, plazoPago, productos);
+		facturas.add(venta);
+		retirarVenta(venta.getCodigo());
+		JOptionPane.showMessageDialog(null, "La venta fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
 	}
-	public OrdenVenta buscarFactura(String codigo) {
+	public FacturaVenta buscarFacturaVenta(String codigo) {
 		for(OrdenVenta x: facturas) {
-			if(x.getCodigo().equals(codigo)) {
-				return x;
+			if(x instanceof FacturaVenta) {
+				if((x.getCodigo().equalsIgnoreCase(codigo))) {
+					return (FacturaVenta) x;
+				}
 			}
 		}
 		return null;
 	}
-	public boolean verificarFactura(String codigo) {
+	public boolean verificarFacturaVenta(String codigo) {
 		for(OrdenVenta x: facturas) {
-			if(x.getCodigo().equals(codigo)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public void duplicarFactura(String codigo) {
-		OrdenVenta factura = buscarFactura(codigo);
-		generarFactura(factura.getCliente(), factura.getEmpleado(), factura.getProductos());
-	}
-	public void recibirFactura(ArrayList<Producto> carrito) {
-		for(Producto x: productos) {
-			for(Producto y: carrito) {
-				if(x.getCodigo().equals(y.getCodigo())) {
-					x.setCantidad(x.getCantidad()+y.getCantidad());
+			if(x instanceof FacturaVenta) {
+				if((x.getCodigo().equalsIgnoreCase(codigo))) {
+					return true;
 				}
 			}
 		}
+		System.out.printf("a");
+		return false;
 	}
-	public void retirarFactura(ArrayList<Producto> carrito) {
+	public void facturaVentaToDevolucionVenta(String codigo) {
+		FacturaVenta venta = buscarFacturaVenta(codigo);
+		DevolucionVenta devolucion = new DevolucionVenta(venta.getCliente(), venta.getEmpleado(), venta.getFecha(), venta.getPlazoPago(), venta.getProductos());
+		facturas.add(devolucion);
+		JOptionPane.showMessageDialog(null, "La venta (codigo: "+codigo+") emitio una devolucion", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+
+	}
+	public void retirarVenta(String codigo) {
+		FacturaVenta compraInventario = buscarFacturaVenta(codigo);
 		for(Producto x: productos) {
-			for(Producto y: carrito) {
+			for(Producto y: compraInventario.getProductos()) {
 				if(x.getCodigo().equals(y.getCodigo())) {
 					x.setCantidad(x.getCantidad()-y.getCantidad());
 				}
 			}
 		}
 	}
-	public void modificarFactura(String codigo, Cliente cliente, Empleado empleado, ArrayList<Producto> carrito) {
-		OrdenVenta factura = buscarFactura(codigo);
-		recibirFactura(carrito);
+	
+	
+	// FUNCIONES DE DEVOLUCION DE VENTA
+	public void generarDevolucionVenta(Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
+		DevolucionVenta devolucionInventario = new DevolucionVenta(cliente, empleado, fecha, plazoPago, productos);
+		facturas.add(devolucionInventario);
+		JOptionPane.showMessageDialog(null, "La devolucion fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public DevolucionVenta buscarDevolucionVenta(String codigo) {
 		for(OrdenVenta x: facturas) {
-			if(x==factura) {
-				x.setCliente(cliente);
-				x.setEmpleado(empleado);
-				x.setProductos(carrito);
+			if(x instanceof DevolucionVenta) {
+				if(((DevolucionVenta) x).getCodigo().equalsIgnoreCase(codigo)) {
+					return (DevolucionVenta) x;
+				}
 			}
 		}
+		return null;
 	}
-	public void eliminarFactura(String codigo) {
-		OrdenVenta factura = buscarFactura(codigo);
-		facturas.remove(factura);
-		retirarFactura(factura.getProductos());
+	public boolean verificarDevolucionVenta(String codigo) {
+		for(OrdenVenta x: facturas) {
+			if(x instanceof DevolucionVenta) {
+				if(((DevolucionVenta) x).getCodigo().equalsIgnoreCase(codigo)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public void recibirDevolucionVenta(String codigo) {
+		DevolucionVenta devolucionVenta = buscarDevolucionVenta(codigo);
+		if(!devolucionVenta.isRecibida()) {
+			for(Producto x: productos) {
+				for(Producto y: devolucionVenta.getProductos()) {
+					if(x.getCodigo().equals(y.getCodigo())) {
+						x.setCantidad(x.getCantidad()+y.getCantidad());
+					}
+				}
+			}
+		}
+		buscarDevolucionVenta(codigo).setRecibida(true);
+	}
+	public void modificarDevolucionVenta(String codigo,Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> producto) {
+		buscarDevolucionVenta(codigo).setCliente(cliente);
+		buscarDevolucionVenta(codigo).setEmpleado(empleado);
+		buscarDevolucionVenta(codigo).setFecha(fecha);
+		buscarDevolucionVenta(codigo).setProductos(productos);
+		buscarDevolucionVenta(codigo).setPlazoPago(plazoPago);
+		JOptionPane.showMessageDialog(null, "La devolucion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public void eliminarDevolucionVenta(String codigo) {
+		facturas.remove(buscarDevolucionVenta(codigo));
+		JOptionPane.showMessageDialog(null, "La devolucion (codigo: "+codigo+") fue eliminada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+
+	// FUNCIONES DE COTIZACION DE VENTAS
+	public void generarCotizacionVenta(Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
+		facturas.add(new CotizacionVenta(cliente, empleado, fecha, plazoPago, productos));
+		JOptionPane.showMessageDialog(null, "La cotizacion fue registrada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public CotizacionVenta buscarCotizacionVenta(String codigo) {
+		for(OrdenVenta x: facturas) {
+			if(x instanceof CotizacionVenta) {
+				if(x.getCodigo().equalsIgnoreCase(codigo)) {
+					return (CotizacionVenta) x;
+				}
+			}
+		}
+		return null;
+	}
+	public boolean verificarCotizacionVenta(String codigo) {
+		for(OrdenVenta x: facturas) {
+			if(x instanceof CotizacionVenta) {
+				if(x.getCodigo().equalsIgnoreCase(codigo)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public void cotizacioVentaToCompraVenta(String codigo) {
+		CotizacionVenta cotizacionInventario = (CotizacionVenta) buscarCotizacionVenta(codigo);
+		generarFacturaVenta(cotizacionInventario.getCliente(), cotizacionInventario.getEmpleado(), cotizacionInventario.getFecha(), cotizacionInventario.getPlazoPago(), cotizacionInventario.getProductos());
+	}
+	public void eliminarCotizacionVenta(String codigo) {
+		facturas.remove(buscarCotizacionVenta(codigo));
+		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue eliminada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	public void modificarCotizacionVenta(String codigo, Cliente cliente, Empleado empleado, Date fecha, int plazoPago, ArrayList<Producto> productos) {
+		buscarCotizacionVenta(codigo).setCliente(cliente);
+		buscarCotizacionVenta(codigo).setEmpleado(empleado);
+		buscarCotizacionVenta(codigo).setFecha(fecha);
+		buscarCotizacionVenta(codigo).setProductos(productos);
+		buscarCotizacionVenta(codigo).setPlazoPago(plazoPago);
+		JOptionPane.showMessageDialog(null, "La cotizacion (codigo: "+codigo+") fue modificada exitosamente.", "Confirmacion", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public Boolean isCotizacioVentaToCompraVenta(String codigo) {
+		CotizacionVenta cotizacion = buscarCotizacionVenta(codigo);
+		for(Producto x: productos) {
+			for(Producto y: cotizacion.getProductos()) {
+				if(x.getCodigo().equals(y.getCodigo())) {
+					if(x.getCantidad()<y.getCantidad()) {
+						return false;
+					}
+				}
+				
+			}
+		}
+		return true;
 	}
 
 }

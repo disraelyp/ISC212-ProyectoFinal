@@ -2,17 +2,14 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.FlowLayout;
 
-import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import logic.Tienda;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,16 +18,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
+import javax.swing.border.TitledBorder;
 
-public class IniciarSesion extends JFrame {
+import logic.Tienda;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
-	private JPanel contentPane;
+public class IniciarSesion extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+	private JButton btnCancelar;
+	private JButton btnIngresar;
+	private JPanel panel;
 	private JTextField txtUsuario;
-	private JTextField txtContraseña;
+	private JPasswordField txtContraseña;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -71,66 +75,74 @@ public class IniciarSesion extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public IniciarSesion() {
-		setTitle("Cecomsa - Iniciar Sesion");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/resources/logo.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(IniciarSesion.class.getResource("/resources/logo.png")));
+		setTitle("CECOMSA - Ingreso al Sistema");
+		
+		
+		setModal(true);
+		setResizable(false);
+		setBounds(100, 100, 351, 230);
 		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Usuario");
-		lblNewLabel.setBounds(21, 36, 46, 14);
-		panel.add(lblNewLabel);
-		
-		txtUsuario = new JTextField();
-		txtUsuario.setBounds(21, 63, 86, 20);
-		panel.add(txtUsuario);
-		txtUsuario.setColumns(10);
-		
-		JLabel lblNewLabel_1 = new JLabel("Contrase\u00F1a");
-		lblNewLabel_1.setBounds(21, 119, 86, 14);
-		panel.add(lblNewLabel_1);
-		
-		JButton btnNewButton = new JButton("Salir");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BorderLayout(0, 0));
+		{
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(panel, BorderLayout.CENTER);
+			panel.setLayout(null);
+			
+			JLabel lblUsuario = new JLabel("Usuario:");
+			lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblUsuario.setBounds(10, 11, 315, 20);
+			panel.add(lblUsuario);
+			
+			txtUsuario = new JTextField();
+			txtUsuario.setBounds(10, 42, 300, 20);
+			panel.add(txtUsuario);
+			txtUsuario.setColumns(10);
+			
+			JLabel lblContrasea = new JLabel("Contrase\u00F1a");
+			lblContrasea.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblContrasea.setBounds(10, 73, 315, 20);
+			panel.add(lblContrasea);
+			
+			txtContraseña = new JPasswordField();
+			txtContraseña.setBounds(10, 104, 300, 20);
+			panel.add(txtContraseña);
+		}
+		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				btnIngresar = new JButton("Ingresar");
+				btnIngresar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(Tienda.getInstance().iniciarSesion(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()))) {
+							dispose();
+							Principal principal = new Principal();
+							principal.setVisible(true);
+						} else {
+							JOptionPane.showMessageDialog(null,"Error: Usuario o Contraseña invalidos","Error",JOptionPane.ERROR_MESSAGE);
+						}
+						
+					}
+				});
+				buttonPane.add(btnIngresar);
 			}
-		});
-		btnNewButton.setBounds(18, 218, 89, 23);
-		panel.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Entrar");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(Tienda.getInstance().iniciarSesion(txtUsuario.getText(), txtContraseña.getText())) {
-					dispose();
-					Principal principal = new Principal();
-					principal.setVisible(true);
-				} else {
-					JOptionPane.showMessageDialog(null,"Error: Usuario o Contraseña invalidos","Error",JOptionPane.ERROR_MESSAGE);
-				}
-				
+			{
+				btnCancelar = new JButton("Cancelar");
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				buttonPane.add(btnCancelar);
 			}
-		});
-		btnNewButton_1.setBounds(117, 218, 89, 23);
-		panel.add(btnNewButton_1);
-		
-		txtContraseña = new JTextField();
-		txtContraseña.setBounds(21, 187, 86, 20);
-		panel.add(txtContraseña);
-		txtContraseña.setColumns(10);
+		}
 	}
-
 }

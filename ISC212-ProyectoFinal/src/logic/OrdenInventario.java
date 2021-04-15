@@ -82,7 +82,7 @@ public class OrdenInventario implements Serializable{
 	public float getCostoTotal() {
 		float costoTotal=0;
 		for(Componente x: componentes) {
-			costoTotal+=x.getCosto();
+			costoTotal+=x.getCosto()*x.getCantidad();
 		}
 		return costoTotal;
 	}
